@@ -2,52 +2,51 @@
 .. index: memory layout
 
 ****************
-Layout in Memory
+Layout di Memory
 ****************
 
-Solidity reserves four 32-byte slots, with specific byte ranges (inclusive of endpoints) being used as follows:
+Solidity mencadangkan empat slot 32-byte, dengan rentang byte tertentu (termasuk titik akhir) yang digunakan sebagai berikut:
 
-- ``0x00`` - ``0x3f`` (64 bytes): scratch space for hashing methods
-- ``0x40`` - ``0x5f`` (32 bytes): currently allocated memory size (aka. free memory pointer)
+- ``0x00`` - ``0x3f`` (64 bytes): ruang awal untuk metode hashing
+- ``0x40`` - ``0x5f`` (32 bytes): ukuran memori yang dialokasikan saat ini (aka. free memory pointer)
 - ``0x60`` - ``0x7f`` (32 bytes): zero slot
 
-Scratch space can be used between statements (i.e. within inline assembly). The zero slot
-is used as initial value for dynamic memory arrays and should never be written to
-(the free memory pointer points to ``0x80`` initially).
+Ruang awal dapat digunakan di antara pernyataan (yaitu dalam inline assembly). Zero slot
+digunakan sebagai nilai awal untuk array memori dinamis dan tidak boleh ditulis ke
+(pointer memori bebas menunjuk ke ``0x80`` pada awalnya).
 
-Solidity always places new objects at the free memory pointer and
-memory is never freed (this might change in the future).
+Solidity selalu menempatkan objek baru pada penunjuk memori bebas dan
+memori tidak pernah dibebaskan (ini mungkin berubah di masa depan).
 
-Elements in memory arrays in Solidity always occupy multiples of 32 bytes (this
-is even true for ``bytes1[]``, but not for ``bytes`` and ``string``).
-Multi-dimensional memory arrays are pointers to memory arrays. The length of a
-dynamic array is stored at the first slot of the array and followed by the array
-elements.
+Elemen dalam array memori di Solidity selalu menempati kelipatan 32 byte (ini
+bahkan berlaku untuk ``bytes1[]``, tetapi tidak untuk ``byte`` dan ``string``).
+Array memori multi-dimensi adalah pointer ke array memori. panjang dari
+array dinamis disimpan di slot pertama array dan diikuti oleh array
+elemen.
 
 .. warning::
-  There are some operations in Solidity that need a temporary memory area
-  larger than 64 bytes and therefore will not fit into the scratch space.
-  They will be placed where the free memory points to, but given their
-  short lifetime, the pointer is not updated. The memory may or may not
-  be zeroed out. Because of this, one should not expect the free memory
-  to point to zeroed out memory.
+  Ada beberapa operasi di Solidity yang membutuhkan area memori sementara
+  yang lebih besar dari 64 byte dan oleh karena itu tidak akan muat ke dalam ruang awal.
+  Mereka akan ditempatkan di mana memori bebas menunjuk, tetapi mengingat masa pakainya
+  yang singkat, penunjuk tidak diperbarui. Memori mungkin atau mungkin tidak nol. Karena itu,
+  seseorang seharusnya tidak mengharapkan memori bebas untuk menunjuk ke memori yang nol.
 
-  While it may seem like a good idea to use ``msize`` to arrive at a
-  definitely zeroed out memory area, using such a pointer non-temporarily
-  without updating the free memory pointer can have unexpected results.
+  Meskipun mungkin tampak seperti ide yang baik untuk menggunakan ``msize`` untuk tiba di
+  area memori yang benar-benar nol, menggunakan penunjuk seperti itu untuk sementara tanpa
+  memperbarui penunjuk memori bebas dapat memberikan hasil yang tidak diharapkan.
 
 
-Differences to Layout in Storage
+Perbedaan Layout di Storage
 ================================
 
-As described above the layout in memory is different from the layout in
-:ref:`storage<storage-inplace-encoding>`. Below there are some examples.
+Seperti yang dijelaskan diatas layout di memory berbeda dari layout di
+:ref:`storage<storage-inplace-encoding>`. Di bawah ini ada beberapa contoh.
 
-Example for Difference in Arrays
+Contoh Perbedaan dalam Array
 --------------------------------
 
-The following array occupies 32 bytes (1 slot) in storage, but 128
-bytes (4 items with 32 bytes each) in memory.
+Array berikut menempati 32 byte (1 slot) dalam penyimpanan, tetapi 128
+byte (4 item dengan masing-masing 32 byte) di memori.
 
 .. code-block:: solidity
 
@@ -55,11 +54,11 @@ bytes (4 items with 32 bytes each) in memory.
 
 
 
-Example for Difference in Struct Layout
----------------------------------------
+Contoh untuk Perbedaan dalam Layout Struct
+------------------------------------------
 
-The following struct occupies 96 bytes (3 slots of 32 bytes) in storage,
-but 128 bytes (4 items with 32 bytes each) in memory.
+Struktur berikut menempati 96 byte (3 slot 32 byte) dalam penyimpanan,
+tetapi 128 byte (4 item dengan masing-masing 32 byte) di memori.
 
 
 .. code-block:: solidity

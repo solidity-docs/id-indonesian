@@ -1,135 +1,134 @@
-******************
-Using the Compiler
-******************
+*********************
+Menggunakan Kompiler
+*********************
 
 .. index:: ! commandline compiler, compiler;commandline, ! solc
 
 .. _commandline-compiler:
 
-Using the Commandline Compiler
-******************************
+Menggunakan Kompiler Commandline
+********************************
 
 .. note::
-    This section does not apply to :ref:`solcjs <solcjs>`, not even if it is used in commandline mode.
+    Bagian ini tidak berlaku untuk :ref:`solcjs <solcjs>`, bahkan jika digunakan dalam mode commandline.
 
-Basic Usage
------------
+Penggunaan Dasar
+----------------
 
-One of the build targets of the Solidity repository is ``solc``, the solidity commandline compiler.
-Using ``solc --help`` provides you with an explanation of all options. The compiler can produce various outputs, ranging from simple binaries and assembly over an abstract syntax tree (parse tree) to estimations of gas usage.
-If you only want to compile a single file, you run it as ``solc --bin sourceFile.sol`` and it will print the binary. If you want to get some of the more advanced output variants of ``solc``, it is probably better to tell it to output everything to separate files using ``solc -o outputDirectory --bin --ast-compact-json --asm sourceFile.sol``.
+Salah satu target build dari repositori Solidity adalah ``solc``, compiler commandline solidity.
+Menggunakan ``solc --help`` memberi Anda penjelasan tentang semua opsi. Kompiler dapat menghasilkan berbagai output mulai dari binary sederhana dan assembly melalui abstract syntax tree (parse tree) hingga perkiraan penggunaan gas.
+Jika Anda hanya ingin mengkompilasi satu file, Anda menjalankannya sebagai ``solc --bin sourceFile.sol`` dan akan mencetak biner. Jika Anda ingin mendapatkan beberapa varian keluaran yang lebih maju dari ``solc``, mungkin lebih baik mengatakannya untuk menampilkan semuanya ke file terpisah menggunakan ``solc -o outputDirectory --bin --ast-compact-json - -asm sourceFile.sol``.
 
-Optimizer Options
------------------
+Opsi Optimizer
+--------------
 
-Before you deploy your contract, activate the optimizer when compiling using ``solc --optimize --bin sourceFile.sol``.
-By default, the optimizer will optimize the contract assuming it is called 200 times across its lifetime
-(more specifically, it assumes each opcode is executed around 200 times).
-If you want the initial contract deployment to be cheaper and the later function executions to be more expensive,
-set it to ``--optimize-runs=1``. If you expect many transactions and do not care for higher deployment cost and
-output size, set ``--optimize-runs`` to a high number.
-This parameter has effects on the following (this might change in the future):
+Sebelum Anda menerapkan kontrak Anda, aktifkan pengoptimal saat kompilasi menggunakan ``solc --optimize --bin sourceFile.sol``.
+Secara default, pengoptimal akan mengoptimalkan kontrak dengan asumsi kontrak tersebut dipanggil 200 kali sepanjang masa pakainya
+(lebih khusus, ini mengasumsikan setiap opcode dieksekusi sekitar 200 kali).
+Jika Anda ingin penerapan kontrak awal lebih murah dan eksekusi fungsi selanjutnya lebih mahal,
+setel ke ``--optimize-runs=1``. Jika Anda mengharapkan banyak transaksi dan tidak peduli dengan biaya penerapan yang lebih tinggi dan
+ukuran output, setel ``--optimize-runs`` ke angka tinggi.
+Parameter ini memiliki efek sebagai berikut (ini mungkin berubah di masa mendatang):
 
-- the size of the binary search in the function dispatch routine
-- the way constants like large numbers or strings are stored
+- ukuran pencarian biner dalam fungsi pengiriman rutin
+- cara konstanta seperti angka atau string besar disimpan
 
 .. index:: allowed paths, --allow-paths, base path, --base-path, include paths, --include-path
 
-Base Path and Import Remapping
+Base Path dan Import Remapping
 ------------------------------
 
-The commandline compiler will automatically read imported files from the filesystem, but
-it is also possible to provide :ref:`path redirects <import-remapping>` using ``prefix=path`` in the following way:
+Kompiler commandline akan secara otomatis membaca file yang diimpor dari sistem file, tetapi
+Anda juga dapat menyediakan :ref:`path redirect <import-remapping>` menggunakan ``prefix=path`` dengan cara berikut:
 
 .. code-block:: bash
 
     solc github.com/ethereum/dapp-bin/=/usr/local/lib/dapp-bin/ file.sol
 
-This essentially instructs the compiler to search for anything starting with
-``github.com/ethereum/dapp-bin/`` under ``/usr/local/lib/dapp-bin``.
+Ini pada dasarnya menginstruksikan kompiler untuk mencari apa pun yang dimulai dengan
+``github.com/ethereum/dapp-bin/`` di bawah ``/usr/local/lib/dapp-bin``.
 
-When accessing the filesystem to search for imports, :ref:`paths that do not start with ./
-or ../ <direct-imports>` are treated as relative to the directories specified using
-``--base-path`` and ``--include-path`` options (or the current working directory if base path is not specified).
-Furthermore, the part of the path added via these options will not appear in the contract metadata.
+Saat mengakses filesystem untuk mencari impor, :ref:`path yang tidak dimulai dengan ./
+atau ../ <direct-imports>` diperlakukan sebagai relatif terhadap direktori yang ditentukan menggunakan
+Opsi ``--base-path`` dan ``--include-path`` (atau direktori kerja saat ini jika jalur dasar tidak ditentukan).
+Selanjutnya, bagian dari jalur yang ditambahkan melalui opsi ini tidak akan muncul dalam metadata kontrak.
 
-For security reasons the compiler has :ref:`restrictions on what directories it can access <allowed-paths>`.
-Directories of source files specified on the command line and target paths of
-remappings are automatically allowed to be accessed by the file reader, but everything
-else is rejected by default.
-Additional paths (and their subdirectories) can be allowed via the
+Untuk alasan keamanan, kompiler memiliki :ref:`pembatasan pada direktori apa yang dapat diakses <allowed-paths>`.
+Direktori file sumber yang ditentukan pada baris perintah dan jalur target dari
+remapping secara otomatis diizinkan untuk diakses oleh pembaca file, tetapi yang
+lainnya ditolak secara default.
+Path tambahan (dan subdirektorinya) dapat diizinkan melalui
 ``--allow-paths /sample/path,/another/sample/path`` switch.
-Everything inside the path specified via ``--base-path`` is always allowed.
+Segala sesuatu di dalam jalur yang ditentukan melalui ``--base-path`` selalu diizinkan.
 
-The above is only a simplification of how the compiler handles import paths.
-For a detailed explanation with examples and discussion of corner cases please refer to the section on
-:ref:`path resolution <path-resolution>`.
+Di atas hanyalah penyederhanaan bagaimana kompiler menangani jalur impor.
+Untuk penjelasan rinci dengan contoh dan pembahasan kasus sudut, silakan merujuk ke bagian di
+:ref:`resolusi path <path-resolusi>`.
 
 .. index:: ! linker, ! --link, ! --libraries
 .. _library-linking:
 
-Library Linking
----------------
+Penautan Library
+----------------
 
-If your contracts use :ref:`libraries <libraries>`, you will notice that the bytecode contains substrings of the form ``__$53aea86b7d70b31448b230b20ae141a537$__``. These are placeholders for the actual library addresses.
-The placeholder is a 34 character prefix of the hex encoding of the keccak256 hash of the fully qualified library name.
-The bytecode file will also contain lines of the form ``// <placeholder> -> <fq library name>`` at the end to help
-identify which libraries the placeholders represent. Note that the fully qualified library name
-is the path of its source file and the library name separated by ``:``.
-You can use ``solc`` as a linker meaning that it will insert the library addresses for you at those points:
+Jika kontrak Anda menggunakan :ref:`libraries <libraries>`, Anda akan melihat bahwa bytecode berisi substring dalam bentuk ``__$53aea86b7d70b31448b230b20ae141a537$__``. Ini adalah tempat penampung untuk alamat library yang sebenarnya.
+Placeholder adalah awalan 34 karakter dari pengkodean hex dari hash keccak256 dari nama library yang sepenuhnya memenuhi syarat.
+File bytecode juga akan berisi baris formulir ``// <placeholder> -> <fq library name>`` di bagian akhir untuk membantu
+mengidentifikasi library mana yang diwakili oleh placeholder. Perhatikan bahwa nama library yang sepenuhnya memenuhi syarat
+adalah jalur file sumbernya dan nama library yang dipisahkan oleh ``:``.
+Anda dapat menggunakan ``solc`` sebagai penghubung yang berarti bahwa itu akan memasukkan alamat library untuk Anda pada titik-titik tersebut:
 
-Either add ``--libraries "file.sol:Math=0x1234567890123456789012345678901234567890 file.sol:Heap=0xabCD567890123456789012345678901234567890"`` to your command to provide an address for each library (use commas or spaces as separators) or store the string in a file (one library per line) and run ``solc`` using ``--libraries fileName``.
+Tambahkan ``--libraries "file.sol:Math=0x1234567890123456789012345678901234567890 file.sol:Heap=0xabCD567890123456789012345678901234567890"`` ke perintah Anda untuk memberikan alamat setiap library (gunakan koma atau spasi sebagai pemisah) atau simpan string dalam file (satu library per baris) dan jalankan ``solc`` menggunakan ``--libraries fileName``.
 
 .. note::
-    Starting Solidity 0.8.1 accepts ``=`` as separator between library and address, and ``:`` as a separator is deprecated. It will be removed in the future. Currently ``--libraries "file.sol:Math:0x1234567890123456789012345678901234567890 file.sol:Heap:0xabCD567890123456789012345678901234567890"`` will work too.
+    Memulai Solidity 0.8.1 menerima ``=`` sebagai pemisah antara library dan alamat, dan ``:`` sebagai pemisah tidak digunakan lagi. Ini akan dihapus di masa depan. Saat ini ``--libraries "file.sol:Math:0x1234567890123456789012345678901234567890 file.sol:Heap:0xabCD567890123456789012345678901234567890"`` juga akan berfungsi.
 
 .. index:: --standard-json, --base-path
 
-If ``solc`` is called with the option ``--standard-json``, it will expect a JSON input (as explained below) on the standard input, and return a JSON output on the standard output. This is the recommended interface for more complex and especially automated uses. The process will always terminate in a "success" state and report any errors via the JSON output.
-The option ``--base-path`` is also processed in standard-json mode.
+Jika ``solc`` dipanggil dengan opsi ``--standard-json``, ia akan mengharapkan input JSON (seperti yang dijelaskan di bawah) pada input standar, dan mengembalikan output JSON pada output standar. Ini adalah interface yang direkomendasikan untuk penggunaan yang lebih kompleks dan terutama otomatis. Proses akan selalu berakhir dalam status "sukses" dan melaporkan kesalahan apa pun melalui output JSON.
+Opsi ``--base-path`` juga diproses dalam mode json standar.
 
-If ``solc`` is called with the option ``--link``, all input files are interpreted to be unlinked binaries (hex-encoded) in the ``__$53aea86b7d70b31448b230b20ae141a537$__``-format given above and are linked in-place (if the input is read from stdin, it is written to stdout). All options except ``--libraries`` are ignored (including ``-o``) in this case.
+Jika ``solc`` dipanggil dengan opsi ``--link``, semua file input ditafsirkan sebagai binari yang tidak terhubung (dikodekan hex) dalam format ``__$53aea86b7d70b31448b230b20ae141a537$__`` yang diberikan di atas dan ditautkan di tempat (jika input dibaca dari stdin, itu ditulis ke stdout). Semua opsi kecuali ``--libraries`` diabaikan (termasuk ``-o``) dalam kasus ini.
 
 .. warning::
-    Manually linking libraries on the generated bytecode is discouraged because it does not update
-    contract metadata. Since metadata contains a list of libraries specified at the time of
-    compilation and bytecode contains a metadata hash, you will get different binaries, depending
-    on when linking is performed.
+    Menautkan library secara manual pada bytecode yang dihasilkan tidak disarankan karena tidak memperbarui
+    metadata kontrak. Karena metadata berisi daftar library yang ditentukan pada saat
+    kompilasi dan bytecode berisi hash metadata, Anda akan mendapatkan binari yang berbeda, tergantung
+    kapan penautan dilakukan.
 
-    You should ask the compiler to link the libraries at the time a contract is compiled by either
-    using the ``--libraries`` option of ``solc`` or the ``libraries`` key if you use the
-    standard-JSON interface to the compiler.
+    Anda harus meminta kompiler untuk menautkan library pada saat kontrak dikompilasi
+    dengan menggunakan opsi ``--libraries`` dari ``solc`` atau kunci ``libraries`` jika Anda menggunakan
+    antarmuka JSON standar ke kompiler.
 
 .. note::
-    The library placeholder used to be the fully qualified name of the library itself
-    instead of the hash of it. This format is still supported by ``solc --link`` but
-    the compiler will no longer output it. This change was made to reduce
-    the likelihood of a collision between libraries, since only the first 36 characters
-    of the fully qualified library name could be used.
+    Placeholder library dulunya adalah nama library itu sendiri
+    yang sepenuhnya memenuhi syarat, bukan hashnya. Format ini masih didukung oleh ``solc --link`` tetapi
+    kompilator tidak akan mengeluarkannya lagi. Perubahan ini dibuat untuk mengurangi
+    kemungkinan tabrakan antar library, karena hanya 36 karakter
+    pertama dari nama library yang memenuhi syarat yang dapat digunakan.
 
 .. _evm-version:
 .. index:: ! EVM version, compile target
 
-Setting the EVM Version to Target
-*********************************
+Setting Versi EVM ke Target
+***************************
 
-When you compile your contract code you can specify the Ethereum virtual machine
-version to compile for to avoid particular features or behaviours.
+Saat Anda mengkompilasi kode kontrak Anda, Anda dapat menentukan versi mesin virtual
+Ethereum untuk dikompilasi untuk menghindari fitur atau perilaku tertentu.
 
 .. warning::
 
-   Compiling for the wrong EVM version can result in wrong, strange and failing
-   behaviour. Please ensure, especially if running a private chain, that you
-   use matching EVM versions.
+   Kompilasi untuk versi EVM yang salah dapat menghasilkan perilaku yang salah, aneh,
+   dan gagal. Harap pastikan, terutama jika menjalankan private chain, bahwa Anda
+   menggunakan versi EVM yang cocok.
 
-On the command line, you can select the EVM version as follows:
+Pada baris perintah, Anda dapat memilih versi EVM sebagai berikut:
 
 .. code-block:: shell
 
   solc --evm-version <VERSION> contract.sol
 
-In the :ref:`standard JSON interface <compiler-api>`, use the ``"evmVersion"``
-key in the ``"settings"`` field:
+Di :ref:`antarmuka JSON standar <compiler-api>`, gunakan kunci ``"evmVersion"`` di bidang ``"settings"``:
 
 .. code-block:: javascript
 
@@ -141,61 +140,62 @@ key in the ``"settings"`` field:
       }
     }
 
-Target Options
---------------
+Opsi Target
+-----------
 
-Below is a list of target EVM versions and the compiler-relevant changes introduced
-at each version. Backward compatibility is not guaranteed between each version.
+Di bawah ini adalah daftar versi EVM target dan perubahan yang relevan dengan kompiler yang diperkenalkan
+di setiap versi. Kompatibilitas *Backward* tidak dijamin antara setiap versi.
 
 - ``homestead``
-   - (oldest version)
+   - (versi tertua)
 - ``tangerineWhistle``
-   - Gas cost for access to other accounts increased, relevant for gas estimation and the optimizer.
-   - All gas sent by default for external calls, previously a certain amount had to be retained.
+   - Biaya gas untuk akses ke akun lain meningkat, relevan untuk estimasi gas dan pengoptimalan.
+   - Semua gas yang dikirim secara default untuk panggilan eksternal, sebelumnya jumlah tertentu harus dipertahankan.
 - ``spuriousDragon``
-   - Gas cost for the ``exp`` opcode increased, relevant for gas estimation and the optimizer.
+   - Biaya gas untuk opcode ``exp`` meningkat, relevan untuk estimasi gas dan pengoptimalan.
 - ``byzantium``
-   - Opcodes ``returndatacopy``, ``returndatasize`` and ``staticcall`` are available in assembly.
-   - The ``staticcall`` opcode is used when calling non-library view or pure functions, which prevents the functions from modifying state at the EVM level, i.e., even applies when you use invalid type conversions.
-   - It is possible to access dynamic data returned from function calls.
-   - ``revert`` opcode introduced, which means that ``revert()`` will not waste gas.
+   - Opcode ``returndatacopy``, ``returndatasize`` dan ``staticcall`` tersedia dalam assembly.
+   - Opcode ``staticcall`` digunakan saat memanggil tampilan non-library atau fungsi pure, yang mencegah fungsi mengubah state pada tingkat EVM, yaitu, bahkan berlaku saat Anda menggunakan konversi jenis yang tidak valid.
+   - Dimungkinkan untuk mengakses data dinamis yang dikembalikan dari panggilan fungsi.
+   - ``revert`` opcode diperkenalkan, yang berarti ``revert()`` tidak akan membuang gas.
 - ``constantinople``
-   - Opcodes ``create2`, ``extcodehash``, ``shl``, ``shr`` and ``sar`` are available in assembly.
-   - Shifting operators use shifting opcodes and thus need less gas.
+   - Opcode ``create2`, ``extcodehash``, ``shl``, ``shr`` and ``sar`` tersedia di assembly.
+   - Shifting operators menggunakan shifting opcodes dan sehingga membutuhkan lebih sedikit gas.
 - ``petersburg``
-   - The compiler behaves the same way as with constantinople.
+   - Kompiler berperilaku dengan cara yang sama seperti dengan konstantinopel.
 - ``istanbul``
-   - Opcodes ``chainid`` and ``selfbalance`` are available in assembly.
+   - Opcodes ``chainid`` dan ``selfbalance`` tersedia di assembly.
 - ``berlin``
-   - Gas costs for ``SLOAD``, ``*CALL``, ``BALANCE``, ``EXT*`` and ``SELFDESTRUCT`` increased. The
-     compiler assumes cold gas costs for such operations. This is relevant for gas estimation and
-     the optimizer.
+   - Biaya gas untuk ``SLOAD``, ``*CALL``, ``BALANCE``, ``EXT*`` dan ``SELFDESTRUCT`` meningkat. Kompiler
+     mengasumsikan biaya cold gas untuk operasi tersebut. Ini relevan untuk estimasi gas
+     dan pengoptimal.
 - ``london`` (**default**)
-   - The block's base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_) can be accessed via the global ``block.basefee`` or ``basefee()`` in inline assembly.
+   - Block base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ dan `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_) dapat diakses via global ``block.basefee`` atau ``basefee()`` di inline assembly.
 
 
 .. index:: ! standard JSON, ! --standard-json
 .. _compiler-api:
 
-Compiler Input and Output JSON Description
-******************************************
+Deskripsi JSON Input dan Output Kompiler
+****************************************
 
-The recommended way to interface with the Solidity compiler especially for
-more complex and automated setups is the so-called JSON-input-output interface.
-The same interface is provided by all distributions of the compiler.
+Cara yang disarankan untuk berinteraksi dengan kompiler Solidity terutama untuk
+pengaturan yang lebih kompleks dan otomatis adalah yang disebut antarmuka input-output JSON.
+Antarmuka yang sama disediakan oleh semua distribusi kompiler.
 
-The fields are generally subject to change,
-some are optional (as noted), but we try to only make backwards compatible changes.
+Bidang umumnya dapat berubah,
+beberapa bersifat opsional (seperti yang disebutkan), tetapi kami mencoba hanya membuat perubahan yang kompatibel dengan versi sebelumnya.
 
-The compiler API expects a JSON formatted input and outputs the compilation result in a JSON formatted output.
-The standard error output is not used and the process will always terminate in a "success" state, even
-if there were errors. Errors are always reported as part of the JSON output.
+Kompiler API mengharapkan input berformat JSON dan mengeluarkan hasil kompilasi dalam
+output berformat JSON. Keluaran kesalahan standar tidak digunakan dan proses akan selalu
+berakhir dalam keadaan "berhasil", bahkan jika ada kesalahan. Kesalahan selalu dilaporkan
+sebagai bagian dari keluaran JSON.
 
-The following subsections describe the format through an example.
-Comments are of course not permitted and used here only for explanatory purposes.
+Subbagian berikut menjelaskan format melalui contoh.
+Komentar tentu saja tidak diizinkan dan digunakan di sini hanya untuk tujuan penjelasan.
 
-Input Description
------------------
+Deskripsi Input
+---------------
 
 .. code-block:: javascript
 
@@ -601,125 +601,122 @@ Output Description
 Error Types
 ~~~~~~~~~~~
 
-1. ``JSONError``: JSON input doesn't conform to the required format, e.g. input is not a JSON object, the language is not supported, etc.
-2. ``IOError``: IO and import processing errors, such as unresolvable URL or hash mismatch in supplied sources.
-3. ``ParserError``: Source code doesn't conform to the language rules.
-4. ``DocstringParsingError``: The NatSpec tags in the comment block cannot be parsed.
-5. ``SyntaxError``: Syntactical error, such as ``continue`` is used outside of a ``for`` loop.
-6. ``DeclarationError``: Invalid, unresolvable or clashing identifier names. e.g. ``Identifier not found``
-7. ``TypeError``: Error within the type system, such as invalid type conversions, invalid assignments, etc.
-8. ``UnimplementedFeatureError``: Feature is not supported by the compiler, but is expected to be supported in future versions.
-9. ``InternalCompilerError``: Internal bug triggered in the compiler - this should be reported as an issue.
-10. ``Exception``: Unknown failure during compilation - this should be reported as an issue.
-11. ``CompilerError``: Invalid use of the compiler stack - this should be reported as an issue.
-12. ``FatalError``: Fatal error not processed correctly - this should be reported as an issue.
-13. ``Warning``: A warning, which didn't stop the compilation, but should be addressed if possible.
-14. ``Info``: Information that the compiler thinks the user might find useful, but is not dangerous and does not necessarily need to be addressed.
+1. ``JSONError``: Input JSON tidak sesuai dengan format yang diperlukan, mis. input bukan objek JSON, bahasa tidak didukung, dll.
+2. ``IOError``: IO dan kesalahan pemrosesan impor, seperti URL yang tidak dapat diselesaikan atau ketidakcocokan hash dalam sumber yang disediakan.
+3. ``ParserError``: Kode sumber tidak sesuai dengan aturan bahasa.
+4. ``DocstringParsingError``: Tag NatSpec di blok komentar tidak dapat diuraikan.
+5. ``SyntaxError``: Kesalahan sintaksis, seperti ``continue`` digunakan di luar loop ``for``.
+6. ``DeclarationError``: Nama pengidentifikasi tidak valid, tidak dapat diselesaikan, atau bentrok. misalnya ``Identifier tidak ditemukan``
+7. ``TypeError``: Kesalahan dalam sistem tipe, seperti konversi tipe yang tidak valid, penetapan yang tidak valid, dll.
+8. ``UnimplementedFeatureError``: Fitur tidak didukung oleh kompiler, tetapi diharapkan didukung di versi mendatang.
+9. ``InternalCompilerError``: Bug internal terpicu dalam kompiler - ini harus dilaporkan sebagai masalah.
+10. ``Pengecualian``: Kegagalan yang tidak diketahui selama kompilasi - ini harus dilaporkan sebagai masalah.
+11. ``CompilerError``: Penggunaan tumpukan kompiler yang tidak valid - ini harus dilaporkan sebagai masalah.
+12. ``FatalError``: Kesalahan fatal tidak diproses dengan benar - ini harus dilaporkan sebagai masalah.
+13. ``Peringatan``: Peringatan, yang tidak menghentikan kompilasi, tetapi harus ditangani jika memungkinkan.
+14. ``Info``: Informasi yang menurut kompiler mungkin berguna bagi pengguna, tetapi tidak berbahaya dan tidak perlu ditangani.
 
 
 .. _compiler-tools:
 
-Compiler Tools
-**************
+Alat kompiler
+*************
 
 solidity-upgrade
 ----------------
 
-``solidity-upgrade`` can help you to semi-automatically upgrade your contracts
-to breaking language changes. While it does not and cannot implement all
-required changes for every breaking release, it still supports the ones, that
-would need plenty of repetitive manual adjustments otherwise.
+``solidity-upgrade`` dapat membantu Anda meningkatkan versi kontrak
+secara semi-otomatis untuk memecahkan perubahan bahasa. Meskipun tidak dan tidak dapat
+mengimplementasikan semua perubahan yang diperlukan untuk setiap rilis yang terputus, ia masih
+mendukungnya, yang akan membutuhkan banyak penyesuaian manual berulang.
 
 .. note::
 
-    ``solidity-upgrade`` carries out a large part of the work, but your
-    contracts will most likely need further manual adjustments. We recommend
-    using a version control system for your files. This helps reviewing and
-    eventually rolling back the changes made.
+    ``solidity-upgrade`` melakukan sebagian besar pekerjaan, tetapi kontrak Anda kemungkinan
+    besar akan membutuhkan penyesuaian manual lebih lanjut. Sebaiknya gunakan sistem kontrol
+    versi untuk file Anda. Ini membantu meninjau dan akhirnya mengembalikan perubahan yang dibuat.
 
 .. warning::
 
-    ``solidity-upgrade`` is not considered to be complete or free from bugs, so
-    please use with care.
+    ``solidity-upgrade`` tidak dianggap lengkap atau bebas dari bug, jadi harap gunakan dengan hati-hati.
 
-How it Works
-~~~~~~~~~~~~
+Bagaimana cara kerjanya
+~~~~~~~~~~~~~~~~~~~~~~~
 
-You can pass (a) Solidity source file(s) to ``solidity-upgrade [files]``. If
-these make use of ``import`` statement which refer to files outside the
-current source file's directory, you need to specify directories that
-are allowed to read and import files from, by passing
-``--allow-paths [directory]``. You can ignore missing files by passing
-``--ignore-missing``.
+Anda dapat meneruskan (sebuah) file sumber Solidity ke ``solidity-upgrade [files]``. Jika
+ini menggunakan pernyataan ``import`` yang merujuk ke file di luar direktori
+file sumber saat ini, Anda perlu menentukan direktori yang diizinkan untuk membaca dan
+mengimpor file dari, dengan meneruskan ``--allow-paths [directory]` `. Anda dapat mengabaikan file yang hilang dengan
+meneruskan ``--ignore-missing``.
 
-``solidity-upgrade`` is based on ``libsolidity`` and can parse, compile and
-analyse your source files, and might find applicable source upgrades in them.
+``solidity-upgrade`` didasarkan pada ``libsolidity`` dan dapat mengurai, mengkompilasi dan
+menganalisis file sumber Anda, dan mungkin menemukan peningkatan sumber yang berlaku di dalamnya.
 
-Source upgrades are considered to be small textual changes to your source code.
-They are applied to an in-memory representation of the source files
-given. The corresponding source file is updated by default, but you can pass
-``--dry-run`` to simulate to whole upgrade process without writing to any file.
+Source upgrade dianggap sebagai perubahan tekstual kecil pada kode sumber Anda.
+Mereka diterapkan pada representasi dalam memori dari file sumber
+yang diberikan. File sumber terkait diperbarui secara default, tetapi Anda
+dapat meneruskan ``--dry-run`` untuk mensimulasikan ke seluruh proses peningkatan tanpa menulis ke file apa pun.
 
-The upgrade process itself has two phases. In the first phase source files are
-parsed, and since it is not possible to upgrade source code on that level,
-errors are collected and can be logged by passing ``--verbose``. No source
-upgrades available at this point.
+Proses upgrade itu sendiri memiliki dua fase. Pada fase pertama, file sumber diurai,
+dan karena kode sumber tidak dapat ditingkatkan pada level tersebut,
+kesalahan dikumpulkan dan dapat dicatat dengan meneruskan ``--verbose``. Tidak ada
+peningkatan sumber yang tersedia saat ini.
 
-In the second phase, all sources are compiled and all activated upgrade analysis
-modules are run alongside compilation. By default, all available modules are
-activated. Please read the documentation on
-:ref:`available modules <upgrade-modules>` for further details.
+Pada fase kedua, semua sumber dikompilasi dan semua modul analisis pemutakhiran
+yang diaktifkan dijalankan bersamaan dengan kompilasi. Secara default, semua modul yang
+tersedia diaktifkan. Silakan baca dokumentasi di
+:ref:`available modules <upgrade-modules>` untuk detail lebih lanjut.
 
 
-This can result in compilation errors that may
-be fixed by source upgrades. If no errors occur, no source upgrades are being
-reported and you're done.
-If errors occur and some upgrade module reported a source upgrade, the first
-reported one gets applied and compilation is triggered again for all given
-source files. The previous step is repeated as long as source upgrades are
-reported. If errors still occur, you can log them by passing ``--verbose``.
-If no errors occur, your contracts are up to date and can be compiled with
-the latest version of the compiler.
+Hal ini dapat mengakibatkan kesalahan kompilasi yang dapat diperbaiki oleh
+peningkatan sumber. Jika tidak ada kesalahan yang terjadi, tidak ada pemutakhiran
+sumber yang dilaporkan dan Anda selesai.
+Jika kesalahan terjadi dan beberapa modul pemutakhiran melaporkan pemutakhiran sumber,
+yang pertama dilaporkan akan diterapkan dan kompilasi dipicu lagi untuk semua file sumber
+yang diberikan. Langkah sebelumnya diulang selama upgrade sumber adalah dilaporkan.
+Jika kesalahan masih terjadi, Anda dapat mencatatnya dengan meneruskan ``--verbose``.
+Jika tidak ada kesalahan yang terjadi, kontrak Anda mutakhir dan dapat dikompilasi
+dengan versi kompiler terbaru.
 
 .. _upgrade-modules:
 
-Available Upgrade Modules
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Peningkatan Modul yang Tersedia
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +----------------------------+---------+--------------------------------------------------+
-| Module                     | Version | Description                                      |
+| Modul                      | Versi   | Deskstipsi                                       |
 +============================+=========+==================================================+
-| ``constructor``            | 0.5.0   | Constructors must now be defined using the       |
-|                            |         | ``constructor`` keyword.                         |
+| ``constructor``            | 0.5.0   | Konstruktor sekarang harus didefinisikan         |
+|                            |         | menggunakan ``constructor`` keyword.             |
 +----------------------------+---------+--------------------------------------------------+
-| ``visibility``             | 0.5.0   | Explicit function visibility is now mandatory,   |
-|                            |         | defaults to ``public``.                          |
+| ``visibility``             | 0.5.0   | Visibilitas fungsi eksplisit sekarang wajib,     |
+|                            |         | defaults ke ``public``.                          |
 +----------------------------+---------+--------------------------------------------------+
-| ``abstract``               | 0.6.0   | The keyword ``abstract`` has to be used if a     |
-|                            |         | contract does not implement all its functions.   |
+| ``abstract``               | 0.6.0   | keyword ``abstract`` harus digunakan jika        |
+|                            |         | kontrak tidak mengiplementasikan semua fungsinya.|
 +----------------------------+---------+--------------------------------------------------+
-| ``virtual``                | 0.6.0   | Functions without implementation outside an      |
-|                            |         | interface have to be marked ``virtual``.         |
+| ``virtual``                | 0.6.0   | Fungsi tanpa implementasi di luar                |
+|                            |         | antarmuka harus ditandai ``virtual``.            |
 +----------------------------+---------+--------------------------------------------------+
-| ``override``               | 0.6.0   | When overriding a function or modifier, the new  |
-|                            |         | keyword ``override`` must be used.               |
+| ``override``               | 0.6.0   | Saat mengganti fungsi atau pengubah, keyword     |
+|                            |         | baru ``override`` harus digunakan.               |
 +----------------------------+---------+--------------------------------------------------+
-| ``dotsyntax``              | 0.7.0   | The following syntax is deprecated:              |
-|                            |         | ``f.gas(...)()``, ``f.value(...)()`` and         |
-|                            |         | ``(new C).value(...)()``. Replace these calls by |
-|                            |         | ``f{gas: ..., value: ...}()`` and                |
+| ``dotsyntax``              | 0.7.0   | Sintaks berikut tidak digunakan lagi:            |
+|                            |         | ``f.gas(...)()``, ``f.value(...)()`` dan         |
+|                            |         | ``(new C).value(...)()``. Ganti panggilan ini    |
+|                            |         | dengan ``f{gas: ..., value: ...}()`` dan         |
 |                            |         | ``(new C){value: ...}()``.                       |
 +----------------------------+---------+--------------------------------------------------+
-| ``now``                    | 0.7.0   | The ``now`` keyword is deprecated. Use           |
-|                            |         | ``block.timestamp`` instead.                     |
+| ``now``                    | 0.7.0   | Keyword ``now`` sudah ditinggalkan. Gunakan      |
+|                            |         | ``block.timestamp`` Sebagai ganyinya.            |
 +----------------------------+---------+--------------------------------------------------+
-| ``constructor-visibility`` | 0.7.0   | Removes visibility of constructors.              |
+| ``constructor-visibility`` | 0.7.0   | Menghapus visibilitas konstruktor.               |
 |                            |         |                                                  |
 +----------------------------+---------+--------------------------------------------------+
 
-Please read :doc:`0.5.0 release notes <050-breaking-changes>`,
+Silahkan baca :doc:`0.5.0 release notes <050-breaking-changes>`,
 :doc:`0.6.0 release notes <060-breaking-changes>`,
-:doc:`0.7.0 release notes <070-breaking-changes>` and :doc:`0.8.0 release notes <080-breaking-changes>` for further details.
+:doc:`0.7.0 release notes <070-breaking-changes>` dan :doc:`0.8.0 release notes <080-breaking-changes>` untuk rincian lebih lanjut.
 
 Synopsis
 ~~~~~~~~
@@ -745,17 +742,17 @@ Synopsis
 
 
 
-Bug Reports / Feature Requests
+Laporan Bug / Permintaan Fitur
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you found a bug or if you have a feature request, please
-`file an issue <https://github.com/ethereum/solidity/issues/new/choose>`_ on Github.
+Jika Anda menemukan bug atau jika Anda memiliki permintaan fitur, silakan
+`mengajukan masalah <https://github.com/ethereum/solidity/issues/new/choose>`_ di Github.
 
 
-Example
-~~~~~~~
+Contoh
+~~~~~~
 
-Assume that you have the following contract in ``Source.sol``:
+Misalnya Anda memiliki kontrak berikut di ``Source.sol``:
 
 .. code-block:: Solidity
 
@@ -790,26 +787,26 @@ Assume that you have the following contract in ``Source.sol``:
 
 
 
-Required Changes
-^^^^^^^^^^^^^^^^
+Perubahan yang Diperlukan
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The above contract will not compile starting from 0.7.0. To bring the contract up to date with the
-current Solidity version, the following upgrade modules have to be executed:
-``constructor-visibility``, ``now`` and ``dotsyntax``. Please read the documentation on
-:ref:`available modules <upgrade-modules>` for further details.
+Kontrak di atas tidak akan dikompilasi mulai dari 0.7.0. Untuk memperbarui kontrak dengan
+versi Solidity saat ini, modul pemutakhiran berikut harus dijalankan:
+``constructor-visibility``, ``now`` dan ``dotsyntax``. Silakan baca dokumentasi di
+:ref:`modul yang tersedia <upgrade-modules>` untuk detail lebih lanjut.
 
 
-Running the Upgrade
+Menjalankan Upgrade
 ^^^^^^^^^^^^^^^^^^^
 
-It is recommended to explicitly specify the upgrade modules by using ``--modules`` argument.
+Direkomendasikan untuk secara eksplisit menentukan modul upgrade dengan menggunakan argumen ``--modules``.
 
 .. code-block:: bash
 
     solidity-upgrade --modules constructor-visibility,now,dotsyntax Source.sol
 
-The command above applies all changes as shown below. Please review them carefully (the pragmas will
-have to be updated manually.)
+Perintah di atas menerapkan semua perubahan seperti yang ditunjukkan di bawah ini. Harap tinjau dengan cermat (pragma
+harus diperbarui secara manual.)
 
 .. code-block:: Solidity
 

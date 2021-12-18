@@ -1,70 +1,67 @@
 .. index:: source mappings
 
 ***************
-Source Mappings
+Source Mapping
 ***************
 
-As part of the AST output, the compiler provides the range of the source
-code that is represented by the respective node in the AST. This can be
-used for various purposes ranging from static analysis tools that report
-errors based on the AST and debugging tools that highlight local variables
-and their uses.
+Sebagai bagian dari output AST, kompilator menyediakan rentang kode sumber yang diwakili
+oleh masing-masing node di AST. Ini dapat digunakan untuk berbagai tujuan mulai dari alat
+analisis statis yang melaporkan kesalahan berdasarkan AST dan alat debugging yang menyoroti
+variabel lokal dan penggunaannya.
 
-Furthermore, the compiler can also generate a mapping from the bytecode
-to the range in the source code that generated the instruction. This is again
-important for static analysis tools that operate on bytecode level and
-for displaying the current position in the source code inside a debugger
-or for breakpoint handling. This mapping also contains other information,
-like the jump type and the modifier depth (see below).
+Selanjutnya, kompiler juga dapat menghasilkan mapping dari bytecode ke kisaran
+dalam kode sumber yang menghasilkan instruksi. sekali lagi Ini penting untuk alat analisis statis yang beroperasi
+pada tingkat bytecode dan untuk menampilkan posisi saat ini dalam kode sumber di dalam debugger
+atau untuk penanganan breakpoint. Pemetaan ini juga berisi informasi lain, seperti jenis lompatan
+dan kedalaman modifier (lihat di bawah).
 
-Both kinds of source mappings use integer identifiers to refer to source files.
-The identifier of a source file is stored in
-``output['sources'][sourceName]['id']`` where ``output`` is the output of the
-standard-json compiler interface parsed as JSON.
-For some utility routines, the compiler generates "internal" source files
-that are not part of the original input but are referenced from the source
-mappings. These source files together with their identifiers can be
-obtained via ``output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources']``.
+Kedua jenis mapping sumber menggunakan pengidentifikasi integer untuk merujuk ke file sumber.
+Pengidentifikasi file sumber disimpan di
+``output['sources'][sourceName]['id']`` dimana ``output`` merupakan output dari
+antarmuka kompiler standard-json diuraikan sebagai JSON.
+Untuk beberapa rutinitas utilitas, kompiler menghasilkan file sumber "internal" yang bukan
+bagian dari input asli tetapi direferensikan dari sumber
+mapping. File sumber ini bersama dengan pengidentifikasinya dapat
+diperoleh melalui ``output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources']``.
 
 .. note ::
-    In the case of instructions that are not associated with any particular source file,
-    the source mapping assigns an integer identifier of ``-1``. This may happen for
-    bytecode sections stemming from compiler-generated inline assembly statements.
+    Dalam hal instruksi yang tidak terkait dengan file sumber tertentu,
+    mapping sumber menetapkan pengidentifikasi integer ``-1``. Ini mungkin terjadi untuk
+    bagian bytecode yang berasal dari pernyataan inline assembly yang dihasilkan oleh kompiler.
 
-The source mappings inside the AST use the following
-notation:
+Source mapping di dalam AST menggunakan notasi
+berikut:
 
 ``s:l:f``
 
-Where ``s`` is the byte-offset to the start of the range in the source file,
-``l`` is the length of the source range in bytes and ``f`` is the source
-index mentioned above.
+Dimana ``s`` adalah byte-offset ke awal rentang dalam file sumber,
+``l`` adalah panjang rentang sumber dalam byte dan ``f`` adalah indeks
+sumber yang disebutkan di atas.
 
-The encoding in the source mapping for the bytecode is more complicated:
-It is a list of ``s:l:f:j:m`` separated by ``;``. Each of these
-elements corresponds to an instruction, i.e. you cannot use the byte offset
-but have to use the instruction offset (push instructions are longer than a single byte).
-The fields ``s``, ``l`` and ``f`` are as above. ``j`` can be either
-``i``, ``o`` or ``-`` signifying whether a jump instruction goes into a
-function, returns from a function or is a regular jump as part of e.g. a loop.
-The last field, ``m``, is an integer that denotes the "modifier depth". This depth
-is increased whenever the placeholder statement (``_``) is entered in a modifier
-and decreased when it is left again. This allows debuggers to track tricky cases
-like the same modifier being used twice or multiple placeholder statements being
-used in a single modifier.
+Encoding didalam source mapping untuk bytecode lebih rumit:
+Ini adalah daftar ``s:l:f:j:m`` yang dipisahkan oleh ``;``. Masing-masing
+elemen sesuai dengan instruksi, yaitu Anda tidak dapat menggunakan byte offset
+tetapi harus menggunakan instruksi offset (instruksi push lebih panjang dari satu byte).
+Kolom ``s``, ``l`` dan ``f`` adalah seperti di atas. ``j`` bisa jadi
+``i``, ``o`` atau ``-`` menandakan apakah instruksi jump masuk ke sebuah
+fungsi, kembali dari suatu fungsi atau merupakan lompatan reguler sebagai bagian dari mis. sebuah loop.
+Bidang terakhir, ``m``, adalah integer yang menunjukkan "kedalaman modifier". Kedalaman ini
+meningkat setiap kali pernyataan placeholder (``_``) dimasukkan ke dalam modifier
+dan berkurang jika dibiarkan lagi. Ini memungkinkan para debugger untuk melacak kasus-kasus rumit
+seperti modifier yang sama digunakan dua kali atau beberapa pernyataan placeholder
+digunakan dalam pengubah tunggal.
 
-In order to compress these source mappings especially for bytecode, the
-following rules are used:
+Untuk mengompresi source mapping ini terutama untuk bytecode,
+aturan berikut digunakan:
 
-- If a field is empty, the value of the preceding element is used.
-- If a ``:`` is missing, all following fields are considered empty.
+- Jika bidang kosong, nilai elemen sebelumnya digunakan.
+- Jika ``:`` tidak ada, semua bidang berikut dianggap kosong.
 
-This means the following source mappings represent the same information:
+Ini berarti source mapping berikut mewakili informasi yang sama:
 
 ``1:2:1;1:9:1;2:1:2;2:1:2;2:1:2``
 
 ``1:2:1;:9;2:1:2;;``
 
-Important to note is that when the :ref:`verbatim <yul-verbatim>` builtin is used,
-the source mappings will be invalid: The builtin is considered a single
-instruction instead of potentially multiple.
+Penting untuk dicatat bahwa ketika builtin :ref:`verbatim <yul-verbatim>` digunakan,
+source mapping akan tidak valid: Builtin dianggap sebagai instruksi tunggal alih-alih berpotensi banyak.

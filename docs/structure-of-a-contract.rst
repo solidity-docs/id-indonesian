@@ -3,25 +3,25 @@
 .. _contract_structure:
 
 ***********************
-Structure of a Contract
+Struktur Kontrak
 ***********************
 
-Contracts in Solidity are similar to classes in object-oriented languages.
-Each contract can contain declarations of :ref:`structure-state-variables`, :ref:`structure-functions`,
-:ref:`structure-function-modifiers`, :ref:`structure-events`, :ref:`structure-errors`, :ref:`structure-struct-types` and :ref:`structure-enum-types`.
-Furthermore, contracts can inherit from other contracts.
+Kontrak di Solidity mirip dengan class dalam bahasa *object-oriented*.
+Setiap kontrak dapat berisi pernyataan tentang :ref:`structure-state-variables`, :ref:`structure-functions`,
+:ref:`structure-function-modifiers`, :ref:`structure-events`, :ref:`structure-errors`, :ref:`structure-struct-types` dan :ref:`structure-enum-types`.
+Lebih jauh, kontrak dapat mewarisi dari kontrak lain.
 
-There are also special kinds of contracts called :ref:`libraries<libraries>` and :ref:`interfaces<interfaces>`.
+Ada juga jenis kontrak khusus yang disebut :ref:`libraries<libraries>` dan :ref:`interfaces<interfaces>`.
 
-The section about :ref:`contracts<contracts>` contains more details than this section,
-which serves to provide a quick overview.
+Bagian tentang :ref:`kontrak<contracts>` berisi lebih banyak detail daripada bagian ini,
+yang berfungsi untuk memberikan gambaran singkat.
 
 .. _structure-state-variables:
 
-State Variables
+Variabel State
 ===============
 
-State variables are variables whose values are permanently stored in contract
+Variabel State adalah variabel yang nilainya disimpan secara permanen di dalam kontrak
 storage.
 
 .. code-block:: solidity
@@ -34,18 +34,18 @@ storage.
         // ...
     }
 
-See the :ref:`types` section for valid state variable types and
-:ref:`visibility-and-getters` for possible choices for
-visibility.
+lihat bagian :ref:`types` untuk tipe variabel state yang valid dan
+:ref:`visibility-and-getters` untuk kemungkinan pilihan untuk
+visibilitas.
 
 .. _structure-functions:
 
-Functions
-=========
+Functions (Fungsi)
+==================
 
-Functions are the executable units of code. Functions are usually
-defined inside a contract, but they can also be defined outside of
-contracts.
+Fungsi adalah unit kode yang dapat dieksekusi. Fungsi biasanya
+didefinisikan di dalam kontrak, tetapi mereka juga dapat didefinisikan di luar
+kontrak.
 
 .. code-block:: solidity
 
@@ -63,23 +63,23 @@ contracts.
         return x * 2;
     }
 
-:ref:`function-calls` can happen internally or externally
-and have different levels of :ref:`visibility<visibility-and-getters>`
-towards other contracts. :ref:`Functions<functions>` accept :ref:`parameters and return variables<function-parameters-return-variables>` to pass parameters
-and values between them.
+:ref:`function-calls` dapat terjadi secara internal atau external
+dan kami memiliki level :ref:`visibilitas<visibility-and-getters>` yang berbeda
+terhadap kontrak lain. :ref:`Functions<functions>` menerima :ref:`variabel parameter and return<function-parameters-return-variables>` untuk melewati parameter
+dan nilai-nilai di antara mereka.
 
 .. _structure-function-modifiers:
 
-Function Modifiers
-==================
+Function Modifiers (Pengubah Fungsi)
+====================================
 
-Function modifiers can be used to amend the semantics of functions in a declarative way
-(see :ref:`modifiers` in the contracts section).
+Function modifiers dapat digunakan untuk mengubah semantics dari fungsi dengan cara deklaratif
+(lihat :ref:`modifiers` di bagian kontrak).
 
-Overloading, that is, having the same modifier name with different parameters,
-is not possible.
+Overloading, that is, memiliki nama modifier yang sama dengan paramater berbeda,
+itu tidak mungkin.
 
-Like functions, modifiers can be :ref:`overridden <modifier-overriding>`.
+Sama seperti functions, modifiers dapat :ref:`dikesampingkan <modifier-overriding>`.
 
 .. code-block:: solidity
 
@@ -107,7 +107,7 @@ Like functions, modifiers can be :ref:`overridden <modifier-overriding>`.
 Events
 ======
 
-Events are convenience interfaces with the EVM logging facilities.
+Events adalah antarmuka yang nyaman dengan fasilitas logging EVM.
 
 .. code-block:: solidity
 
@@ -123,19 +123,19 @@ Events are convenience interfaces with the EVM logging facilities.
         }
     }
 
-See :ref:`events` in contracts section for information on how events are declared
-and can be used from within a dapp.
+Lihat :ref:`events` dibagian kontrak untuk informasi bagaimana events dinyatakan
+dan dapat digunakan dari dalam dapp.
 
 .. _structure-errors:
 
-Errors
-======
+Error (kesalahan)
+==================
 
-Errors allow you to define descriptive names and data for failure situations.
-Errors can be used in :ref:`revert statements <revert-statement>`.
-In comparison to string descriptions, errors are much cheaper and allow you
-to encode additional data. You can use NatSpec to describe the error to
-the user.
+Error memungkinkan Anda untuk menentukan nama deskriptif dan data untuk situasi failure.
+Error dapat digunakan dalam :ref:`revert statement <revert-statement>`.
+Dibandingkan dengan deskripsi string, kesalahan jauh lebih murah dan memungkinkan Anda
+untuk mengkodekan data tambahan. Anda dapat menggunakan NatSpec untuk menjelaskan kesalahan ke
+pengguna.
 
 .. code-block:: solidity
 
@@ -158,15 +158,15 @@ the user.
         }
     }
 
-See :ref:`errors` in the contracts section for more information.
+Lihat :ref:`errors` dibagian kontrak untuk info lebih lanjut.
 
 .. _structure-struct-types:
 
 Struct Types
 =============
 
-Structs are custom defined types that can group several variables (see
-:ref:`structs` in types section).
+Struct adalah tipe yang ditentukan khusus yang dapat mengelompokkan beberapa variabel (lihat
+:ref:`structs` dibagian types).
 
 .. code-block:: solidity
 
@@ -187,8 +187,8 @@ Structs are custom defined types that can group several variables (see
 Enum Types
 ==========
 
-Enums can be used to create custom types with a finite set of 'constant values' (see
-:ref:`enums` in types section).
+Enums dapat digunakan untuk membuat tipe khusus dengan serangkaian 'nilai konstan' yang terbatas (lihat
+:ref:`enums` dibagian types).
 
 .. code-block:: solidity
 

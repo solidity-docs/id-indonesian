@@ -1,52 +1,48 @@
 .. index: variable cleanup
 
 *********************
-Cleaning Up Variables
+Cleaning Up Variabel
 *********************
 
-When a value is shorter than 256 bit, in some cases the remaining bits
-must be cleaned.
-The Solidity compiler is designed to clean such remaining bits before any operations
-that might be adversely affected by the potential garbage in the remaining bits.
-For example, before writing a value to  memory, the remaining bits need
-to be cleared because the memory contents can be used for computing
-hashes or sent as the data of a message call.  Similarly, before
-storing a value in the storage, the remaining bits need to be cleaned
-because otherwise the garbled value can be observed.
+Ketika nilai lebih pendek dari 256 bit, dalam beberapa kasus bit yang tersisa harus dibersihkan.
+Kompiler Solidity dirancang untuk membersihkan bit yang tersisa sebelum operasi apa pun yang
+mungkin terpengaruh oleh potensi sampah dalam bit yang tersisa.
+Misalnya, sebelum menulis nilai ke memori, bit yang tersisa perlu
+dibersihkan karena isi memori dapat digunakan untuk komputasi
+hash atau dikirim sebagai data panggilan pesan. Demikian pula, sebelumnya
+menyimpan nilai dalam penyimpanan, bit yang tersisa perlu dibersihkan
+karena jika tidak, nilai *garbled* dapat diamati.
 
-Note that access via inline assembly is not considered such an operation:
-If you use inline assembly to access Solidity variables
-shorter than 256 bits, the compiler does not guarantee that
-the value is properly cleaned up.
+Perhatikan bahwa akses melalui inline assembly tidak dianggap sebagai operasi seperti itu:
+Jika Anda menggunakan inline assembly untuk mengakses variabel Solidityyang lebih pendek
+dari 256 bit, kompiler tidak menjamin bahwa nilainya dibersihkan dengan benar.
 
-Moreover, we do not clean the bits if the immediately
-following operation is not affected.  For instance, since any non-zero
-value is considered ``true`` by ``JUMPI`` instruction, we do not clean
-the boolean values before they are used as the condition for
-``JUMPI``.
+Selain itu, kami tidak membersihkan bit jika operasiberikut segera tidak terpengaruh. Misalnya,
+karena setiap nilai non-zero dianggap ``true`` oleh instruksi ``JUMPI``, kami tidak membersihkan
+nilai boolean sebelum digunakan sebagai kondisi untuk ``JUMPI``.
 
-In addition to the design principle above, the Solidity compiler
-cleans input data when it is loaded onto the stack.
+Selain prinsip desain di atas, compiler Solidity
+membersihkan data input saat dimuat ke stack.
 
-Different types have different rules for cleaning up invalid values:
+Tipe yang berbeda memiliki aturan berbeda untuk membersihkan nilai yang tidak valid:
 
 +---------------+---------------+-------------------+
-|Type           |Valid Values   |Invalid Values Mean|
+|Tipe           | Nilai Valid   | Nilai Invalid Mean|
 +===============+===============+===================+
 |enum of n      |0 until n - 1  |exception          |
 |members        |               |                   |
 +---------------+---------------+-------------------+
 |bool           |0 or 1         |1                  |
 +---------------+---------------+-------------------+
-|signed integers|sign-extended  |currently silently |
-|               |word           |wraps; in the      |
-|               |               |future exceptions  |
-|               |               |will be thrown     |
+|signed integers|sign-extended  |saat ini diam-diam |
+|               |word           |wraps; di masa     |
+|               |               |depan eksepsi      |
+|               |               |akan diberikan     |
 |               |               |                   |
 |               |               |                   |
 +---------------+---------------+-------------------+
-|unsigned       |higher bits    |currently silently |
-|integers       |zeroed         |wraps; in the      |
-|               |               |future exceptions  |
-|               |               |will be thrown     |
+|unsigned       |higher bits    |saat ini diam-diam |
+|integers       |zeroed         |wraps; di masa     |
+|               |               |depan eksepsi      |
+|               |               |akan diberikan     |
 +---------------+---------------+-------------------+

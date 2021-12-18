@@ -2,35 +2,35 @@
 
 .. _types-conversion-elementary-types:
 
-Conversions between Elementary Types
-====================================
+Konversi antara Tipe Elementary
+===============================
 
-Implicit Conversions
---------------------
+Konversi Implisit
+-----------------
 
-An implicit type conversion is automatically applied by the compiler in some cases
-during assignments, when passing arguments to functions and when applying operators.
-In general, an implicit conversion between value-types is possible if it makes
-sense semantically and no information is lost.
+Konversi tipe implisit secara otomatis diterapkan oleh kompiler dalam beberapa kasus
+selama assignment, saat meneruskan argumen ke fungsi dan saat menerapkan operator.
+Secara umum, konversi implisit antara tipe-nilai dimungkinkan jika masuk akal
+secara semantik dan tidak ada informasi yang hilang.
 
-For example, ``uint8`` is convertible to
-``uint16`` and ``int128`` to ``int256``, but ``int8`` is not convertible to ``uint256``,
-because ``uint256`` cannot hold values such as ``-1``.
+Misalnya, ``uint8`` dapat dikonversi ke
+``uint16`` dan ``int128`` menjadi ``int256``, tetapi ``int8`` tidak dapat dikonversi menjadi ``uint256``,
+karena ``uint256`` tidak dapat menyimpan nilai seperti ``-1``.
 
-If an operator is applied to different types, the compiler tries to implicitly
-convert one of the operands to the type of the other (the same is true for assignments).
-This means that operations are always performed in the type of one of the operands.
+Jika operator diterapkan ke tipe yang berbeda, kompiler mencoba untuk secara implisit
+mengonversi salah satu operand ke tipe yang lain (hal yang sama berlaku untuk assignment).
+Ini berarti bahwa operasi selalu dilakukan dalam jenis salah satu operand.
 
-For more details about which implicit conversions are possible,
-please consult the sections about the types themselves.
+Untuk detail selengkapnya tentang konversi implisit mana yang memungkinkan,
+silakan berkonsultasi bagian tentang tipe itu sendiri.
 
-In the example below, ``y`` and ``z``, the operands of the addition,
-do not have the same type, but ``uint8`` can
-be implicitly converted to ``uint16`` and not vice-versa. Because of that,
-``y`` is converted to the type of ``z`` before the addition is performed
-in the ``uint16`` type. The resulting type of the expression ``y + z`` is ``uint16``.
-Because it is assigned to a variable of type ``uint32`` another implicit conversion
-is performed after the addition.
+Pada contoh di bawah ini, ``y`` dan ``z``, operand penambahan,
+tidak memiliki tipe yang sama, tetapi ``uint8`` dapat
+secara implisit dikonversi ke ``uint16`` dan bukan sebaliknya. sebaliknya.
+Karena itu, ``y`` dikonversi ke tipe ``z`` sebelum penambahan dilakukan
+dalam tipe ``uint16``. Tipe ekspresi yang dihasilkan ``y + z`` adalah ``uint16``.
+Karena ditugaskan ke variabel tipe ``uint32``, konversi implisit lain
+dilakukan setelah penambahan.
 
 .. code-block:: solidity
 
@@ -39,14 +39,14 @@ is performed after the addition.
     uint32 x = y + z;
 
 
-Explicit Conversions
---------------------
+Konversi Eksplisit
+------------------
 
-If the compiler does not allow implicit conversion but you are confident a conversion will work,
-an explicit type conversion is sometimes possible. This may
-result in unexpected behaviour and allows you to bypass some security
-features of the compiler, so be sure to test that the
-result is what you want and expect!
+Jika kompiler tidak mengizinkan konversi implisit tetapi Anda yakin konversi akan berhasil,
+konversi tipe eksplisit terkadang dimungkinkan. Ini mungkin
+menghasilkan perilaku yang tidak terduga dan memungkinkan Anda untuk melewati beberapa keamanan
+fitur kompiler, jadi pastikan untuk menguji bahwa
+hasilnya adalah apa yang Anda inginkan dan harapkan!
 
 Take the following example that converts a negative ``int`` to a ``uint``:
 
@@ -55,19 +55,19 @@ Take the following example that converts a negative ``int`` to a ``uint``:
     int  y = -3;
     uint x = uint(y);
 
-At the end of this code snippet, ``x`` will have the value ``0xfffff..fd`` (64 hex
-characters), which is -3 in the two's complement representation of 256 bits.
+Di akhir cuplikan kode ini, ``x`` akan memiliki nilai ``0xfffff..fd`` (64
+karakter hex), yaitu -3 dalam dua representasi komplemen 256 bit.
 
-If an integer is explicitly converted to a smaller type, higher-order bits are
-cut off:
+Jika integer secara eksplisit dikonversi ke tipe yang lebih kecil, bit *higher-order*
+terpotong:
 
 .. code-block:: solidity
 
     uint32 a = 0x12345678;
     uint16 b = uint16(a); // b will be 0x5678 now
 
-If an integer is explicitly converted to a larger type, it is padded on the left (i.e., at the higher order end).
-The result of the conversion will compare equal to the original integer:
+Jika integer secara eksplisit dikonversi ke tipe yang lebih besar, itu diisi di sebelah kiri (yaitu, di ujung urutan yang lebih tinggi).
+Hasil konversi akan dibandingkan sama dengan integer asli:
 
 .. code-block:: solidity
 
@@ -75,18 +75,18 @@ The result of the conversion will compare equal to the original integer:
     uint32 b = uint32(a); // b will be 0x00001234 now
     assert(a == b);
 
-Fixed-size bytes types behave differently during conversions. They can be thought of as
-sequences of individual bytes and converting to a smaller type will cut off the
-sequence:
+Tipe Fixed-size bytes berperilaku berbeda selama konversi.
+Mereka dapat dianggap sebagai urutan byte individu dan mengonversi
+ke tipe yang lebih kecil akan memotong urutan:
 
 .. code-block:: solidity
 
     bytes2 a = 0x1234;
     bytes1 b = bytes1(a); // b will be 0x12
 
-If a fixed-size bytes type is explicitly converted to a larger type, it is padded on
-the right. Accessing the byte at a fixed index will result in the same value before and
-after the conversion (if the index is still in range):
+Jika tipe fixed-size bytes secara eksplisit dikonversi ke tipe yang lebih besar, itu diisi di sebelah kanan.
+Mengakses byte pada indeks tetap akan menghasilkan nilai yang sama sebelum dan
+sesudah konversi (jika indeks masih dalam kisaran):
 
 .. code-block:: solidity
 
@@ -95,11 +95,11 @@ after the conversion (if the index is still in range):
     assert(a[0] == b[0]);
     assert(a[1] == b[1]);
 
-Since integers and fixed-size byte arrays behave differently when truncating or
-padding, explicit conversions between integers and fixed-size byte arrays are only allowed,
-if both have the same size. If you want to convert between integers and fixed-size byte arrays of
-different size, you have to use intermediate conversions that make the desired truncation and padding
-rules explicit:
+Karena integer dan array byte ukuran tetap berperilaku berbeda saat truncating atau
+padding, konversi eksplisit antara integer dan array byte fixed-size hanya diperbolehkan,
+jika keduanya memiliki ukuran yang sama. Jika Anda ingin mengonversi antara integer dan array byte fixed-size
+dengan ukuran berbeda, Anda harus menggunakan konversi menengah yang membuat aturan eksplisit untuk pemotongan dan padding
+yang diinginkan:
 
 .. code-block:: solidity
 
@@ -109,9 +109,9 @@ rules explicit:
     uint8 d = uint8(uint16(a)); // d will be 0x34
     uint8 e = uint8(bytes1(a)); // e will be 0x12
 
-``bytes`` arrays and ``bytes`` calldata slices can be converted explicitly to fixed bytes types (``bytes1``/.../``bytes32``).
-In case the array is longer than the target fixed bytes type, truncation at the end will happen.
-If the array is shorter than the target type, it will be padded with zeros at the end.
+``bytes`` array dan ``bytes`` calldata slices dapat dikonversi secara eksplisit ke tipe fixed byte (``bytes1``/.../``bytes32``).
+Jika array lebih panjang dari tipe byte fixed target, pemotongan pada akhirnya akan terjadi.
+Jika array lebih pendek dari tipe target, array akan diisi dengan nol di akhir.
 
 .. code-block:: solidity
 
@@ -132,14 +132,14 @@ If the array is shorter than the target type, it will be padded with zeros at th
 
 .. _types-conversion-literals:
 
-Conversions between Literals and Elementary Types
-=================================================
+Konversi antara Tipe Literal dan Elementary
+===========================================
 
-Integer Types
--------------
+Tipe Integer
+------------
 
-Decimal and hexadecimal number literals can be implicitly converted to any integer type
-that is large enough to represent it without truncation:
+Literal angka desimal dan heksadesimal dapat secara implisit dikonversi ke tipe integer apa pun yang
+cukup besar untuk mewakilinya tanpa pemotongan:
 
 .. code-block:: solidity
 
@@ -148,17 +148,17 @@ that is large enough to represent it without truncation:
     uint16 c = 0x123456; // fails, since it would have to truncate to 0x3456
 
 .. note::
-    Prior to version 0.8.0, any decimal or hexadecimal number literals could be explicitly
-    converted to an integer type. From 0.8.0, such explicit conversions are as strict as implicit
-    conversions, i.e., they are only allowed if the literal fits in the resulting range.
+    Sebelum versi 0.8.0, literal angka desimal atau heksadesimal apa pun dapat secara eksplisit
+    dikonversi ke tipe integer. Dari 0.8.0, konversi eksplisit seperti itu sama ketatnya dengan konversi implisit,
+    yaitu, konversi hanya diperbolehkan jika literal cocok dengan rentang yang dihasilkan.
 
 Fixed-Size Byte Arrays
 ----------------------
 
-Decimal number literals cannot be implicitly converted to fixed-size byte arrays. Hexadecimal
-number literals can be, but only if the number of hex digits exactly fits the size of the bytes
-type. As an exception both decimal and hexadecimal literals which have a value of zero can be
-converted to any fixed-size bytes type:
+Sebelum versi 0.8.0, literal angka desimal atau heksadesimal apa pun dapat secara eksplisit
+dikonversi ke tipe integer. Dari 0.8.0, konversi eksplisit seperti itu sama ketatnya dengan
+konversi implisit, yaitu, konversi hanya diperbolehkan jika literal cocok dengan
+rentang yang dihasilkan.
 
 .. code-block:: solidity
 
@@ -170,8 +170,8 @@ converted to any fixed-size bytes type:
     bytes4 f = 0; // fine
     bytes4 g = 0x0; // fine
 
-String literals and hex string literals can be implicitly converted to fixed-size byte arrays,
-if their number of characters matches the size of the bytes type:
+Literal string dan literal string hex dapat secara implisit dikonversi ke array byte fixed-size,
+jika jumlah karakternya cocok dengan ukuran tipe byte:
 
 .. code-block:: solidity
 
@@ -185,9 +185,9 @@ if their number of characters matches the size of the bytes type:
 Addresses
 ---------
 
-As described in :ref:`address_literals`, hex literals of the correct size that pass the checksum
-test are of ``address`` type. No other literals can be implicitly converted to the ``address`` type.
+Seperti yang dijelaskan dalam :ref:`address_literals`, literal heksadesimal dengan ukuran yang benar yang
+lulus uji checksum bertipe ``address``. Tidak ada literal lain yang dapat secara implisit dikonversi ke tipe ``address``.
 
-Explicit conversions from ``bytes20`` or any integer type to ``address`` result in ``address payable``.
+Konversi eksplisit dari ``bytes20`` atau tipe integer apa pun ke ``address`` menghasilkan ``address payable``.
 
-An ``address a`` can be converted to ``address payable`` via ``payable(a)``.
+``address a`` dapat dikonversi menjadi ``address payable`` melalui ``payable(a)``.

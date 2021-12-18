@@ -1,86 +1,83 @@
-####################
-Solidity Brand Guide
-####################
+######################
+Panduan Brand Solidity
+######################
 
-This brand guide features information on Solidity's brand policy and
-logo usage guidelines.
+Panduan merek ini menampilkan informasi tentang kebijakan merek Solidity dan
+pedoman penggunaan logo.
 
-The Solidity Brand
+Merek Solidity
 ==================
 
-The Solidity programming language is an open-source, community project
-governed by a core team. The core team is sponsored by the `Ethereum
-Foundation <https://ethereum.foundation/>`_.
+Bahasa pemrograman Solidity adalah proyek komunitas sumber terbuka
+dipimpin oleh tim inti. Tim inti disponsori oleh `Yayasan
+Ethereum <https://ethereum.foundation/>`_.
 
-This document aims to provide information about how to best use the
-Solidity brand name and logo.
+Dokumen ini bertujuan untuk memberikan informasi tentang cara terbaik menggunakan
+Nama merek dan logo solidity.
 
-We encourage you to read this document carefully before using the
-brand name or the logo. Your cooperation is highly appreciated!
+Kami mendorong Anda untuk membaca dokumen ini dengan seksama sebelum menggunakan
+nama merek atau logo. Kerja sama Anda sangat dihargai!
 
-Solidity Brand Name
+Nama Merek Solidity
 ===================
 
-"Solidity" should be used to refer to the Solidity programming language
-solely.
+"Solidity" harus digunakan untuk merujuk ke bahasa pemrograman Solidity semata.
 
-Please do not use "Solidity":
+Tolong jangan gunakan "Solidity":
 
-- To refer to any other programming language.
+- Untuk merujuk ke bahasa pemrograman lain.
 
-- In a way that is misleading or may imply association of unrelated
-  modules, tools, documentation, or other resources with the Solidity
-  programming language.
+- Dengan cara yang menyesatkan atau mungkin menyiratkan asosiasi modul, alat,
+  dokumentasi, atau sumber daya lain yang tidak terkait dengan bahasa pemrograman Solidity.
 
-- In ways that confuse the community as to whether the Solidity
-  programming language is open-source and free to use.
+- Dengan cara yang membingungkan komunitas apakah bahasa pemrograman Solidity
+  adalah open-source dan bebas untuk digunakan.
 
-Solidity Logo License
+Lisensi Logo Solidity
 =====================
 
 .. image:: https://i.creativecommons.org/l/by/4.0/88x31.png
   :width: 88
   :alt: Creative Commons License
 
-The Solidity logo is distributed and licensed under a `Creative Commons
+Logo Solidity didistribusikan dan dilisensikan di bawah `Creative Commons
 Attribution 4.0 International License <https://creativecommons.org/licenses/by/4.0/>`_.
 
-This is the most permissive Creative Commons license and allows reuse
-and modifications for any purpose.
+Ini adalah lisensi Creative Commons yang paling permisif dan memungkinkan penggunaan kembali
+dan modifikasi untuk tujuan apapun.
 
-You are free to:
+Anda bebas untuk:
 
-- **Share** — Copy and redistribute the material in any medium or format.
+- **Bagikan** — Salin dan distribusikan ulang materi dalam media atau format apa pun.
 
-- **Adapt** — Remix, transform, and build upon the material for any
-  purpose, even commercially.
+- **Adapt** — Remix, ubah, dan bangun materi untuk semua
+   tujuan, bahkan komersial.
 
-Under the following terms:
+Di bawah ketentuan berikut:
 
-- **Attribution** — You must give appropriate credit, provide a link to
-  the license, and indicate if changes were made. You may do so in any
-  reasonable manner, but not in any way that suggests the the Solidity
-  core team endorses you or your use.
+- **Atribusi** — Anda harus memberikan kredit yang sesuai, memberikan tautan ke lisensi, dan menunjukkan
+  jika ada perubahan. Anda dapat melakukannya dengan cara yang wajar, tetapi tidak dengan cara apa pun yang
+  menunjukkan bahwa tim inti Solidity mendukung Anda atau penggunaan Anda.
 
-When using the Solidity logo, please respect the Solidity logo guidelines.
+Saat menggunakan logo Solidity, harap hormati pedoman logo Solidity.
 
-Solidity Logo Guidelines
-========================
+Pedoman Logo Solidity
+=====================
 
 .. image:: logo.svg
   :width: 256
 
-*(Right click on the logo to download it.)*
+*(Klik kanan pada logo untuk mengunduhnya.)*
 
-Please do not:
+Jangan:
 
-- Change the ratio of the logo (do not stretch it or cut it).
+- Ubah rasio logo (jangan diregangkan atau dipotong).
 
-- Change the colors of the logo, unless it is absolutely necessary.
+- Mengubah warna logo, kecuali benar-benar diperlukan.
 
-Credits
-=======
+Kredit
+======
 
-This document was, in parts, derived from the `Python Software
+Dokumen ini, sebagian, berasal dari `Python Software
 Foundation Trademark Usage Policy <https://www.python.org/psf/trademarks/>`_
-and the `Rust Media Guide <https://www.rust-lang.org/policies/media-guide>`_.
+dan `Rust Media Guide <https://www.rust-lang.org/policies/media-guide>`_.

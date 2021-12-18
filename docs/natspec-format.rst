@@ -4,59 +4,58 @@
 NatSpec Format
 ##############
 
-Solidity contracts can use a special form of comments to provide rich
-documentation for functions, return variables and more. This special form is
-named the Ethereum Natural Language Specification Format (NatSpec).
+Kontrak solidity dapat menggunakan bentuk komentar khusus untuk menyediakan dokumentasi
+yang kaya untuk fungsi, variabel return, dan lainnya. Bentuk khusus ini diberi nama
+Ethereum Natural Language Specification Format (NatSpec).
 
 .. note::
 
-  NatSpec was inspired by `Doxygen <https://en.wikipedia.org/wiki/Doxygen>`_.
-  While it uses Doxygen-style comments and tags, there is no intention to keep
-  strict compatibility with Doxygen. Please carefully examine the supported tags
-  listed below.
+  NatSpec terinspirasi oleh `Doxygen <https://en.wikipedia.org/wiki/Doxygen>`_.
+  Meskipun menggunakan komentar dan tag bergaya Doxygen, tidak ada niat untuk menjaga
+  kompatibilitas ketat dengan Doxygen. Harap periksa dengan cermat tag yang didukung yang
+  tercantum di bawah ini.
 
-This documentation is segmented into developer-focused messages and end-user-facing
-messages. These messages may be shown to the end user (the human) at the
-time that they will interact with the contract (i.e. sign a transaction).
+Dokumentasi ini disegmentasikan ke dalam pesan yang berfokus pada pengembang dan pesan
+yang ditujukan kepada pengguna akhir. Pesan-pesan ini dapat ditampilkan kepada pengguna
+akhir (manusia) pada saat mereka akan berinteraksi dengan kontrak (yaitu menandatangani
+transaksi).
 
-It is recommended that Solidity contracts are fully annotated using NatSpec for
-all public interfaces (everything in the ABI).
+Direkomendasikan agar kontrak Solidity dijelaskan sepenuhnya menggunakan NatSpec untuk
+semua antarmuka publik (semua yang ada di ABI).
 
-NatSpec includes the formatting for comments that the smart contract author will
-use, and which are understood by the Solidity compiler. Also detailed below is
-output of the Solidity compiler, which extracts these comments into a machine-readable
-format.
+NatSpec menyertakan pemformatan untuk komentar yang akan digunakan oleh pembuat smart kontrak,
+dan yang dipahami oleh kompiler Solidity. Juga dirinci di bawah ini adalah output dari kompiler
+Solidity, yang mengekstrak komentar-komentar ini ke dalam format yang dapat dibaca mesin.
 
-NatSpec may also include annotations used by third-party tools. These are most likely
-accomplished via the ``@custom:<name>`` tag, and a good use case is analysis and verification
-tools.
+NatSpec juga dapat menyertakan anotasi yang digunakan oleh alat pihak ketiga. Ini kemungkinan besar
+dicapai melalui tag ``@custom:<name>``, dan kasus penggunaan yang baik adalah alat analisis dan verifikasi.
 
 .. _header-doc-example:
 
-Documentation Example
-=====================
+Contoh Dokumentasi
+==================
 
-Documentation is inserted above each ``contract``, ``interface``,
-``function``, and ``event`` using the Doxygen notation format.
-A ``public`` state variable is equivalent to a ``function``
-for the purposes of NatSpec.
+Dokumentasi disisipkan di atas masing-masing ``contract``, ``interface``,
+``function``, dan ``event`` menggunakn format notasi Doxygen.
+``public`` state variable setara dengan ``function``
+untuk keperluan NatSpec.
 
--  For Solidity you may choose ``///`` for single or multi-line
-   comments, or ``/**`` and ending with ``*/``.
+-  Untuk Solidity Anda dapat memilih ``///`` untuk single atau multi-line
+   komentar, atau ``/**`` dan diakhiri dengan ``*/``.
 
--  For Vyper, use ``"""`` indented to the inner contents with bare
-   comments. See the `Vyper
+-  Untuk Vyper, gunakan ``"""`` menjorok ke konten dalam dengan
+   komentar kosong. Lihat `Vyper
    documentation <https://vyper.readthedocs.io/en/latest/natspec.html>`__.
 
-The following example shows a contract and a function using all available tags.
+Contoh berikut menunjukkan kontrak dan fungsi menggunakan semua tag yang tersedia.
 
 .. note::
 
-  The Solidity compiler only interprets tags if they are external or
-  public. You are welcome to use similar comments for your internal and
-  private functions, but those will not be parsed.
+  Kompiler Solidity hanya menginterpretasikan tag jika tag eksternal atau
+  publik. Anda dipersilakan untuk menggunakan komentar serupa untuk internal Anda dan
+  fungsi pribadi, tetapi itu tidak akan diuraikan.
 
-  This may change in the future.
+  Ini mungkin berubah di masa depan.
 
 .. code-block:: Solidity
 
@@ -107,55 +106,55 @@ The following example shows a contract and a function using all available tags.
 Tags
 ====
 
-All tags are optional. The following table explains the purpose of each
-NatSpec tag and where it may be used. As a special case, if no tags are
-used then the Solidity compiler will interpret a ``///`` or ``/**`` comment
-in the same way as if it were tagged with ``@notice``.
+Semua tag bersifat opsional. Tabel berikut menjelaskan tujuan masing-masing
+Tag NatSpec dan di mana ia dapat digunakan. Sebagai kasus khusus, jika tidak ada tag adalah
+digunakan maka kompiler Solidity akan menginterpretasikan komentar ``///`` atau ``/**``
+dengan cara yang sama seperti jika diberi tag dengan ``@notice``.
 
 =============== ====================================================================================== =============================
 Tag                                                                                                    Context
 =============== ====================================================================================== =============================
-``@title``      A title that should describe the contract/interface                                    contract, library, interface
-``@author``     The name of the author                                                                 contract, library, interface
-``@notice``     Explain to an end user what this does                                                  contract, library, interface, function, public state variable, event
-``@dev``        Explain to a developer any extra details                                               contract, library, interface, function, state variable, event
-``@param``      Documents a parameter just like in Doxygen (must be followed by parameter name)        function, event
-``@return``     Documents the return variables of a contract's function                                function, public state variable
-``@inheritdoc`` Copies all missing tags from the base function (must be followed by the contract name) function, public state variable
-``@custom:...`` Custom tag, semantics is application-defined                                           everywhere
+``@title``      Judul yang harus menggambarkan kontrak/interface                                       contract, library, interface
+``@author``     Nama penulis                                                                           contract, library, interface
+``@notice``     Jelaskan kepada pengguna akhir apa fungsinya                                           contract, library, interface, function, public state variable, event
+``@dev``        Jelaskan kepada pengembang detail tambahan apa pun                                     contract, library, interface, function, state variable, event
+``@param``      Mendokumentasikan parameter seperti di Doxygen (harus diikuti dengan nama parameter)   function, event
+``@return``     Dokumentasikan variabel return dari fungsi kontrak                                     function, public state variable
+``@inheritdoc`` Salin semua tag yang hilang dari fungsi dasar (harus diikuti dengan nama kontrak)      function, public state variable
+``@custom:...`` Tag khusus, semantik ditentukan oleh aplikasi                                          everywhere
 =============== ====================================================================================== =============================
 
-If your function returns multiple values, like ``(int quotient, int remainder)``
-then use multiple ``@return`` statements in the same format as the ``@param`` statements.
+Jika fungsi Anda mengembalikan banyak nilai, seperti ``(int quotient, int rest)``
+kemudian gunakan beberapa pernyataan ``@return`` dalam format yang sama dengan pernyataan ``@param``.
 
-Custom tags start with ``@custom:`` and must be followed by one or more lowercase letters or hyphens.
-It cannot start with a hyphen however. They can be used everywhere and are part of the developer documentation.
+Tag khusus dimulai dengan ``@kustom:`` dan harus diikuti oleh satu atau beberapa huruf kecil atau tanda hubung.
+Namun, itu tidak dapat dimulai dengan tanda hubung. Mereka dapat digunakan di mana saja dan merupakan bagian dari dokumentasi pengembang.
 
 .. _header-dynamic:
 
 Dynamic expressions
 -------------------
 
-The Solidity compiler will pass through NatSpec documentation from your Solidity
-source code to the JSON output as described in this guide. The consumer of this
-JSON output, for example the end-user client software, may present this to the end-user directly or it may apply some pre-processing.
+Kompiler Solidity akan melewati dokumentasi NatSpec dari kode sumber Solidity Anda ke output JSON
+seperti yang dijelaskan dalam panduan ini. Konsumen dari output JSON ini, misalnya perangkat lunak
+klien pengguna akhir, dapat menyajikan ini kepada pengguna akhir secara langsung atau mungkin menerapkan beberapa pra-pemrosesan.
 
-For example, some client software will render:
+Misalnya, beberapa perangkat lunak klien akan merender:
 
 .. code:: Solidity
 
    /// @notice This function will multiply `a` by 7
 
-to the end-user as:
+kepada pengguna akhir sebagai:
 
 .. code:: text
 
     This function will multiply 10 by 7
 
-if a function is being called and the input ``a`` is assigned a value of 10.
+jika suatu fungsi dipanggil dan input ``a`` diberi nilai 10.
 
-Specifying these dynamic expressions is outside the scope of the Solidity
-documentation and you may read more at
+Menentukan ekspresi dinamis ini berada di luar cakupan dokumentasi
+Solidity dan Anda dapat membaca lebih lanjut di
 `the radspec project <https://github.com/aragon/radspec>`__.
 
 .. _header-inheritance:
@@ -163,44 +162,44 @@ documentation and you may read more at
 Inheritance Notes
 -----------------
 
-Functions without NatSpec will automatically inherit the documentation of their
-base function. Exceptions to this are:
+Fungsi tanpa NatSpec akan secara otomatis mewarisi dokumentas
+fungsi dasarnya. Pengecualian untuk ini adalah:
 
-* When the parameter names are different.
-* When there is more than one base function.
-* When there is an explicit ``@inheritdoc`` tag which specifies which contract should be used to inherit.
+* Ketika nama parameter berbeda.
+* Bila ada lebih dari satu fungsi dasar.
+* Ketika ada tag ``@inheritdoc`` eksplisit yang menentukan kontrak mana yang harus digunakan untuk mewarisi.
 
 .. _header-output:
 
-Documentation Output
-====================
+Dokumentasi Output
+==================
 
-When parsed by the compiler, documentation such as the one from the
-above example will produce two different JSON files. One is meant to be
-consumed by the end user as a notice when a function is executed and the
-other to be used by the developer.
+Ketika diurai oleh compiler, dokumentasi seperti contoh di atas akan menghasilkan
+dua file JSON yang berbeda. Satu dimaksudkan untuk dikonsumsi oleh pengguna akhir
+sebagai pemberitahuan ketika suatu fungsi dijalankan dan yang lainnya untuk digunakan
+oleh pengembang.
 
-If the above contract is saved as ``ex1.sol`` then you can generate the
-documentation using:
+Jika kontrak di atas disimpan sebagai ``ex1.sol`` maka Anda dapat membuat
+dokumentasi menggunakan:
 
 .. code::
 
    solc --userdoc --devdoc ex1.sol
 
-And the output is below.
+Dan outputnya ada di bawah.
 
 .. note::
-    Starting Solidity version 0.6.11 the NatSpec output also contains a ``version`` and a ``kind`` field.
-    Currently the ``version`` is set to ``1`` and ``kind`` must be one of ``user`` or ``dev``.
-    In the future it is possible that new versions will be introduced, deprecating older ones.
+    Memulai Solidity versi 0.6.11, output NatSpec juga berisi bidang ``version`` dan ``kind``.
+    Saat ini ``version`` disetel ke ``1`` dan ``kind`` harus salah satu dari ``user`` atau ``dev``.
+    Di masa depan, ada kemungkinan bahwa versi baru akan diperkenalkan, tidak lagi menggunakan versi lama.
 
 .. _header-user-doc:
 
-User Documentation
-------------------
+Dokumentasi User
+----------------
 
-The above documentation will produce the following user documentation
-JSON file as output:
+Dokumentasi di atas akan menghasilkan file JSON dokumentasi pengguna
+berikut sebagai output:
 
 .. code::
 
@@ -217,18 +216,18 @@ JSON file as output:
       "notice" : "You can use this contract for only the most basic simulation"
     }
 
-Note that the key by which to find the methods is the function's
-canonical signature as defined in the :ref:`Contract
-ABI <abi_function_selector>` and not simply the function's
-name.
+Perhatikan bahwa kunci untuk menemukan metode adalah fungsi
+tanda tangan kanonik sebagaimana didefinisikan dalam :ref:`Contract
+ABI <abi_function_selector>` dan bukan hanya fungsi
+nama.
 
 .. _header-developer-doc:
 
-Developer Documentation
------------------------
+Dokumentasi Developer
+---------------------
 
-Apart from the user documentation file, a developer documentation JSON
-file should also be produced and should look like this:
+Terlepas dari file dokumentasi pengguna, dokumentasi pengembang JSON
+file juga harus diproduksi dan akan terlihat seperti ini:
 
 .. code::
 

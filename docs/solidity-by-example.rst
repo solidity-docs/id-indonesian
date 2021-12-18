@@ -1,5 +1,5 @@
 ###################
-Solidity by Example
+Contoh Solidity
 ###################
 
 .. include:: examples/voting.rst

@@ -1,36 +1,34 @@
 .. _security_considerations:
 
 #######################
-Security Considerations
+Pertimbangan Keamanan
 #######################
 
-While it is usually quite easy to build software that works as expected,
-it is much harder to check that nobody can use it in a way that was **not** anticipated.
+Meskipun biasanya cukup mudah untuk membangun perangkat lunak yang berfungsi seperti yang diharapkan,
+jauh lebih sulit untuk memeriksa bahwa tidak ada yang dapat menggunakannya dengan cara yang **tidak** diantisipasi.
 
-In Solidity, this is even more important because you can use smart contracts
-to handle tokens or, possibly, even more valuable things. Furthermore, every
-execution of a smart contract happens in public and, in addition to that,
-the source code is often available.
+Di Solidity, ini bahkan lebih penting karena Anda dapat menggunakan smart kontrak untuk
+menangani token atau, mungkin, hal-hal yang lebih berharga. Selanjutnya, setiap pelaksanaan
+smart kontrak terjadi di depan umum dan, selain itu, kode sumbernya sering tersedia.
 
-Of course you always have to consider how much is at stake:
-You can compare a smart contract with a web service that is open to the
-public (and thus, also to malicious actors) and perhaps even open source.
-If you only store your grocery list on that web service, you might not have
-to take too much care, but if you manage your bank account using that web service,
-you should be more careful.
+Tentu saja Anda harus selalu mempertimbangkan berapa banyak yang dipertaruhkan:
+Anda dapat membandingkan smart kontrak dengan layanan web yang terbuka untuk umum
+(dan dengan demikian, juga untuk aktor jahat) dan bahkan mungkin open source.
+Jika Anda hanya menyimpan daftar belanjaan Anda di layanan web itu, Anda mungkin
+tidak perlu terlalu berhati-hati, tetapi jika Anda mengelola rekening bank Anda
+menggunakan layanan web itu, Anda harus lebih berhati-hati.
 
-This section will list some pitfalls and general security recommendations but
-can, of course, never be complete.  Also, keep in mind that even if your smart
-contract code is bug-free, the compiler or the platform itself might have a
-bug. A list of some publicly known security-relevant bugs of the compiler can
-be found in the :ref:`list of known bugs<known_bugs>`, which is also
-machine-readable. Note that there is a bug bounty program that covers the code
-generator of the Solidity compiler.
+Bagian ini akan mencantumkan beberapa perangkap dan rekomendasi keamanan umum, tetapi
+tentu saja tidak akan pernah lengkap. Juga, perlu diingat bahwa meskipun kode smart
+kontrak Anda bebas bug, kompiler atau platform itu sendiri mungkin memiliki bug.
+Daftar beberapa bug yang relevan dengan keamanan yang diketahui publik dari kompiler
+dapat ditemukan di :ref:`list of known bugs<known_bugs>`, yang juga dapat dibaca mesin.
+Perhatikan bahwa ada program bug bounty yang mencakup pembuat kode dari kompiler Solidity.
 
-As always, with open source documentation, please help us extend this section
-(especially, some examples would not hurt)!
+Seperti biasa, dengan dokumentasi open source, tolong bantu kami memperluas bagian ini
+(terutama, beberapa contoh tidak ada salahnya)!
 
-NOTE: In addition to the list below, you can find more security recommendations and best practices
+CATATAN: Selain daftar di bawah, Anda dapat menemukan lebih banyak rekomendasi keamanan dan praktik terbaik
 `in Guy Lando's knowledge list <https://github.com/guylando/KnowledgeLists/blob/master/EthereumSmartContracts.md>`_ and
 `the Consensys GitHub repo <https://consensys.github.io/smart-contract-best-practices/>`_.
 
@@ -38,23 +36,22 @@ NOTE: In addition to the list below, you can find more security recommendations 
 Pitfalls
 ********
 
-Private Information and Randomness
+Private Information dan Randomness
 ==================================
 
-Everything you use in a smart contract is publicly visible, even
-local variables and state variables marked ``private``.
+Semua yang Anda gunakan dalam smart kontrak dapat dilihat oleh publik, meskipun
+variabel lokal dan variabel state ditandai sebagai ``private``.
 
-Using random numbers in smart contracts is quite tricky if you do not want
-miners to be able to cheat.
+Menggunakan angka acak dalam smart kontrak cukup rumit jika Anda
+tidak ingin penambang bisa curang.
 
 Re-Entrancy
 ===========
 
-Any interaction from a contract (A) with another contract (B) and any transfer
-of Ether hands over control to that contract (B). This makes it possible for B
-to call back into A before this interaction is completed. To give an example,
-the following code contains a bug (it is just a snippet and not a
-complete contract):
+Setiap interaksi dari kontrak (A) dengan kontrak lain (B) dan setiap transfer Ether
+menyerahkan kendali ke kontrak itu (B). Ini memungkinkan B untuk memanggil kembali
+ke A sebelum interaksi ini selesai. Sebagai contoh, kode berikut berisi bug (ini hanya
+cuplikan dan bukan kontrak lengkap):
 
 .. code-block:: solidity
 
@@ -72,13 +69,12 @@ complete contract):
         }
     }
 
-The problem is not too serious here because of the limited gas as part
-of ``send``, but it still exposes a weakness: Ether transfer can always
-include code execution, so the recipient could be a contract that calls
-back into ``withdraw``. This would let it get multiple refunds and
-basically retrieve all the Ether in the contract. In particular, the
-following contract will allow an attacker to refund multiple times
-as it uses ``call`` which forwards all remaining gas by default:
+Masalahnya tidak terlalu serius di sini karena terbatasnya gas sebagai bagian dari ``send``,
+tetapi masih memperlihatkan kelemahan: Transfer ether selalu dapat menyertakan kode eksekusi,
+sehingga penerima dapat berupa kontrak yang memanggil kembali ke ``withdraw``. Ini akan membuatnya
+mendapatkan beberapa pengembalian uang dan pada dasarnya mengambil semua Ether dalam kontrak.
+Secara khusus, kontrak berikut akan memungkinkan penyerang untuk mengembalikan dana beberapa kali
+karena menggunakan ``call`` yang meneruskan semua gas yang tersisa secara default:
 
 .. code-block:: solidity
 
@@ -97,8 +93,8 @@ as it uses ``call`` which forwards all remaining gas by default:
         }
     }
 
-To avoid re-entrancy, you can use the Checks-Effects-Interactions pattern as
-outlined further below:
+Untuk menghindari re-entrancy, Anda dapat menggunakan pola Checks-Effects-Interactions seperti
+diuraikan lebih lanjut di bawah ini:
 
 .. code-block:: solidity
 
@@ -116,92 +112,84 @@ outlined further below:
         }
     }
 
-Note that re-entrancy is not only an effect of Ether transfer but of any
-function call on another contract. Furthermore, you also have to take
-multi-contract situations into account. A called contract could modify the
-state of another contract you depend on.
+Perhatikan bahwa re-entrancy bukan hanya efek dari transfer Ether tetapi dari panggilan fungsi
+apa pun pada kontrak lain. Selain itu, Anda juga harus mempertimbangkan situasi multi-kontrak.
+Kontrak yang dipanggil dapat mengubah status kontrak lain yang Anda andalkan.
 
-Gas Limit and Loops
+Gas Limit dan Loops
 ===================
 
-Loops that do not have a fixed number of iterations, for example, loops that depend on storage values, have to be used carefully:
-Due to the block gas limit, transactions can only consume a certain amount of gas. Either explicitly or just due to
-normal operation, the number of iterations in a loop can grow beyond the block gas limit which can cause the complete
-contract to be stalled at a certain point. This may not apply to ``view`` functions that are only executed
-to read data from the blockchain. Still, such functions may be called by other contracts as part of on-chain operations
-and stall those. Please be explicit about such cases in the documentation of your contracts.
+Loop yang tidak memiliki jumlah iterasi tetap, misalnya loop yang bergantung pada nilai penyimpanan, harus digunakan dengan hati-hati:
+Karena batasan gas blok, transaksi hanya dapat mengkonsumsi gas dalam jumlah tertentu. Baik secara eksplisit atau hanya karena
+operasi normal, jumlah iterasi dalam satu lingkaran dapat tumbuh melampaui batas gas blok yang dapat menyebabkan penyelesaian
+kontrak akan terhenti pada titik tertentu. Ini mungkin tidak berlaku untuk fungsi ``view`` yang hanya dijalankan
+untuk membaca data dari blockchain. Namun, fungsi tersebut dapat dipanggil oleh kontrak lain sebagai bagian dari operasi on-chain
+dan stall itu. Harap jelaskan secara eksplisit tentang kasus tersebut dalam dokumentasi kontrak Anda.
 
-Sending and Receiving Ether
+Mengirim dan Menerima Ether
 ===========================
 
-- Neither contracts nor "external accounts" are currently able to prevent that someone sends them Ether.
-  Contracts can react on and reject a regular transfer, but there are ways
-  to move Ether without creating a message call. One way is to simply "mine to"
-  the contract address and the second way is using ``selfdestruct(x)``.
+- Baik kontrak maupun "akun eksternal" saat ini tidak dapat mencegah seseorang
+  mengirim Ether kepada mereka. Kontrak dapat bereaksi dan menolak transfer biasa,
+  tetapi ada cara untuk memindahkan Ether tanpa membuat panggilan pesan. Salah satu
+  caranya adalah dengan "menambang ke" alamat kontrak dan cara kedua adalah menggunakan ``selfdestruct(x)``.
 
-- If a contract receives Ether (without a function being called),
-  either the :ref:`receive Ether <receive-ether-function>`
-  or the :ref:`fallback <fallback-function>` function is executed.
-  If it does not have a receive nor a fallback function, the Ether will be
-  rejected (by throwing an exception). During the execution of one of these
-  functions, the contract can only rely on the "gas stipend" it is passed (2300
-  gas) being available to it at that time. This stipend is not enough to modify
-  storage (do not take this for granted though, the stipend might change with
-  future hard forks). To be sure that your contract can receive Ether in that
-  way, check the gas requirements of the receive and fallback functions
-  (for example in the "details" section in Remix).
+- Jika kontrak menerima Ether (tanpa fungsi dipanggil), baik fungsi :ref:`receive Ether <receive-ether-function>`
+  atau :ref:`fallback <fallback-function>` dijalankan. Jika tidak memiliki fungsi terima atau fallback,
+  Ether akan ditolak (dengan melempar pengecualian). Selama pelaksanaan salah satu fungsi ini, kontrak hanya
+  dapat mengandalkan "gas stipend" yang diberikan (2300 gas) yang tersedia untuknya pada saat itu. Tunjangan
+  ini tidak cukup untuk mengubah penyimpanan (jangan menganggap ini begitu saja, tunjangan mungkin berubah
+  dengan hard forks di masa depan). Untuk memastikan bahwa kontrak Anda dapat menerima Ether dengan cara itu,
+  periksa persyaratan gas dari fungsi terima dan fallback (misalnya di bagian "detail" di Remix).
 
-- There is a way to forward more gas to the receiving contract using
-  ``addr.call{value: x}("")``. This is essentially the same as ``addr.transfer(x)``,
-  only that it forwards all remaining gas and opens up the ability for the
-  recipient to perform more expensive actions (and it returns a failure code
-  instead of automatically propagating the error). This might include calling back
-  into the sending contract or other state changes you might not have thought of.
-  So it allows for great flexibility for honest users but also for malicious actors.
+- Ada cara untuk meneruskan lebih banyak gas ke kontrak penerima menggunakan
+  ``addr.call{value: x}("")``. Ini pada dasarnya sama dengan ``addr.transfer(x)``, hanya saja ia meneruskan
+  semua gas yang tersisa dan membuka kemampuan penerima untuk melakukan tindakan yang lebih mahal (dan
+  mengembalikan kode kegagalan alih-alih secara otomatis menyebarkan kesalahan ). Ini mungkin termasuk
+  memanggil kembali ke dalam kontrak pengiriman atau perubahan state lainnya yang mungkin tidak Anda pikirkan.
+  Jadi memungkinkan fleksibilitas yang besar untuk pengguna yang jujur tetapi juga untuk aktor jahat.
 
-- Use the most precise units to represent the wei amount as possible, as you lose
-  any that is rounded due to a lack of precision.
+- Gunakan unit yang paling tepat untuk mewakili jumlah wei sebanyak mungkin, karena Anda kehilangan
+  semua yang dibulatkan karena kurangnya presisi.
 
-- If you want to send Ether using ``address.transfer``, there are certain details to be aware of:
+- Jika Anda ingin mengirim Ether menggunakan ``address.transfer``, ada beberapa detail yang harus diperhatikan:
 
-  1. If the recipient is a contract, it causes its receive or fallback function
-     to be executed which can, in turn, call back the sending contract.
-  2. Sending Ether can fail due to the call depth going above 1024. Since the
-     caller is in total control of the call depth, they can force the
-     transfer to fail; take this possibility into account or use ``send`` and
-     make sure to always check its return value. Better yet, write your
-     contract using a pattern where the recipient can withdraw Ether instead.
-  3. Sending Ether can also fail because the execution of the recipient
-     contract requires more than the allotted amount of gas (explicitly by
-     using :ref:`require <assert-and-require>`, :ref:`assert <assert-and-require>`,
-     :ref:`revert <assert-and-require>` or because the
-     operation is too expensive) - it "runs out of gas" (OOG).  If you
-     use ``transfer`` or ``send`` with a return value check, this might
-     provide a means for the recipient to block progress in the sending
-     contract. Again, the best practice here is to use a :ref:`"withdraw"
-     pattern instead of a "send" pattern <withdrawal_pattern>`.
+  1. Jika penerima adalah sebuah kontrak, itu menyebabkan fungsi recieve atau
+     fallback dieksekusi yang pada gilirannya, dapat memanggil kembali kontrak pengirim.
+  2. Mengirim Ether dapat gagal karena kedalaman panggilan di atas 1024. Karena pemanggil
+     memegang kendali penuh atas kedalaman panggilan, mereka dapat memaksa transfer gagal;
+     pertimbangkan kemungkinan ini atau gunakan ``send`` dan pastikan untuk selalu memeriksa
+     nilai *return*nya. Lebih baik lagi, tulis kontrak Anda menggunakan pola di mana penerima
+     dapat menarik Ether sebagai gantinya.
+  3. Mengirim Ether juga dapat gagal karena pelaksanaan kontrak penerima membutuhkan lebih
+     dari jumlah gas yang ditentukan (secara eksplisit dengan menggunakan :ref:`require <assert-and-require>`,
+     :ref:`assert <assert-and-require> `, :ref:`revert <assert-and-require>` atau karena operasinya terlalu
+     mahal) - "kehabisan gas" (OOG). Jika Anda menggunakan ``transfer`` atau ``send`` dengan pemeriksaan nilai
+     pengembalian, ini mungkin memberikan cara bagi penerima untuk memblokir kemajuan dalam kontrak pengiriman.
+     Sekali lagi, praktik terbaik di sini adalah menggunakan pola :ref:`"withdraw" alih-alih pola "send" <withdrawal_pattern>`.
 
-Call Stack Depth
-================
+Kedalaman Call Stack
+====================
 
-External function calls can fail any time because they exceed the maximum
-call stack size limit of 1024. In such situations, Solidity throws an exception.
-Malicious actors might be able to force the call stack to a high value
-before they interact with your contract. Note that, since `Tangerine Whistle <https://eips.ethereum.org/EIPS/eip-608>`_ hardfork, the `63/64 rule <https://eips.ethereum.org/EIPS/eip-150>`_ makes call stack depth attack impractical. Also note that the call stack and the expression stack are unrelated, even though both have a size limit of 1024 stack slots.
+Panggilan fungsi eksternal dapat gagal kapan saja karena melebihi batas
+ukuran stack panggilan maksimum 1024. Dalam situasi seperti itu, Solidity
+mengeluarkan pengecualian. Pelaku jahat mungkin dapat memaksa stack panggilan
+ke nilai tinggi sebelum mereka berinteraksi dengan kontrak Anda. Perhatikan
+bahwa, sejak `Tangerine Whistle <https://eips.ethereum.org/EIPS/eip-608>`_ hardfork, aturan `63/64 <https://eips.ethereum.org/EIPS/eip-150>`_
+membuat serangan call stack depth menjadi tidak praktis. Perhatikan juga bahwa stack panggilan dan stack ekspresi tidak terkait, meskipun keduanya memiliki batas ukuran 1024 slot stack.
 
-Note that ``.send()`` does **not** throw an exception if the call stack is
-depleted but rather returns ``false`` in that case. The low-level functions
-``.call()``, ``.delegatecall()`` and ``.staticcall()`` behave in the same way.
+Perhatikan bahwa ``.send()`` **tidak** mengeluarkan pengecualian jika stack panggilan habis,
+melainkan mengembalikan ``false`` dalam kasus tersebut. Fungsi tingkat rendah ``.call()``,
+``.delegatecall()`` dan ``.staticcall()`` berperilaku dengan cara yang sama.
 
 Authorized Proxies
 ==================
 
-If your contract can act as a proxy, i.e. if it can call arbitrary contracts
-with user-supplied data, then the user can essentially assume the identity
-of the proxy contract. Even if you have other protective measures in place,
-it is best to build your contract system such that the proxy does not have
-any permissions (not even for itself). If needed, you can accomplish that
-using a second proxy:
+Jika kontrak Anda dapat bertindak sebagai proxy, yaitu jika kontrak tersebut dapat memanggil
+kontrak arbitrer dengan data yang disediakan pengguna, maka pengguna pada dasarnya dapat mengasumsikan
+identitas kontrak proxy. Bahkan jika Anda memiliki tindakan perlindungan lain, yang terbaik adalah
+membangun sistem kontrak Anda sedemikian rupa sehingga proxy tidak memiliki izin apa pun (bahkan untuk
+dirinya sendiri). Jika perlu, Anda dapat melakukannya menggunakan proxy kedua:
 
 .. code-block:: solidity
 
@@ -229,7 +217,7 @@ using a second proxy:
 tx.origin
 =========
 
-Never use tx.origin for authorization. Let's say you have a wallet contract like this:
+Jangan pernah menggunakan tx.origin untuk otorisasi. Katakanlah Anda memiliki kontrak dompet seperti ini:
 
 .. code-block:: solidity
 
@@ -250,7 +238,7 @@ Never use tx.origin for authorization. Let's say you have a wallet contract like
         }
     }
 
-Now someone tricks you into sending Ether to the address of this attack wallet:
+Sekarang seseorang menipu Anda untuk mengirim Ether ke alamat dompet serangan ini:
 
 .. code-block:: solidity
 
@@ -272,18 +260,18 @@ Now someone tricks you into sending Ether to the address of this attack wallet:
         }
     }
 
-If your wallet had checked ``msg.sender`` for authorization, it would get the address of the attack wallet, instead of the owner address. But by checking ``tx.origin``, it gets the original address that kicked off the transaction, which is still the owner address. The attack wallet instantly drains all your funds.
+Jika dompet Anda telah memeriksa ``msg.sender`` untuk otorisasi, dompet tersebut akan mendapatkan alamat dompet penyerang, bukan alamat pemilik. Tetapi dengan memeriksa ``tx.origin``, ia mendapatkan alamat asli yang memulai transaksi, yang masih merupakan alamat pemilik. Dompet serangan langsung menguras semua dana Anda.
 
 .. _underflow-overflow:
 
-Two's Complement / Underflows / Overflows
+Dua Complement / Underflows / Overflows
 =========================================
 
-As in many programming languages, Solidity's integer types are not actually integers.
-They resemble integers when the values are small, but cannot represent arbitrarily large numbers.
+Seperti dalam banyak bahasa pemrograman, tipe integer Solidity sebenarnya bukan integer.
+Mereka menyerupai integer ketika nilainya kecil, tetapi tidak dapat mewakili angka besar arbitrarily.
 
-The following code causes an overflow because the result of the addition is too large
-to be stored in the type ``uint8``:
+Kode berikut menyebabkan overflow karena hasil penjumlahan terlalu besar
+untuk disimpan dalam tipe ``uint8``:
 
 .. code-block:: solidity
 
@@ -291,37 +279,35 @@ to be stored in the type ``uint8``:
   uint8 y = 1;
   return x + y;
 
-Solidity has two modes in which it deals with these overflows: Checked and Unchecked or "wrapping" mode.
+Solidity memiliki dua mode yang menangani overflows ini: mode Checked and Unchecked atau "wrapping".
 
-The default checked mode will detect overflows and cause a failing assertion. You can disable this check
-using ``unchecked { ... }``, causing the overflow to be silently ignored. The above code would return
-``0`` if wrapped in ``unchecked { ... }``.
+Mode default checked akan mendeteksi overflows dan menyebabkan kegagalan assertion. Anda dapat menonaktifkan check
+ini menggubakan ``unchecked { ... }``, menyebabkan overflow secara diam-diam di abaikan. Kode di atas akan kembali
+``0`` jika di*wrap* dengan ``unchecked { ... }``.
 
-Even in checked mode, do not assume you are protected from overflow bugs.
-In this mode, overflows will always revert. If it is not possible to avoid the
-overflow, this can lead to a smart contract being stuck in a certain state.
+Meskipun di mode checked, jangan berasumsi Anda terlindungi dari bug overflow.
+Di dalam mode ini, overflows akan selalu revert. Jika tidak mungkin untuk menghindari
+overflow, ini dapat menyebabkan smart kontrak terjebak dalam keadaan tertentu.
 
-In general, read about the limits of two's complement representation, which even has some
-more special edge cases for signed numbers.
+Secara umum, baca tentang batas representasi komplemen dua, yang bahkan memiliki beberapa
+lebih banyak kasus tepi khusus untuk nomor yang ditandatangani.
 
-Try to use ``require`` to limit the size of inputs to a reasonable range and use the
-:ref:`SMT checker<smt_checker>` to find potential overflows.
+Coba gunakan ``require`` untuk membatasi ukuran input ke kisaran yang wajar dan gunakan
+:ref:`SMT checker<smt_checker>` untuk menemukan potensi overflow.
 
 .. _clearing-mappings:
 
 Clearing Mappings
 =================
 
-The Solidity type ``mapping`` (see :ref:`mapping-types`) is a storage-only
-key-value data structure that does not keep track of the keys that were
-assigned a non-zero value.  Because of that, cleaning a mapping without extra
-information about the written keys is not possible.
-If a ``mapping`` is used as the base type of a dynamic storage array, deleting
-or popping the array will have no effect over the ``mapping`` elements.  The
-same happens, for example, if a ``mapping`` is used as the type of a member
-field of a ``struct`` that is the base type of a dynamic storage array.  The
-``mapping`` is also ignored in assignments of structs or arrays containing a
-``mapping``.
+Solidity tipe ``mapping`` (lihat :ref:`mapping-types`) adalah struktur
+storage-only key-value data yang tidak melacak kunci yang diberi nilai bukan nol.
+Karena itu, pembersihan mapping tanpa informasi tambahan tentang kunci tertulis
+tidak mungkin dilakukan. Jika ``mapping`` digunakan sebagai tipe dasar array penyimpanan
+dinamis, menghapus atau memunculkan array tidak akan berpengaruh pada elemen ``mapping``.
+Hal yang sama terjadi, misalnya, jika ``mapping`` digunakan sebagai tipe bidang anggota
+dari ``struct`` yang merupakan tipe dasar array penyimpanan dinamis. ``mapping`` juga
+diabaikan dalam penetapan struct atau array yang berisi ``mapping``.
 
 .. code-block:: solidity
 
@@ -349,105 +335,105 @@ field of a ``struct`` that is the base type of a dynamic storage array.  The
         }
     }
 
-Consider the example above and the following sequence of calls: ``allocate(10)``,
+Perhatikan contoh di atas dan urutan panggilan berikut: ``allocate(10)``,
 ``writeMap(4, 128, 256)``.
-At this point, calling ``readMap(4, 128)`` returns 256.
-If we call ``eraseMaps``, the length of state variable ``array`` is zeroed, but
-since its ``mapping`` elements cannot be zeroed, their information stays alive
-in the contract's storage.
-After deleting ``array``, calling ``allocate(5)`` allows us to access
-``array[4]`` again, and calling ``readMap(4, 128)`` returns 256 even without
-another call to ``writeMap``.
+Pada titik ini, memanggil ``readMap(4, 128)`` mengembalikan 256.
+Jika kita memanggil ``eraseMaps``, panjang variabel status ``array`` adalah nol, tetapi
+karena elemen ``pemetaan`` tidak dapat di-nolkan, informasinya tetap hidup
+dalam penyimpanan kontrak.
+Setelah menghapus ``array``, memanggil ``allocate(5)`` memungkinkan kita untuk mengakses
+``array[4]`` lagi, dan memanggil ``readMap(4, 128)`` mengembalikan 256 bahkan tanpa
+panggilan lain ke ``writeMap``.
 
-If your ``mapping`` information must be deleted, consider using a library similar to
+Jika informasi ``mapping`` Anda harus dihapus, pertimbangkan untuk menggunakan library yang mirip dengan
 `iterable mapping <https://github.com/ethereum/dapp-bin/blob/master/library/iterable_mapping.sol>`_,
-allowing you to traverse the keys and delete their values in the appropriate ``mapping``.
+memungkinkan Anda menelusuri kunci dan menghapus nilainya dalam ``mapping`` yang sesuai.
 
 Minor Details
 =============
 
-- Types that do not occupy the full 32 bytes might contain "dirty higher order bits".
-  This is especially important if you access ``msg.data`` - it poses a malleability risk:
-  You can craft transactions that call a function ``f(uint8 x)`` with a raw byte argument
-  of ``0xff000001`` and with ``0x00000001``. Both are fed to the contract and both will
-  look like the number ``1`` as far as ``x`` is concerned, but ``msg.data`` will
-  be different, so if you use ``keccak256(msg.data)`` for anything, you will get different results.
+- Jenis yang tidak menempati 32 byte penuh mungkin berisi "dirty higher order bits".
+  Ini sangat penting jika Anda mengakses ``msg.data`` - itu menimbulkan resiko *malleability*:
+  Anda dapat membuat transaksi yang memanggil fungsi ``f(uint8 x)`` dengan argumen byte mentah
+  dari ``0xff000001`` dan dengan ``0x00000001``. Keduanya diumpankan ke kontrak dan keduanya akan
+  terlihat seperti angka ``1`` sejauh menyangkut ``x``, tetapi ``msg.data`` akan
+  berbeda, jadi jika Anda menggunakan ``keccak256(msg.data)`` untuk apa pun, Anda akan mendapatkan hasil yang berbeda.
 
 ***************
-Recommendations
+Rekomendasi
 ***************
 
-Take Warnings Seriously
+Ambil Peringatan dengan Serius
+==============================
+
+Jika kompiler memperingatkan Anda tentang sesuatu, Anda harus mengubahnya.
+Bahkan jika Anda tidak berpikir bahwa peringatan khusus ini memiliki implikasi
+keamanan, mungkin ada masalah lain yang terkubur di bawahnya. Setiap peringatan
+kompiler yang kami keluarkan dapat dibungkam dengan sedikit perubahan pada kode.
+
+Selalu gunakan versi terbaru kompiler untuk diberi tahu tentang semua peringatan
+yang baru saja diperkenalkan.
+
+Pesan bertipe ``info`` yang dikeluarkan oleh kompilator tidak berbahaya, dan hanya
+mewakili saran tambahan dan informasi opsional yang dipikirkan oleh kompiler
+mungkin berguna bagi pengguna.
+
+Membatasi Jumlah Ether
+======================
+
+Batasi jumlah Ether (atau token lainnya) yang dapat disimpan di smart
+kontrak. Jika kode sumber Anda, kompiler, atau platform memiliki bug, dana
+ini bisa hilang. Jika Anda ingin membatasi kerugian Anda, batasi jumlah Ether.
+
+Tetap Kecil dan Modular
 =======================
 
-If the compiler warns you about something, you should change it.
-Even if you do not think that this particular warning has security
-implications, there might be another issue buried beneath it.
-Any compiler warning we issue can be silenced by slight changes to the
-code.
+Jaga agar kontrak Anda tetap kecil dan mudah dimengerti. Pilih yang tidak terkait
+fungsionalitas dalam kontrak lain atau ke perpustakaan. Rekomendasi umum
+tentang kualitas kode sumber tentu saja berlaku: Batasi jumlah variabel lokal,
+panjang fungsi dan sebagainya. Dokumentasikan fungsi Anda agar yang lain
+dapat melihat apa niat Anda dan apakah itu berbeda dari apa yang dilakukan kode.
 
-Always use the latest version of the compiler to be notified about all recently
-introduced warnings.
+Gunakan pola Checks-Effects-Interactions
+========================================
 
-Messages of type ``info`` issued by the compiler are not dangerous, and simply
-represent extra suggestions and optional information that the compiler thinks
-might be useful to the user.
+Sebagian besar fungsi pertama-tama akan melakukan beberapa pemeriksaan
+(siapa yang memanggil fungsi, apakah argumen dalam jangkauan, apakah mereka
+mengirim cukup Ether, apakah orang tersebut memiliki token, dll.). Pemeriksaan
+ini harus dilakukan terlebih dahulu.
 
-Restrict the Amount of Ether
-============================
+Sebagai langkah kedua, jika semua pemeriksaan lulus, efeknya pada variabel state
+kontrak saat ini harus dibuat. Interaksi dengan kontrak lain
+harus menjadi langkah terakhir dalam fungsi apa pun.
 
-Restrict the amount of Ether (or other tokens) that can be stored in a smart
-contract. If your source code, the compiler or the platform has a bug, these
-funds may be lost. If you want to limit your loss, limit the amount of Ether.
+Kontrak awal menunda beberapa efek dan menunggu fungsi eksternal
+panggilan untuk kembali dalam keadaan non-kesalahan. Ini sering merupakan kesalahan serius
+karena masalah masuk kembali yang dijelaskan di atas.
 
-Keep it Small and Modular
-=========================
+Perhatikan bahwa, juga, panggilan ke kontrak yang diketahui dapat menyebabkan panggilan ke
+kontrak yang tidak diketahui, jadi mungkin lebih baik untuk selalu menerapkan pola ini.
 
-Keep your contracts small and easily understandable. Single out unrelated
-functionality in other contracts or into libraries. General recommendations
-about source code quality of course apply: Limit the amount of local variables,
-the length of functions and so on. Document your functions so that others
-can see what your intention was and whether it is different than what the code does.
+Sertakan mode Fail-Safe
+=======================
 
-Use the Checks-Effects-Interactions Pattern
-===========================================
+Saat membuat sistem Anda terdesentralisasi sepenuhnya akan menghapus perantara apa pun,
+mungkin ide yang bagus, terutama untuk kode baru, untuk memasukkan beberapa jenis
+mekanisme fail-safe:
 
-Most functions will first perform some checks (who called the function,
-are the arguments in range, did they send enough Ether, does the person
-have tokens, etc.). These checks should be done first.
+Anda dapat menambahkan fungsi dalam kontrak pintar Anda yang melakukan beberapa
+self-check seperti "Apakah ada Ether yang bocor?",
+"Apakah jumlah token sama dengan saldo kontrak?" atau hal serupa.
+Ingatlah bahwa Anda tidak dapat menggunakan terlalu banyak gas untuk itu, jadi bantulah melalui off-chain
+perhitungan mungkin diperlukan di sana.
 
-As the second step, if all checks passed, effects to the state variables
-of the current contract should be made. Interaction with other contracts
-should be the very last step in any function.
+Jika pemeriksaan mandiri gagal, kontrak secara otomatis berubah menjadi semacam
+dari mode "failsafe", yang, misalnya, menonaktifkan sebagian besar fitur, menyerahkan
+kontrol ke pihak ketiga yang tetap dan tepercaya atau hanya mengubah kontrak menjadi
+kontrak sederhana "beri saya kembali uang saya".
 
-Early contracts delayed some effects and waited for external function
-calls to return in a non-error state. This is often a serious mistake
-because of the re-entrancy problem explained above.
+Minta Review Sejawat
+====================
 
-Note that, also, calls to known contracts might in turn cause calls to
-unknown contracts, so it is probably better to just always apply this pattern.
-
-Include a Fail-Safe Mode
-========================
-
-While making your system fully decentralised will remove any intermediary,
-it might be a good idea, especially for new code, to include some kind
-of fail-safe mechanism:
-
-You can add a function in your smart contract that performs some
-self-checks like "Has any Ether leaked?",
-"Is the sum of the tokens equal to the balance of the contract?" or similar things.
-Keep in mind that you cannot use too much gas for that, so help through off-chain
-computations might be needed there.
-
-If the self-check fails, the contract automatically switches into some kind
-of "failsafe" mode, which, for example, disables most of the features, hands over
-control to a fixed and trusted third party or just converts the contract into
-a simple "give me back my money" contract.
-
-Ask for Peer Review
-===================
-
-The more people examine a piece of code, the more issues are found.
-Asking people to review your code also helps as a cross-check to find out whether your code
-is easy to understand - a very important criterion for good smart contracts.
+Semakin banyak orang memeriksa sepotong kode, semakin banyak masalah yang ditemukan.
+Meminta orang untuk meninjau kode Anda juga membantu sebagai pemeriksaan silang untuk mengetahui apakah kode Anda
+mudah dimengerti - kriteria yang sangat penting untuk smart kontrak yang baik.

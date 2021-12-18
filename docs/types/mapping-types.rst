@@ -1,44 +1,44 @@
 .. index:: !mapping
 .. _mapping-types:
 
-Mapping Types
+Tipe Mapping
 =============
 
-Mapping types use the syntax ``mapping(_KeyType => _ValueType)`` and variables
-of mapping type are declared using the syntax ``mapping(_KeyType => _ValueType) _VariableName``.
-The ``_KeyType`` can be any
-built-in value type, ``bytes``, ``string``, or any contract or enum type. Other user-defined
-or complex types, such as mappings, structs or array types are not allowed.
-``_ValueType`` can be any type, including mappings, arrays and structs.
+Tipe mapping menggunakan syntax ``mapping(_KeyType => _ValueType)`` dan tipe variabel
+mapping dideklarasikan menggunakan syntax ``mapping(_KeyType => _ValueType) _VariableName``.
+``_KeyType`` dapat berupa tipe nilai
+bawaan apa saja, ``bytes``, ``string``, atau kontrak atau jenis enum apa pun. Tipe *user-defined*
+atau tipe kompleks lainnya, seperti mapping, struct, atau tipe array tidak diizinkan.
+``_ValueType`` dapat berupa tipe apa saja, termasuk mapping, array, dan struct.
 
-You can think of mappings as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_, which are virtually initialised
-such that every possible key exists and is mapped to a value whose
-byte-representation is all zeros, a type's :ref:`default value <default-value>`.
-The similarity ends there, the key data is not stored in a
-mapping, only its ``keccak256`` hash is used to look up the value.
+Anda dapat menganggap mapping sebagai `tabel hash <https://en.wikipedia.org/wiki/Hash_table>`_, yang secara virtual diinisialisasi
+sedemikian rupa sehingga setiap kunci yang mungkin ada dan dipetakan ke nilai yang
+representasi byte-nya semuanya nol, tipe :ref:`nilai default <default-value>`.
+Kesamaan berakhir di sana, data kunci tidak disimpan dalam
+mapping, hanya hash ``keccak256`` yang digunakan untuk mencari nilainya.
 
-Because of this, mappings do not have a length or a concept of a key or
-value being set, and therefore cannot be erased without extra information
-regarding the assigned keys (see :ref:`clearing-mappings`).
+Karena itu, mapping tidak memiliki panjang atau konsep kunci atau nilai yang ditetapkan,
+dan oleh karena itu tidak dapat dihapus tanpa informasi tambahan mengenai
+kunci yang ditetapkan (lihat :ref:`clearing-mappings`).
 
-Mappings can only have a data location of ``storage`` and thus
-are allowed for state variables, as storage reference types
-in functions, or as parameters for library functions.
-They cannot be used as parameters or return parameters
-of contract functions that are publicly visible.
-These restrictions are also true for arrays and structs that contain mappings.
+Mapping hanya dapat memiliki lokasi data ``storage`` dan oleh
+karena itu diperbolehkan untuk variabel state, sebagai tipe referensi
+storage dalam functions, atau sebagai parameter untuk fungsi library.
+Mereka tidak dapat digunakan sebagai parameter atau menghasilkan parameter
+fungsi kontrak yang dapat dilihat oleh publik. Pembatasan ini
+juga berlaku untuk array dan struct yang berisi mapping.
 
-You can mark state variables of mapping type as ``public`` and Solidity creates a
-:ref:`getter <visibility-and-getters>` for you. The ``_KeyType`` becomes a parameter for the getter.
-If ``_ValueType`` is a value type or a struct, the getter returns ``_ValueType``.
-If ``_ValueType`` is an array or a mapping, the getter has one parameter for
-each ``_KeyType``, recursively.
+Anda dapat menandai variabel state tipe mapping sebagai ``public`` dan Solidity membuat
+:ref:`getter <visibility-and-getter>` untuk Anda. ``_KeyType`` menjadi parameter untuk gatter.
+Jika ``_ValueType`` adalah tipe nilai atau struct, getter menghasilkan ``_ValueType``.
+Jika ``_ValueType`` adalah array atau mapping, getter memiliki satu parameter untuk setiap
+``_KeyType``, secara rekursif.
 
-In the example below, the ``MappingExample`` contract defines a public ``balances``
-mapping, with the key type an ``address``, and a value type a ``uint``, mapping
-an Ethereum address to an unsigned integer value. As ``uint`` is a value type, the getter
-returns a value that matches the type, which you can see in the ``MappingUser``
-contract that returns the value at the specified address.
+Dalam contoh di bawah, kontrak ``MappingExample`` mendefinisikan mapping ``balances``
+publik, dengan tipe kunci sebuah ``address``, dan tipe nilai ``uint``, memapping
+alamat Ethereum ke nilai integer yang tidak ditandatangani. Karena ``uint`` adalah tipe nilai, getter
+menghasilkan nilai yang cocok dengan tipe tersebut, yang dapat Anda lihat di kontrak ``MappingUser``
+yang menghasilkan nilai di alamat yang ditentukan.
 
 .. code-block:: solidity
 
@@ -115,11 +115,11 @@ The example below uses ``_allowances`` to record the amount someone else is allo
 Iterable Mappings
 -----------------
 
-You cannot iterate over mappings, i.e. you cannot enumerate their keys.
-It is possible, though, to implement a data structure on
-top of them and iterate over that. For example, the code below implements an
-``IterableMapping`` library that the ``User`` contract then adds data too, and
-the ``sum`` function iterates over to sum all the values.
+Anda tidak dapat mengulangi mapping, yaitu Anda tidak dapat menghitung kuncinya.
+Namun, dimungkinkan untuk menerapkan struktur data di atasnya dan mengulanginya.
+Misalnya, kode di bawah ini mengimplementasikan sebuah library ``IterableMapping``
+yang ``User`` kontrak  kemudian menambahkan data juga, dan fungsi ``sum`` diulang
+untuk menjumlahkan semua nilai.
 
 .. code-block:: solidity
     :force:

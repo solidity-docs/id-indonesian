@@ -1,44 +1,45 @@
 .. index:: assignment, ! delete, lvalue
 
-Operators Involving LValues
-===========================
+Operator yang Melibatkan LValues
+================================
 
-If ``a`` is an LValue (i.e. a variable or something that can be assigned to), the
-following operators are available as shorthands:
+Jika ``a`` adalah sebuah LValue (mis. variabel atau sesuatu yang dapat ditugaskan untuk),
+operator berikut tersedia sebagai singkatan:
 
-``a += e`` is equivalent to ``a = a + e``. The operators ``-=``, ``*=``, ``/=``, ``%=``,
-``|=``, ``&=``, ``^=``, ``<<=`` and ``>>=`` are defined accordingly. ``a++`` and ``a--`` are equivalent
-to ``a += 1`` / ``a -= 1`` but the expression itself still has the previous value
-of ``a``. In contrast, ``--a`` and ``++a`` have the same effect on ``a`` but
-return the value after the change.
+``a += e`` setara dengan ``a = a + e``. Operator ``-=``, ``*=``, ``/=``, ``%=``,
+``|=``, ``&=``, ``^=``, ``<<=`` dan ``>>=`` didefinisikan sesuai. ``a++`` dan ``a--`` setara dengan
+``a += 1`` / ``a -= 1`` tetapi ekspresi itu sendiri masih memiliki nilai sebelumnya
+dari ``a``. Sebaliknya, ``--a`` dan ``++a`` memiliki efek yang sama pada ``a`` tetapi
+mengembalikan nilai setelah perubahan.
 
 .. _delete:
 
 delete
 ------
 
-``delete a`` assigns the initial value for the type to ``a``. I.e. for integers it is
-equivalent to ``a = 0``, but it can also be used on arrays, where it assigns a dynamic
-array of length zero or a static array of the same length with all elements set to their
-initial value. ``delete a[x]`` deletes the item at index ``x`` of the array and leaves
-all other elements and the length of the array untouched. This especially means that it leaves
-a gap in the array. If you plan to remove items, a :ref:`mapping <mapping-types>` is probably a better choice.
+``delete a`` memberikan nilai awal untuk tipe tersebut ke ``a``. yakni untuk integer adalah
+setara dengan ``a = 0``, tetapi juga dapat digunakan pada array, di mana ia menetapkan array
+dinamis dengan panjang nol atau array statis dengan panjang yang sama dengan semua elemen disetel ke
+nilai awal. ``delete a[x]`` menghapus item di indeks ``x`` dari array dan membiarkan semua
+elemen lain dan panjang array tidak tersentuh. Ini terutama berarti bahwa ia meninggalkan
+celah dalam array. Jika Anda berencana untuk menghapus item, :ref:`mapping <mapping-types>` mungkin
+merupakan pilihan yang lebih baik.
 
-For structs, it assigns a struct with all members reset. In other words,
-the value of ``a`` after ``delete a`` is the same as if ``a`` would be declared
-without assignment, with the following caveat:
+Untuk struct, ini menetapkan struct dengan semua member direset. Dengan kata lain,
+nilai ``a`` setelah ``delete a`` sama dengan jika ``a`` akan dideklarasikan
+tanpa assignment, dengan peringatan berikut:
 
-``delete`` has no effect on mappings (as the keys of mappings may be arbitrary and
-are generally unknown). So if you delete a struct, it will reset all members that
-are not mappings and also recurse into the members unless they are mappings.
-However, individual keys and what they map to can be deleted: If ``a`` is a
-mapping, then ``delete a[x]`` will delete the value stored at ``x``.
+``delete`` tidak berpengaruh pada mappings (karena kunci mapping mungkin arbitrer dan
+umumnya tidak diketahui). Jadi jika Anda menghapus struct, itu akan mengatur ulang semua anggota yang
+bukan mapping dan juga berulang menjadi anggota kecuali mereka adalah mapping.
+Namun, kunci individual dan apa yang di*mapa8 dapat dihapus: Jika ``a`` adalah
+mapping, maka ``delete a[x]`` akan menghapus nilai yang disimpan di ``x``.
 
-It is important to note that ``delete a`` really behaves like an
-assignment to ``a``, i.e. it stores a new object in ``a``.
-This distinction is visible when ``a`` is reference variable: It
-will only reset ``a`` itself, not the
-value it referred to previously.
+Penting untuk dicatat bahwa ``delete a`` benar-benar berperilaku seperti
+assignment ke ``a``, yaitu menyimpan objek baru di ``a``.
+Perbedaan ini terlihat ketika ``a`` adalah variabel referensi: Ini
+hanya akan mereset ``a`` itu sendiri, bukan nilai
+yang dirujuk sebelumnya.
 
 .. code-block:: solidity
 
