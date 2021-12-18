@@ -1,7 +1,7 @@
 lexer grammar SolidityLexer;
 
 /**
- * Keywords reserved for future use in Solidity.
+ * Kata kunci dicadangkan untuk penggunaan di masa mendatang di Solidity.
  */
 ReservedKeywords:
 	'after' | 'alias' | 'apply' | 'auto' | 'byte' | 'case' | 'copyof' | 'default' | 'define' | 'final'
@@ -38,7 +38,7 @@ False: 'false';
 Fixed: 'fixed' | ('fixed' [1-9][0-9]* 'x' [1-9][0-9]*);
 From: 'from'; // not a real keyword
 /**
- * Bytes types of fixed length.
+ * Jenis byte panjang tetap.
  */
 FixedBytes:
 	'bytes1' | 'bytes2' | 'bytes3' | 'bytes4' | 'bytes5' | 'bytes6' | 'bytes7' | 'bytes8' |
@@ -61,7 +61,7 @@ Memory: 'memory';
 Modifier: 'modifier';
 New: 'new';
 /**
- * Unit denomination for numbers.
+ * Denominasi satuan untuk angka.
  */
 NumberUnit: 'wei' | 'gwei' | 'ether' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'years';
 Override: 'override';
@@ -73,8 +73,8 @@ Receive: 'receive';
 Return: 'return';
 Returns: 'returns';
 /**
- * Sized signed integer types.
- * int is an alias of int256.
+ * Tipe integer yang Sized signed.
+ * int adalah alias dari int256.
  */
 SignedIntegerType:
 	'int' | 'int8' | 'int16' | 'int24' | 'int32' | 'int40' | 'int48' | 'int56' | 'int64' |
@@ -91,7 +91,7 @@ Ufixed: 'ufixed' | ('ufixed' [1-9][0-9]+ 'x' [1-9][0-9]+);
 Unchecked: 'unchecked';
 /**
  * Sized unsigned integer types.
- * uint is an alias of uint256.
+ * uint adalah alias untuk uint256.
  */
 UnsignedIntegerType:
 	'uint' | 'uint8' | 'uint16' | 'uint24' | 'uint32' | 'uint40' | 'uint48' | 'uint56' | 'uint64' |
@@ -161,32 +161,32 @@ DoubleQuote: '"';
 SingleQuote: '\'';
 
 /**
- * A non-empty quoted string literal restricted to printable characters.
+ * Sebuah literal string yang dikutip tidak kosong dibatasi untuk karakter yang dapat dicetak.
  */
 NonEmptyStringLiteral: '"' DoubleQuotedStringCharacter+ '"' | '\'' SingleQuotedStringCharacter+ '\'';
 /**
- * An empty string literal
+ * Sebuah string literal kosong
  */
 EmptyStringLiteral: '"' '"' | '\'' '\'';
 
-// Note that this will also be used for Yul string literals.
+// Perhatikan bahwa ini juga akan digunakan untuk literal string Yul.
 //@doc:inline
 fragment DoubleQuotedStringCharacter: DoubleQuotedPrintable | EscapeSequence;
-// Note that this will also be used for Yul string literals.
+// Perhatikan bahwa ini juga akan digunakan untuk literal string Yul.
 //@doc:inline
 fragment SingleQuotedStringCharacter: SingleQuotedPrintable | EscapeSequence;
 /**
- * Any printable character except single quote or back slash.
+ * Setiap karakter yang dapat dicetak kecuali tanda kutip tunggal atau garis miring terbalik.
  */
 fragment SingleQuotedPrintable: [\u0020-\u0026\u0028-\u005B\u005D-\u007E];
 /**
- * Any printable character except double quote or back slash.
+ * Setiap karakter yang dapat dicetak kecuali tanda kutip tunggal atau garis miring terbalik.
  */
 fragment DoubleQuotedPrintable: [\u0020-\u0021\u0023-\u005B\u005D-\u007E];
 /**
   * Escape sequence.
-  * Apart from common single character escape sequences, line breaks can be escaped
-  * as well as four hex digit unicode escapes \\uXXXX and two digit hex escape sequences \\xXX are allowed.
+  * Terlepas dari escape sequence karakter tunggal yang umum, jeda baris dapat diloloskan
+  * serta empat digit hex unicode Escape \\uXXXX dan dua digit hex escape sequence \\xxXX diperbolehkan.
   */
 fragment EscapeSequence:
 	'\\' (
@@ -195,7 +195,7 @@ fragment EscapeSequence:
 		| 'x' HexCharacter HexCharacter
 	);
 /**
- * A single quoted string literal allowing arbitrary unicode characters.
+ * Sebuah literal string yang dikutip tunggal memungkinkan karakter unicode arbitrary.
  */
 UnicodeStringLiteral:
 	'unicode"' DoubleQuotedUnicodeStringCharacter* '"'
@@ -205,13 +205,13 @@ fragment DoubleQuotedUnicodeStringCharacter: ~["\r\n\\] | EscapeSequence;
 //@doc:inline
 fragment SingleQuotedUnicodeStringCharacter: ~['\r\n\\] | EscapeSequence;
 
-// Note that this will also be used for Yul hex string literals.
+// Perhatikan bahwa ini juga akan digunakan untuk literal string hex Yul.
 /**
- * Hex strings need to consist of an even number of hex digits that may be grouped using underscores.
+ * String hex harus terdiri dari jumlah digit hex genap yang dapat dikelompokkan menggunakan garis bawah.
  */
 HexString: 'hex' (('"' EvenHexDigits? '"') | ('\'' EvenHexDigits? '\''));
 /**
- * Hex numbers consist of a prefix and an arbitrary number of hex digits that may be delimited by underscores.
+ * Angka heksagonal terdiri dari awalan dan sejumlah digit heksagonal yang dapat dibatasi oleh garis bawah.
  */
 HexNumber: '0' 'x' HexDigits;
 //@doc:inline
@@ -222,9 +222,9 @@ fragment EvenHexDigits: HexCharacter HexCharacter ('_'? HexCharacter HexCharacte
 fragment HexCharacter: [0-9A-Fa-f];
 
 /**
- * A decimal number literal consists of decimal digits that may be delimited by underscores and
- * an optional positive or negative exponent.
- * If the digits contain a decimal point, the literal has fixed point type.
+ * Sebuah angka desimal literal terdiri dari angka desimal yang dapat dibatasi oleh garis bawah dan
+ * eksponen positif atau negatif opsional.
+ * Jika digit berisi titik desimal, literal memiliki tipe titik tetap.
  */
 DecimalNumber: (DecimalDigits | (DecimalDigits? '.' DecimalDigits)) ([eE] '-'? DecimalDigits)?;
 //@doc:inline
@@ -232,8 +232,8 @@ fragment DecimalDigits: [0-9] ('_'? [0-9])* ;
 
 
 /**
- * An identifier in solidity has to start with a letter, a dollar-sign or an underscore and
- * may additionally contain numbers after the first symbol.
+ * Sebuah identifier dalam solidity harus dimulai dengan huruf, tanda dolar atau garis bawah dan
+ * mungkin untuk tambahan dapat berisi angka setelah simbol pertama.
  */
 Identifier: IdentifierStart IdentifierPart*;
 //@doc:inline
@@ -272,7 +272,7 @@ YulTrue: 'true';
 YulHex: 'hex';
 
 /**
- * Builtin functions in the EVM Yul dialect.
+ * Fungsi bawaan dalam dialek EVM Yul.
  */
 YulEVMBuiltin:
 	'stop' | 'add' | 'sub' | 'mul' | 'div' | 'sdiv' | 'mod' | 'smod' | 'exp' | 'not'
@@ -297,9 +297,9 @@ YulComma: ',';
 YulArrow: '->';
 
 /**
- * Yul identifiers consist of letters, dollar signs, underscores and numbers, but may not start with a number.
- * In inline assembly there cannot be dots in user-defined identifiers. Instead see yulPath for expressions
- * consisting of identifiers with dots.
+ * Identifier Yul terdiri dari huruf, tanda dolar, garis bawah, dan angka, tetapi tidak boleh dimulai dengan angka.
+ * Dalam inline assembly tidak boleh ada titik di pengidentifikasi yang ditentukan pengguna. Alih-alih lihat yulPath untuk ekspresi
+ * terdiri dari pengidentifikasi dengan titik-titik.
  */
 YulIdentifier: YulIdentifierStart YulIdentifierPart*;
 //@doc:inline
@@ -307,17 +307,17 @@ fragment YulIdentifierStart: [a-zA-Z$_];
 //@doc:inline
 fragment YulIdentifierPart: [a-zA-Z0-9$_];
 /**
- * Hex literals in Yul consist of a prefix and one or more hexadecimal digits.
+ * Hex literal di Yul terdiri dari awalan dan satu atau lebih digit heksadesimal.
  */
 YulHexNumber: '0' 'x' [0-9a-fA-F]+;
 /**
- * Decimal literals in Yul may be zero or any sequence of decimal digits without leading zeroes.
+ * Literal desimal di Yul mungkin nol atau urutan angka desimal apa pun tanpa nol di depan.
  */
 YulDecimalNumber: '0' | ([1-9] [0-9]*);
 /**
- * String literals in Yul consist of one or more double-quoted or single-quoted strings
- * that may contain escape sequences and printable characters except unescaped line breaks or
- * unescaped double-quotes or single-quotes, respectively.
+ * String literal di Yul terdiri dari satu atau lebih string bertanda kutip ganda atau kutip tunggal
+ * yang mungkin berisi urutan escape dan karakter yang dapat dicetak kecuali jeda baris yang tidak lolos atau
+ * tanda kutip ganda atau tanda kutip tunggal, masing-masing.
  */
 YulStringLiteral:
 	'"' DoubleQuotedStringCharacter* '"'
@@ -332,8 +332,8 @@ YulLINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN) ;
 mode PragmaMode;
 
 /**
- * Pragma token. Can contain any kind of symbol except a semicolon.
- * Note that currently the solidity parser only allows a subset of this.
+ * Token pragma. Dapat berisi simbol apa pun kecuali titik koma.
+ * Perhatikan bahwa saat ini solidity parser hanya mengizinkan subset dari ini.
  */
 //@doc:name pragma-token
 //@doc:no-diagram

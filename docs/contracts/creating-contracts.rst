@@ -1,36 +1,35 @@
 .. index:: ! contract;creation, constructor
 
 ******************
-Creating Contracts
+Membuat Kontrak
 ******************
 
-Contracts can be created "from outside" via Ethereum transactions or from within Solidity contracts.
+Kontrak dapat dibuat "dari luar" melalui transaksi Ethereum atau dari dalam kontrak Solidity.
 
-IDEs, such as `Remix <https://remix.ethereum.org/>`_, make the creation process seamless using UI elements.
+IDEs, seperti `Remix <https://remix.ethereum.org/>`_, membuat proses pembuatan lebih mulus dengan menggunakan elemen UI.
 
-One way to create contracts programmatically on Ethereum is via the JavaScript API `web3.js <https://github.com/ethereum/web3.js>`_.
-It has a function called `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_
-to facilitate contract creation.
+Salah satu cara untuk membuat kontrak secara terprogram di Ethereum adalah melalui JavaScript API `web3.js <https://github.com/ethereum/web3.js>`_.
+Ini memiliki fungsi yang disebut `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_
+untuk memfasilitasi pembuatan kontrak.
 
-When a contract is created, its :ref:`constructor <constructor>` (a function declared with
-the ``constructor`` keyword) is executed once.
+Saat kontrak dibuat, :ref:`constructor <constructor>` (fungsi yang dideklarasikan dengan
+kata kunci ``constructor``) dijalankan satu kali.
 
-A constructor is optional. Only one constructor is allowed, which means
-overloading is not supported.
+Constructor adalah opsional. Hanya satu constructor yang diizinkan, yang berarti overloading tidak didukung.
 
-After the constructor has executed, the final code of the contract is stored on the
-blockchain. This code includes all public and external functions and all functions
-that are reachable from there through function calls. The deployed code does not
-include the constructor code or internal functions only called from the constructor.
+Setelah constructor dieksekusi, kode final kontrak disimpan di blockchain.
+Kode ini mencakup semua fungsi publik dan eksternal dan semua fungsi yang
+dapat dijangkau dari sana melalui panggilan fungsi. Kode yang digunakan tidak
+termasuk kode constructor atau fungsi internal yang hanya bisa dipanggil dari constructor.
 
 .. index:: constructor;arguments
 
-Internally, constructor arguments are passed :ref:`ABI encoded <ABI>` after the code of
-the contract itself, but you do not have to care about this if you use ``web3.js``.
+Secara internal, argumen constructor diteruskan :ref:`ABI encoded <ABI>` setelah kode kontrak itu sendiri,
+tetapi Anda tidak perlu mempedulikan hal ini jika menggunakan ``web3.js``.
 
-If a contract wants to create another contract, the source code
-(and the binary) of the created contract has to be known to the creator.
-This means that cyclic creation dependencies are impossible.
+Jika sebuah kontrak ingin membuat kontrak lain, kode sumber (dan biner) dari
+kontrak yang dibuat harus diketahui oleh pembuatnya.
+Ini berarti bahwa *cyclic creation dependencies* tidak mungkin.
 
 .. code-block:: solidity
 

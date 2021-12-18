@@ -1,26 +1,26 @@
 .. index:: purchase, remote purchase, escrow
 
-********************
-Safe Remote Purchase
-********************
+*****************************************************
+Pembelian Jarak Jauh yang Aman (Safe Remote Purchase)
+*****************************************************
 
-Purchasing goods remotely currently requires multiple parties that need to trust each other.
-The simplest configuration involves a seller and a buyer. The buyer would like to receive
-an item from the seller and the seller would like to get money (or an equivalent)
-in return. The problematic part is the shipment here: There is no way to determine for
-sure that the item arrived at the buyer.
+Membeli barang dari jarak jauh saat ini membutuhkan banyak pihak yang perlu saling percaya.
+Konfigurasi paling sederhana melibatkan penjual dan pembeli.
+Pembeli ingin menerima barang dari penjual dan penjual ingin mendapatkan uang
+(atau yang setara) sebagai imbalannya. Bagian yang bermasalah pengiriman adalah di sini: Tidak ada cara
+untuk menentukan dengan pasti bahwa barang tersebut sampai ke pembeli.
 
-There are multiple ways to solve this problem, but all fall short in one or the other way.
-In the following example, both parties have to put twice the value of the item into the
-contract as escrow. As soon as this happened, the money will stay locked inside
-the contract until the buyer confirms that they received the item. After that,
-the buyer is returned the value (half of their deposit) and the seller gets three
-times the value (their deposit plus the value). The idea behind
-this is that both parties have an incentive to resolve the situation or otherwise
-their money is locked forever.
+Ada banyak cara untuk menyelesaikan masalah ini, tetapi semuanya gagal dalam satu atau cara lain.
+Dalam contoh berikut, kedua belah pihak harus memasukkan dua kali nilai item ke dalam
+kontrak sebagai escrow. Sesaat setelah ini terjadi, uangnya akan tetap terkunci di dalam
+kontrak sampai pembeli menegaskan bahwa mereka menerima item tersebut. Setelah itu,
+nilainya dikembalikan ke pembeli (setengah dari deposit mereka) dan penjual mendapat tiga
+kali nilai (deposit mereka ditambah nilai tersebut). Ide di balik ini adalah bahwa kedua belah pihak
+memiliki insentif untuk menyelesaikan situasi atau sebaliknya uang mereka terkunci selamanya.
 
-This contract of course does not solve the problem, but gives an overview of how
-you can use state machine-like constructs inside a contract.
+
+Kontrak ini tentu saja tidak menyelesaikan masalah, tetapi memberikan gambaran tentang bagaimana Anda
+dapat menggunakan konstruksi *state machine-like* di dalam kontrak.
 
 
 .. code-block:: solidity

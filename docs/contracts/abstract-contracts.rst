@@ -3,15 +3,15 @@
 .. _abstract-contract:
 
 ******************
-Abstract Contracts
+Kontrak Abstrak
 ******************
 
-Contracts need to be marked as abstract when at least one of their functions is not implemented.
-Contracts may be marked as abstract even though all functions are implemented.
+Kontrak perlu ditandai sebagai abstrak ketika setidaknya salah satu fungsinya tidak diimplementasikan.
+Kontrak dapat ditandai sebagai abstrak meskipun semua fungsi diimplementasikan.
 
-This can be done by using the ``abstract`` keyword as shown in the following example. Note that this contract needs to be
-defined as abstract, because the function ``utterance()`` was defined, but no implementation was
-provided (no implementation body ``{ }`` was given).
+Ini dapat dilakukan dengan menggunakan kata kunci ``abstract`` seperti yang ditunjukkan pada contoh berikut. Perhatikan bahwa kontrak
+ini perlu didefinisikan sebagai abstrak, karena fungsi ``utterance()`` telah didefinisikan, tetapi tidak ada implementasi yang diberikan
+(tidak ada badan implementasi ``{ }`` yang diberikan).
 
 .. code-block:: solidity
 
@@ -22,8 +22,8 @@ provided (no implementation body ``{ }`` was given).
         function utterance() public virtual returns (bytes32);
     }
 
-Such abstract contracts can not be instantiated directly. This is also true, if an abstract contract itself does implement
-all defined functions. The usage of an abstract contract as a base class is shown in the following example:
+Kontrak abstrak semacam itu tidak dapat dipakai secara langsung. Ini juga benar, jika kontrak abstrak itu sendiri mengimplementasikan
+semua fungsi yang ditentukan. Penggunaan kontrak abstrak sebagai basis kelas ditunjukkan dalam contoh berikut:
 
 .. code-block:: solidity
 
@@ -38,11 +38,11 @@ all defined functions. The usage of an abstract contract as a base class is show
         function utterance() public pure override returns (bytes32) { return "miaow"; }
     }
 
-If a contract inherits from an abstract contract and does not implement all non-implemented
-functions by overriding, it needs to be marked as abstract as well.
+Jika kontrak mewarisi dari kontrak abstrak dan tidak mengimplementasikan semua fungsi non-implemented
+dengan menimpa, kontrak tersebut perlu ditandai sebagai abstrak juga.
 
-Note that a function without implementation is different from
-a :ref:`Function Type <function_types>` even though their syntax looks very similar.
+Perhatikan bahwa fungsi tanpa implementasi berbeda
+dari :ref:`Function Type <function_types>` meskipun sintaksnya terlihat sangat mirip.
 
 Example of function without implementation (a function declaration):
 
@@ -50,20 +50,19 @@ Example of function without implementation (a function declaration):
 
     function foo(address) external returns (address);
 
-Example of a declaration of a variable whose type is a function type:
+Contoh deklarasi variabel yang tipenya adalah tipe fungsi:
 
 .. code-block:: solidity
 
     function(address) external returns (address) foo;
 
-Abstract contracts decouple the definition of a contract from its
-implementation providing better extensibility and self-documentation and
-facilitating patterns like the `Template method <https://en.wikipedia.org/wiki/Template_method_pattern>`_ and removing code duplication.
-Abstract contracts are useful in the same way that defining methods
-in an interface is useful. It is a way for the designer of the
-abstract contract to say "any child of mine must implement this method".
+Kontrak abstrak memisahkan definisi kontrak dari implementasinya yang menyediakan
+ekstensibilitas dan dokumentasi mandiri yang lebih baik serta pola fasilitasi seperti
+`Metode template <https://en.wikipedia.org/wiki/Template_method_pattern>`_ dan menghapus duplikasi kode.
+Kontrak abstrak berguna dengan cara yang sama seperti mendefinisikan metode dalam antarmuka. Ini adalah
+cara bagi perancang kontrak abstrak untuk mengatakan "setiap anak saya harus menerapkan metode ini".
 
 .. note::
 
-  Abstract contracts cannot override an implemented virtual function with an
-  unimplemented one.
+  Kontrak abstrak tidak dapat mengesampingkan fungsi virtual yang diimplementasikan
+  dengan yang tidak diimplementasikan.

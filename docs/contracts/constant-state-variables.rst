@@ -3,29 +3,29 @@
 .. _constants:
 
 **************************************
-Constant and Immutable State Variables
+Variabel Constant dan Immutable State
 **************************************
 
-State variables can be declared as ``constant`` or ``immutable``.
-In both cases, the variables cannot be modified after the contract has been constructed.
-For ``constant`` variables, the value has to be fixed at compile-time, while
-for ``immutable``, it can still be assigned at construction time.
+Variabel state dapat dideklarasikan sebagai ``constant`` atau ``immutable``.
+Dalam kedua kasus tersebut, variabel tidak dapat dimodifikasi setelah kontrak dibuat.
+Untuk variabel ``constant``, nilainya harus ditetapkan pada waktu kompilasi, sedangkan
+untuk ``immutable``, masih dapat ditetapkan pada waktu konstruksi.
 
-It is also possible to define ``constant`` variables at the file level.
+Dimungkinkan juga untuk mendefinisikan variabel ``constant`` pada tingkat file.
 
-The compiler does not reserve a storage slot for these variables, and every occurrence is
-replaced by the respective value.
+Kompiler tidak memesan slot penyimpanan untuk variabel-variabel ini, dan setiap kemunculan
+diganti dengan nilai masing-masing.
 
-Compared to regular state variables, the gas costs of constant and immutable variables
-are much lower. For a constant variable, the expression assigned to it is copied to
-all the places where it is accessed and also re-evaluated each time. This allows for local
-optimizations. Immutable variables are evaluated once at construction time and their value
-is copied to all the places in the code where they are accessed. For these values,
-32 bytes are reserved, even if they would fit in fewer bytes. Due to this, constant values
-can sometimes be cheaper than immutable values.
+Dibandingkan dengan variabel keadaan biasa, biaya gas variabel constant dan immutable
+jauh lebih rendah. Untuk variabel constant, ekspresi yang ditetapkan padanya disalin
+ke semua tempat di mana ia diakses dan juga dievaluasi ulang setiap saat. Ini memungkinkan
+pengoptimalan lokal. Variabel Immutable dievaluasi sekali pada waktu konstruksi dan nilainya
+disalin ke semua tempat dalam kode di mana mereka diakses. Untuk nilai-nilai ini,
+32 byte dicadangkan, meskipun mereka akan muat dalam byte lebih sedikit. Karena itu, nilai constant
+terkadang bisa lebih murah daripada nilai immutable.
 
-Not all types for constants and immutables are implemented at this time. The only supported types are
-:ref:`strings <strings>` (only for constants) and :ref:`value types <value-types>`.
+Tidak semua tipe untuk constants dan immutable diimplementasikan sekarang. Satu-satunya tipe yang didukung
+adalah :ref:`strings <strings>` (hanya untuk constants) dan :ref:`tipe nilai <value-types>`.
 
 .. code-block:: solidity
 
@@ -56,43 +56,36 @@ Not all types for constants and immutables are implemented at this time. The onl
 Constant
 ========
 
-For ``constant`` variables, the value has to be a constant at compile time and it has to be
-assigned where the variable is declared. Any expression
-that accesses storage, blockchain data (e.g. ``block.timestamp``, ``address(this).balance`` or
-``block.number``) or
-execution data (``msg.value`` or ``gasleft()``) or makes calls to external contracts is disallowed. Expressions
-that might have a side-effect on memory allocation are allowed, but those that
-might have a side-effect on other memory objects are not. The built-in functions
-``keccak256``, ``sha256``, ``ripemd160``, ``ecrecover``, ``addmod`` and ``mulmod``
-are allowed (even though, with the exception of ``keccak256``, they do call external contracts).
+Untuk variabel ``constant``, nilainya harus berupa konstanta pada waktu kompilasi dan harus
+ditetapkan di mana variabel dideklarasikan. Ekspresi apa pun
+yang mengakses penyimpanan, data blockchain (misalnya ``block.timestamp``, ``address(this).balance``
+atau ``block.number``) atau data eksekusi (``msg.value`` atau ` `gasleft()``) atau melakukan panggilan ke kontrak eksternal tidak diizinkan.
+Ekspresi yang mungkin memiliki efek samping pada alokasi memori diperbolehkan, tetapi ekspresi yang mungkin memiliki efek samping pada objek memori lain tidak diperbolehkan.
+Fungsi bawaan ``keccak256``, ``sha256``, ``ripemd160``, ``ecrecover``, ``addmod`` dan ``mulmod``
+diperbolehkan (meskipun, dengan pengecualian ``keccak256``, mereka memanggil kontrak eksternal).
 
-The reason behind allowing side-effects on the memory allocator is that it
-should be possible to construct complex objects like e.g. lookup-tables.
-This feature is not yet fully usable.
+Alasan di balik mengizinkan efek samping pada pengalokasi memori adalah bahwa itu
+harus memungkinkan untuk membangun objek kompleks seperti mis. tabel pencarian.
+Fitur ini belum sepenuhnya dapat digunakan.
 
 Immutable
 =========
 
-Variables declared as ``immutable`` are a bit less restricted than those
-declared as ``constant``: Immutable variables can be assigned an arbitrary
-value in the constructor of the contract or at the point of their declaration.
-They can be assigned only once and can, from that point on, be read even during
-construction time.
+Variabel yang dideklarasikan sebagai ``immutable`` sedikit kurang dibatasi daripada
+yang dideklarasikan sebagai ``constant``: Variabel Immutable dapat diberi nilai arbitrer
+dalam konstruktor kontrak atau pada titik deklarasinya. Mereka dapat ditugaskan hanya
+sekali dan, sejak saat itu, dapat dibaca bahkan selama waktu konstruksi.
 
-The contract creation code generated by the compiler will modify the
-contract's runtime code before it is returned by replacing all references
-to immutables by the values assigned to the them. This is important if
-you are comparing the
-runtime code generated by the compiler with the one actually stored in the
-blockchain.
+Kode pembuatan kontrak yang dihasilkan oleh kompiler akan memodifikasi kode runtime kontrak
+sebelum dikembalikan dengan mengganti semua referensi ke immutables dengan nilai yang diberikan
+padanya. Ini penting jika Anda membandingkan kode runtime yang dihasilkan oleh kompiler dengan
+yang sebenarnya disimpan di blockchain.
 
 .. note::
-  Immutables that are assigned at their declaration are only considered
-  initialized once the constructor of the contract is executing.
-  This means you cannot initialize immutables inline with a value
-  that depends on another immutable. You can do this, however,
-  inside the constructor of the contract.
+  Immutable yang ditetapkan pada deklarasi mereka hanya dianggap diinisialisasi setelah konstruktor
+  kontrak dieksekusi. Ini berarti Anda tidak dapat menginisialisasi Immutable sejalan dengan nilai
+  yang bergantung pada Immutablelainnya. Namun, Anda dapat melakukan ini di dalam konstruktor kontrak.
 
-  This is a safeguard against different interpretations about the order
-  of state variable initialization and constructor execution, especially
-  with regards to inheritance.
+  Ini adalah perlindungan terhadap interpretasi yang berbeda tentang
+  urutan inisialisasi variabel state dan eksekusi konstruktor, terutama
+  yang berkaitan dengan pewarisan(inheritance).

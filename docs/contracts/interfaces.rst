@@ -6,21 +6,21 @@
 Interfaces
 **********
 
-Interfaces are similar to abstract contracts, but they cannot have any functions implemented.
-There are further restrictions:
+Interfaces mirip dengan kontrak abstrak, tetapi tidak dapat menerapkan fungsi apa pun.
+Ada batasan lebih lanjut:
 
-- They cannot inherit from other contracts, but they can inherit from other interfaces.
-- All declared functions must be external.
-- They cannot declare a constructor.
-- They cannot declare state variables.
-- They cannot declare modifiers.
+- Mereka tidak bisa mewarisi dari kontrak lain, tetapi mereka bisa mewarisi dari interfaces lain.
+- Semua fungsi yang dideklarasikan harus bersifat eksternal.
+- Mereka tidak dapat mendeklarasikan konstruktor.
+- Mereka tidak dapat mendeklarasikan variabel state.
+- Mereka tidak dapat mendeklarasikan modifier.
 
-Some of these restrictions might be lifted in the future.
+Beberapa pembatasan ini mungkin akan dicabut di masa mendatang.
 
-Interfaces are basically limited to what the Contract ABI can represent, and the conversion between the ABI and
-an interface should be possible without any information loss.
+Interface pada dasarnya terbatas pada apa yang dapat diwakili oleh ABI Kontrak, dan konversi antara
+ABI dan sebuah interface harus dimungkinkan tanpa kehilangan informasi.
 
-Interfaces are denoted by their own keyword:
+Interface dilambangkan dengan kata kunci mereka sendiri:
 
 .. code-block:: solidity
 
@@ -33,15 +33,14 @@ Interfaces are denoted by their own keyword:
         function transfer(address recipient, uint amount) external;
     }
 
-Contracts can inherit interfaces as they would inherit other contracts.
+Kontrak dapat mewarisi interface karena mereka akan mewarisi dari kontrak lain.
 
-All functions declared in interfaces are implicitly ``virtual`` and any
-functions that override them do not need the ``override`` keyword.
-This does not automatically mean that an overriding function can be overridden again -
-this is only possible if the overriding function is marked ``virtual``.
+Semua fungsi yang dideklarasikan dalam interface secara implisit ``virtual`` dan setiap fungsi yang
+menimpanya tidak memerlukan kata kunci ``override``. Ini tidak secara otomatis berarti bahwa fungsi
+utama dapat diganti lagi - ini hanya mungkin jika fungsi utama ditandai sebagai ``virtual``.
 
-Interfaces can inherit from other interfaces. This has the same rules as normal
-inheritance.
+Interface dapat mewarisi dari Interface lain. Ini memiliki aturan yang sama dengan
+pewarisan normal.
 
 .. code-block:: solidity
 
@@ -62,10 +61,10 @@ inheritance.
         function test() external override(ParentA, ParentB) returns (uint256);
     }
 
-Types defined inside interfaces and other contract-like structures
-can be accessed from other contracts: ``Token.TokenType`` or ``Token.Coin``.
+Tipe yang didefinisikan di dalam interface dan struktur seperti kontrak
+lainnya dapat diakses dari kontrak lain: ``Token.TokenType`` atau ``Token.Coin``.
 
 .. warning:
 
-    Interfaces have supported ``enum`` types since :doc:`Solidity version 0.5.0 <050-breaking-changes>`, make
-    sure the pragma version specifies this version as a minimum.
+    Interfaces telah mendukung jenis ``enum`` sejak :doc:`Solidity versi 0.5.0 <050-breaking-changes>`, pastikan
+    menetapkan versi pragma ini sebagai minimum.

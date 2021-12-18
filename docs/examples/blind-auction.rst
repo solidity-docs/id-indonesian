@@ -1,26 +1,29 @@
 .. index:: auction;blind, auction;open, blind auction, open auction
 
-*************
-Blind Auction
-*************
+***************************
+Lelang Buta (Blind Auction)
+***************************
 
-In this section, we will show how easy it is to create a completely blind
-auction contract on Ethereum.  We will start with an open auction where
-everyone can see the bids that are made and then extend this contract into a
-blind auction where it is not possible to see the actual bid until the bidding
-period ends.
+Di bagian ini, kami akan menunjukkan betapa mudahnya
+membuat kontrak lelang yang sepenuhnya buta di Ethereum.
+Kami akan mulai dengan lelang terbuka di mana setiap orang
+dapat melihat tawaran yang dibuat dan kemudian memperpanjang
+kontrak ini menjadi lelang buta di mana tidak mungkin untuk
+melihat tawaran yang sebenarnya sampai periode penawaran berakhir.
 
 .. _simple_auction:
 
-Simple Open Auction
-===================
+Lelang Terbuka Sederhana (Simple Open Auction)
+==============================================
 
-The general idea of the following simple auction contract is that everyone can
-send their bids during a bidding period. The bids already include sending money
-/ Ether in order to bind the bidders to their bid. If the highest bid is
-raised, the previous highest bidder gets their money back.  After the end of
-the bidding period, the contract has to be called manually for the beneficiary
-to receive their money - contracts cannot activate themselves.
+Gagasan umum dari kontrak lelang sederhana berikut
+adalah bahwa setiap orang dapat mengirimkan penawaran
+mereka selama masa penawaran. Tawaran sudah termasuk
+pengiriman uang/Ether untuk mengikat penawar pada tawaran mereka.
+Jika tawaran tertinggi dinaikkan, penawar tertinggi sebelumnya
+mendapatkan uang mereka kembali. Setelah akhir periode penawaran,
+kontrak harus dipanggil secara manual agar penerima menerima
+uang mereka - kontrak tidak dapat mengaktifkan dirinya sendiri.
 
 .. code-block:: solidity
 
@@ -161,34 +164,33 @@ to receive their money - contracts cannot activate themselves.
         }
     }
 
-Blind Auction
-=============
+Lelang Buta (Blind Auction)
+===========================
 
-The previous open auction is extended to a blind auction in the following. The
-advantage of a blind auction is that there is no time pressure towards the end
-of the bidding period. Creating a blind auction on a transparent computing
-platform might sound like a contradiction, but cryptography comes to the
-rescue.
+Lelang terbuka sebelumnya diperluas ke lelang buta berikut ini.
+Keuntungan dari pelelangan buta adalah tidak ada tekanan waktu menjelang akhir periode penawaran.
+Membuat pelelangan buta pada platform komputasi transparan mungkin terdengar seperti kontradiksi,
+tetapi kriptografi datang untuk menyelamatkan.
 
-During the **bidding period**, a bidder does not actually send their bid, but
-only a hashed version of it.  Since it is currently considered practically
-impossible to find two (sufficiently long) values whose hash values are equal,
-the bidder commits to the bid by that.  After the end of the bidding period,
-the bidders have to reveal their bids: They send their values unencrypted and
-the contract checks that the hash value is the same as the one provided during
-the bidding period.
+Selama **periode penawaran**, bidder tidak benar-benar mengirimkan penawaran mereka,
+tetapi hanya versi hash dari penawaran tersebut. Karena saat ini secara praktis
+dianggap tidak mungkin untuk menemukan dua nilai (cukup panjang)
+yang nilai hashnya sama, penawar berkomitmen pada tawaran itu. Setelah akhir periode penawaran,
+penawar harus mengungkapkan tawaran mereka: Mereka mengirim nilai mereka tidak terenkripsi
+dan kontrak memeriksa bahwa nilai hash sama dengan yang diberikan selama masa penawaran.
 
-Another challenge is how to make the auction **binding and blind** at the same
-time: The only way to prevent the bidder from just not sending the money after
-they won the auction is to make them send it together with the bid. Since value
-transfers cannot be blinded in Ethereum, anyone can see the value.
+Tantangan lainnya adalah bagaimana membuat pelelangan **mengikat dan membutakan**
+pada saat yang bersamaan: Satu-satunya cara untuk mencegah penawar agar tidak mengirimkan
+uang setelah mereka memenangkan lelang adalah dengan membuat mereka mengirimkannya
+bersama dengan penawaran. Karena transfer nilai tidak dapat dibutakan di Ethereum,
+siapa pun dapat melihat nilainya.
 
-The following contract solves this problem by accepting any value that is
-larger than the highest bid. Since this can of course only be checked during
-the reveal phase, some bids might be **invalid**, and this is on purpose (it
-even provides an explicit flag to place invalid bids with high value
-transfers): Bidders can confuse competition by placing several high or low
-invalid bids.
+Kontrak berikut memecahkan masalah ini dengan menerima nilai apa pun
+yang lebih besar dari tawaran tertinggi. Karena ini tentu saja hanya dapat diperiksa
+selama fase pengungkapan, beberapa tawaran mungkin **tidak valid**, dan ini disengaja (bahkan memberikan
+tanda eksplisit untuk menempatkan tawaran yang tidak valid dengan transfer bernilai tinggi): Penawar
+dapat mengacaukan persaingan dengan menempatkan beberapa tawaran yang tidak valid,
+tinggi maupun rendah.
 
 
 .. code-block:: solidity

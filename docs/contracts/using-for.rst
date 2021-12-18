@@ -6,28 +6,25 @@
 Using For
 *********
 
-The directive ``using A for B;`` can be used to attach library
-functions (from the library ``A``) to any type (``B``)
-in the context of a contract.
-These functions will receive the object they are called on
-as their first parameter (like the ``self`` variable in Python).
+Direktif ``using A for B;`` dapat digunakan untuk melampirkan fungsi library
+(dari library ``A``) ke tipe apa pun (``B``) dalam konteks sebuah kontrak.
+Fungsi-fungsi ini akan menerima objek yang mereka panggil sebagai parameter
+pertama mereka (seperti variabel ``self`` dalam Python).
 
-The effect of ``using A for *;`` is that the functions from
-the library ``A`` are attached to *any* type.
+Efek dari ``using A for *;`` adalah bahwa fungsi dari
+library ``A`` dilampirkan ke tipe *apa saja*.
 
-In both situations, *all* functions in the library are attached,
-even those where the type of the first parameter does not
-match the type of the object. The type is checked at the
-point the function is called and function overload
-resolution is performed.
+Dalam kedua situasi tersebut, *semua* fungsi di library dilampirkan, bahkan tipe
+parameter pertama yang tidak cocok dengan tipe objek. Tipe diperiksa pada titik
+saat fungsi dipanggil dan resolusi fungsi yang berlebihan dilakukan.
 
-The ``using A for B;`` directive is active only within the current
-contract, including within all of its functions, and has no effect
-outside of the contract in which it is used. The directive
-may only be used inside a contract, not inside any of its functions.
+Direktif ``using A for B;`` hanya aktif dalam arus
+kontrak, termasuk dalam semua fungsinya, dan tidak memiliki efek
+di luar kontrak di mana ia digunakan. Arahan hanya dapat digunakan di
+dalam kontrak, bukan di dalam fungsinya.
 
-Let us rewrite the set example from the
-:ref:`libraries` in this way:
+Mari kita tulis ulang set contoh dari
+:ref:`libraries` dengan cara ini:
 
 .. code-block:: solidity
 
@@ -82,7 +79,7 @@ Let us rewrite the set example from the
         }
     }
 
-It is also possible to extend elementary types in that way:
+Dimungkinkan juga untuk memperluas tipe dasar dengan cara itu:
 
 .. code-block:: solidity
 
@@ -119,8 +116,8 @@ It is also possible to extend elementary types in that way:
         }
     }
 
-Note that all external library calls are actual EVM function calls. This means that
-if you pass memory or value types, a copy will be performed, even of the
-``self`` variable. The only situation where no copy will be performed
-is when storage reference variables are used or when internal library
-functions are called.
+Perhatikan bahwa semua panggilan library eksternal adalah panggilan
+fungsi EVM yang sebenarnya. Ini berarti bahwa jika Anda melewatkan memori
+atau tipe nilai, salinan akan dilakukan, bahkan untuk variabel ``self``. Satu-satunya situasi
+di mana tidak ada salinan yang akan dilakukan adalah ketika variabel referensi penyimpanan
+digunakan atau ketika fungsi library internal dipanggil.

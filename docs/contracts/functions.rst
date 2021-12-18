@@ -2,15 +2,15 @@
 
 .. _functions:
 
-*********
-Functions
-*********
+*****************
+Function (fungsi)
+*****************
 
-Functions can be defined inside and outside of contracts.
+Fungsi dapat didefinisikan di dalam dan di luar kontrak.
 
-Functions outside of a contract, also called "free functions", always have implicit ``internal``
-:ref:`visibility<visibility-and-getters>`. Their code is included in all contracts
-that call them, similar to internal library functions.
+Fungsi di luar kontrak, juga disebut "fungsi bebas", selalu memiliki implisit ``internal``
+:ref:`visibility<visibility-and-getter>`. Kode mereka termasuk dalam semua kontrak yang
+memanggil mereka, mirip dengan fungsi library internal.
 
 .. code-block:: solidity
 
@@ -34,29 +34,28 @@ that call them, similar to internal library functions.
     }
 
 .. note::
-    Functions defined outside a contract are still always executed
-    in the context of a contract. They still have access to the variable ``this``,
-    can call other contracts, send them Ether and destroy the contract that called them,
-    among other things. The main difference to functions defined inside a contract
-    is that free functions do not have direct access to storage variables and functions
-    not in their scope.
+    Fungsi yang didefinisikan di luar kontrak masih selalu dijalankan dalam konteks kontrak. Mereka masih
+    memiliki akses ke variabel ``this``, dapat memanggil kontrak lain, mengirim mereka Ether dan menghancurkan
+    kontrak yang memanggil mereka, antara lain. Perbedaan utama pada fungsi yang didefinisikan di dalam kontrak
+    adalah bahwa fungsi bebas tidak memiliki akses langsung ke variabel storage dan fungsi tidak berada dalam
+    cakupannya.
 
 .. _function-parameters-return-variables:
 
-Function Parameters and Return Variables
-========================================
+Parameter Fungsi dan Variabel Return
+====================================
 
-Functions take typed parameters as input and may, unlike in many other
-languages, also return an arbitrary number of values as output.
+Fungsi mengambil parameter yang diketik sebagai input dan mungkin, tidak seperti di banyak bahasa lain,
+juga menghasilkan sejumlah nilai arbitrary sebagai output.
 
-Function Parameters
--------------------
+Prameter Fungsi
+---------------
 
-Function parameters are declared the same way as variables, and the name of
-unused parameters can be omitted.
+Parameter fungsi dideklarasikan dengan cara yang sama seperti variabel, dan nama parameter
+yang tidak digunakan dapat dihilangkan.
 
-For example, if you want your contract to accept one kind of external call
-with two integers, you would use something like the following:
+Misalnya, jika Anda ingin kontrak Anda menerima satu jenis panggilan eksternal
+dengan dua integer, Anda akan menggunakan sesuatu seperti berikut:
 
 .. code-block:: solidity
 
@@ -70,28 +69,28 @@ with two integers, you would use something like the following:
         }
     }
 
-Function parameters can be used as any other local variable and they can also be assigned to.
+Parameter fungsi dapat digunakan sebagai variabel lokal lainnya dan mereka juga dapat ditugaskan.
 
 .. note::
 
-  An :ref:`external function<external-function-calls>` cannot accept a
-  multi-dimensional array as an input
-  parameter. This functionality is possible if you enable the ABI coder v2
-  by adding ``pragma abicoder v2;`` to your source file.
+  Sebuah :ref:`external function<external-function-calls>` tidak dapat menerima
+  array multidimensi sebagai input
+  parameter. Fungsionalitas ini dimungkinkan jika Anda mengaktifkan ABI coder v2
+  dengan menambahkan ``pragma abicoder v2;`` ke file sumber Anda.
 
-  An :ref:`internal function<external-function-calls>` can accept a
-  multi-dimensional array without enabling the feature.
+  Sebuah :ref:`internal function<external-function-calls>` dapat menerima
+  array multi-dimensi tanpa mengaktifkan fitur.
 
 .. index:: return array, return string, array, string, array of strings, dynamic array, variably sized array, return struct, struct
 
-Return Variables
+Variabel Return
 ----------------
 
-Function return variables are declared with the same syntax after the
-``returns`` keyword.
+Variabel return fungsi dideklarasikan dengan sintaks yang sama setelah
+kata kunci ``returns``.
 
-For example, suppose you want to return two results: the sum and the product of
-two integers passed as function parameters, then you use something like:
+Misalnya, Anda ingin mengembalikan dua hasil: jumlah dan produk dari dua integer
+yang diteruskan sebagai parameter fungsi, maka Anda menggunakan sesuatu seperti:
 
 .. code-block:: solidity
 
@@ -109,16 +108,15 @@ two integers passed as function parameters, then you use something like:
         }
     }
 
-The names of return variables can be omitted.
-Return variables can be used as any other local variable and they
-are initialized with their :ref:`default value <default-value>` and have that
-value until they are (re-)assigned.
+Nama-nama variabel return dapat dihilangkan.
+Variabel return dapat digunakan sebagai variabel lokal lainnya
+dan variabel tersebut diinisialisasi dengan :ref:`nilai default
+<default-value>` dan memiliki nilai tersebut hingga (kembali) ditetapkan.
 
-You can either explicitly assign to return variables and
-then leave the function as above,
-or you can provide return values
-(either a single or :ref:`multiple ones<multi-return>`) directly with the ``return``
-statement:
+Anda dapat secara eksplisit menetapkan ke variabel return dan kemudian
+meninggalkan fungsi seperti di atas, atau Anda dapat memberikan nilai yang
+dikembalikan (baik satu atau :ref:`multiple one<multi-return>`) secara
+langsung dengan pernyataan ``return``:
 
 .. code-block:: solidity
 
@@ -135,25 +133,26 @@ statement:
         }
     }
 
-If you use an early ``return`` to leave a function that has return variables,
-you must provide return values together with the return statement.
+Jika Anda menggunakan ``return`` lebih awal untuk meninggalkan fungsi yang memiliki variabel return,
+Anda harus memberikan nilai return bersamaan dengan pernyataan return.
 
 .. note::
+    Anda tidak dapat mengembalikan beberapa tipe dari fungsi non-internal, terutama
+    array dan struct dinamis multi-dimensi. Jika Anda mengaktifkan
     You cannot return some types from non-internal functions, notably
     multi-dimensional dynamic arrays and structs. If you enable the
-    ABI coder v2 by adding ``pragma abicoder v2;``
-    to your source file then more types are available, but
-    ``mapping`` types are still limited to inside a single contract and you
-    cannot transfer them.
+    ABI coder v2 dengan menambahkan ``pragma abicoder v2;`` ke file sumber Anda,
+    maka lebih banyak jenis yang tersedia, tetapi jenis ``mapping`` masih terbatas
+    di dalam satu kontrak dan Anda tidak dapat mentransfernya.
 
 .. _multi-return:
 
-Returning Multiple Values
--------------------------
+Mengembalikan Beberapa Nilai
+----------------------------
 
-When a function has multiple return types, the statement ``return (v0, v1, ..., vn)`` can be used to return multiple values.
-The number of components must be the same as the number of return variables
-and their types have to match, potentially after an :ref:`implicit conversion <types-conversion-elementary-types>`.
+Ketika suatu fungsi memiliki beberapa tipe pengembalian, pernyataan ``return (v0, v1, ..., vn)`` dapat digunakan untuk mengembalikan beberapa nilai.
+Jumlah komponen harus sama dengan jumlah variabel return dan jenisnya harus cocok,
+kemungkinan setelah :ref:`konversi implisit <types-conversion-elementary-types>`.
 
 .. _state-mutability:
 
@@ -164,30 +163,30 @@ State Mutability
 
 .. _view-functions:
 
-View Functions
+Fungsi view
 --------------
 
-Functions can be declared ``view`` in which case they promise not to modify the state.
+Fungsi dapat dideklarasikan dengan ``view`` dalam hal ini mereka berjanji untuk tidak mengubah state.
 
 .. note::
-  If the compiler's EVM target is Byzantium or newer (default) the opcode
-  ``STATICCALL`` is used when ``view`` functions are called, which enforces the state
-  to stay unmodified as part of the EVM execution. For library ``view`` functions
-  ``DELEGATECALL`` is used, because there is no combined ``DELEGATECALL`` and ``STATICCALL``.
-  This means library ``view`` functions do not have run-time checks that prevent state
-  modifications. This should not impact security negatively because library code is
-  usually known at compile-time and the static checker performs compile-time checks.
+  Jika target EVM compiler adalah Byzantium atau yang lebih baru (default) opcode
+  ``STATICCALL`` digunakan ketika fungsi ``view`` dipanggil, yang memaksa state untuk tetap
+  tidak dimodifikasi sebagai bagian dari eksekusi EVM. Untuk library ``view`` fungsi ``DELEGATECALL``
+  digunakan, karena tidak ada gabungan antara ``DELEGATECALL`` dan ``STATICCALL``. Ini berarti fungsi
+  library ``view`` tidak memiliki pemeriksaan run-time yang mencegah modifikasi state. Ini seharusnya
+  tidak berdampak negatif pada keamanan karena kode library biasanya diketahui pada waktu kompilasi dan
+  pemeriksa statis melakukan pemeriksaan compile-time.
 
-The following statements are considered modifying the state:
+Pernyataan berikut dianggap mengubah state:
 
-#. Writing to state variables.
+#. Menulis ke variabel state.
 #. :ref:`Emitting events <events>`.
-#. :ref:`Creating other contracts <creating-contracts>`.
-#. Using ``selfdestruct``.
-#. Sending Ether via calls.
-#. Calling any function not marked ``view`` or ``pure``.
-#. Using low-level calls.
-#. Using inline assembly that contains certain opcodes.
+#. :ref:`Membuat kontrak lain <creating-contracts>`.
+#. Menggunakan ``selfdestruct``.
+#. Mengirim Ether via call.
+#. Memanggil fungsi apa pun yang tidak ditandai dengan ``view`` atau ``pure``.
+#. Menggunakan low-level call.
+#. Menggunakan perakitan inline yang berisi opcode tertentu.
 
 .. code-block:: solidity
 
@@ -201,42 +200,42 @@ The following statements are considered modifying the state:
     }
 
 .. note::
-  ``constant`` on functions used to be an alias to ``view``, but this was dropped in version 0.5.0.
+  ``constant`` pada fungsi dulunya merupakan alias untuk ``view``, tetapi ini dihapus di versi 0.5.0.
 
 .. note::
-  Getter methods are automatically marked ``view``.
+  Metode getter secara otomatis ditandai ``view``.
 
 .. note::
-  Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
-  for ``view`` functions.
-  This enabled state modifications in ``view`` functions through the use of
-  invalid explicit type conversions.
-  By using  ``STATICCALL`` for ``view`` functions, modifications to the
-  state are prevented on the level of the EVM.
+  Sebelum versi 0.5.0, compiler tidak menggunakan opcode ``STATICCALL``
+  untuk fungsi ``view``.
+  Ini mengaktifkan modifikasi state dalam fungsi ``view`` melalui penggunaan
+  konversi jenis eksplisit yang tidak valid.
+  Dengan menggunakan ``STATICCALL`` untuk fungsi ``view``, modifikasi state
+  dicegah pada level EVM.
 
 .. index:: ! pure function, function;pure
 
 .. _pure-functions:
 
-Pure Functions
+Fungsi Pure
 --------------
 
-Functions can be declared ``pure`` in which case they promise not to read from or modify the state.
-In particular, it should be possible to evaluate a ``pure`` function at compile-time given
-only its inputs and ``msg.data``, but without any knowledge of the current blockchain state.
-This means that reading from ``immutable`` variables can be a non-pure operation.
+Fungsi dapat dideklarasikan dengan ``pure`` dalam hal ini mereka berjanji untuk tidak membaca atau mengubah state.
+Secara khusus, seharusnya mungkin untuk mengevaluasi fungsi ``pure`` pada waktu kompilasi hanya dengan memasukkan
+input dan ``msg.data``, tetapi tanpa pengetahuan tentang status blockchain saat ini.
+Ini berarti bahwa membaca dari variabel ``immutable`` bisa menjadi operasi non-pure.
 
 .. note::
-  If the compiler's EVM target is Byzantium or newer (default) the opcode ``STATICCALL`` is used,
-  which does not guarantee that the state is not read, but at least that it is not modified.
+  Jika target Kompiler EVM adalah Byzantium atau yang lebih baru (default) opcode ``STATICCALL`` digunakan,
+  yang tidak menjamin bahwa state tidak dibaca, tetapi setidaknya tidak diubah.
 
-In addition to the list of state modifying statements explained above, the following are considered reading from the state:
+Selain daftar pernyataan pengubah state yang dijelaskan di atas, berikut ini dianggap membaca dari state:
 
-#. Reading from state variables.
-#. Accessing ``address(this).balance`` or ``<address>.balance``.
-#. Accessing any of the members of ``block``, ``tx``, ``msg`` (with the exception of ``msg.sig`` and ``msg.data``).
-#. Calling any function not marked ``pure``.
-#. Using inline assembly that contains certain opcodes.
+#. Membaca dari variabel state.
+#. Mengakses ``address(this).balance`` atau ``<address>.balance``.
+#. Mengakses salah satu anggota ``block``, ``tx``, ``msg`` (dengan pengecualian ``msg.sig`` dan ``msg.data``).
+#. Memanggil fungsi apa pun yang tidak ditandai ``pure``.
+#. Menggunakan perakitan inline yang berisi opcode tertentu.
 
 .. code-block:: solidity
 
@@ -249,96 +248,93 @@ In addition to the list of state modifying statements explained above, the follo
         }
     }
 
-Pure functions are able to use the ``revert()`` and ``require()`` functions to revert
-potential state changes when an :ref:`error occurs <assert-and-require>`.
+Fungsi pure dapat menggunakan fungsi ``revert()`` dan ``require()`` untuk mengembalikan
+potensi perubahan state saat :ref:`error terjadi <assert-and-require>`.
 
-Reverting a state change is not considered a "state modification", as only changes to the
-state made previously in code that did not have the ``view`` or ``pure`` restriction
-are reverted and that code has the option to catch the ``revert`` and not pass it on.
+Mengembalikan perubahan state tidak dianggap sebagai "modifikasi state", karena hanya perubahan
+state yang dibuat sebelumnya dalam kode yang tidak memiliki batasan ``view`` atau ``pure`` yang dikembalikan
+dan kode tersebut memiliki opsi untuk menangkap ``revert`` dan tidak menyebarkannya.
 
-This behaviour is also in line with the ``STATICCALL`` opcode.
+Perilaku ini juga sejalan dengan opcode ``STATICCALL``.
 
 .. warning::
-  It is not possible to prevent functions from reading the state at the level
-  of the EVM, it is only possible to prevent them from writing to the state
-  (i.e. only ``view`` can be enforced at the EVM level, ``pure`` can not).
+  Tidak mungkin untuk mencegah fungsi membaca state di level EVM,
+  hanya mungkin mencegahnya untuk menulis ke state (yaitu hanya ``view``
+  yang dapat diterapkan di level EVM, sedangkan ``pure`` tidak bisa).
 
 .. note::
-  Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
-  for ``pure`` functions.
-  This enabled state modifications in ``pure`` functions through the use of
-  invalid explicit type conversions.
-  By using  ``STATICCALL`` for ``pure`` functions, modifications to the
-  state are prevented on the level of the EVM.
+  Sebelum versi 0.5.0, compiler tidak menggunakan opcode ``STATICCALL`` untuk fungsi ``pure``.
+  Ini mengaktifkan modifikasi state dalam fungsi ``pure`` melalui penggunaan konversi jenis eksplisit yang tidak valid.
+  Dengan menggunakan ``STATICCALL`` untuk fungsi ``pure``, modifikasi state dicegah pada level EVM.
 
 .. note::
-  Prior to version 0.4.17 the compiler did not enforce that ``pure`` is not reading the state.
-  It is a compile-time type check, which can be circumvented doing invalid explicit conversions
-  between contract types, because the compiler can verify that the type of the contract does
-  not do state-changing operations, but it cannot check that the contract that will be called
-  at runtime is actually of that type.
+  Sebelum versi 0.4.17 kompiler tidak memaksakan bahwa ``pure`` tidak membaca state.
+  Ini adalah pemeriksaan tipe compile-time, yang dapat dielakkan dengan melakukan konversi
+  eksplisit yang tidak valid antara tipe kontrak, karena kompiler dapat memverifikasi bahwa
+  tipe kontrak tidak melakukan operasi perubahan state, tetapi tidak dapat memeriksa apakah
+  kontrak yang akan dipanggil saat runtime sebenarnya dari jenis itu.
 
 .. _special-functions:
 
-Special Functions
-=================
+Fungsi Spesial
+==============
 
 .. index:: ! receive ether function, function;receive ! receive
 
 .. _receive-ether-function:
 
-Receive Ether Function
+Fungsi Terima Ether
 ----------------------
 
-A contract can have at most one ``receive`` function, declared using
+Sebuah kontrak dapat memiliki paling banyak satu fungsi, yang dideklarasikan menggunakan
 ``receive() external payable { ... }``
-(without the ``function`` keyword).
-This function cannot have arguments, cannot return anything and must have
-``external`` visibility and ``payable`` state mutability.
-It can be virtual, can override and can have modifiers.
+(tanpa kata kunci ``function``).
+Fungsi ini tidak dapat memiliki argumen, tidak dapat mengembalikan apa pun dan harus memiliki
+visibilitas ``eksternal`` dan mutabilitas state ``payable``.
+Itu bisa virtual, dapat menimpa dan dapat memiliki modifiers.
 
-The receive function is executed on a
-call to the contract with empty calldata. This is the function that is executed
-on plain Ether transfers (e.g. via ``.send()`` or ``.transfer()``). If no such
-function exists, but a payable :ref:`fallback function <fallback-function>`
-exists, the fallback function will be called on a plain Ether transfer. If
-neither a receive Ether nor a payable fallback function is present, the
-contract cannot receive Ether through regular transactions and throws an
-exception.
+Fungsi terima dieksekusi pada panggilan
+ke kontrak dengan calldata kosong. Ini adalah fungsi yang dijalankan
+pada transfer Ether biasa (misalnya melalui ``.send()`` atau ``.transfer()``). Jika tidak ada
+fungsi seperti itu, tetapi ada :ref:`fallback function <fallback-function>`
+yang harus dibayar, fungsi fallback akan dipanggil pada transfer Ether biasa. Jika
+tidak ada Fungsi Terima Ehter maupun fungsi fallback yang dapat dibayarkan, kontrak
+tidak dapat menerima Ether melalui transaksi reguler dan mengeluarkan eksepsi.
 
-In the worst case, the ``receive`` function can only rely on 2300 gas being
-available (for example when ``send`` or ``transfer`` is used), leaving little
-room to perform other operations except basic logging. The following operations
-will consume more gas than the 2300 gas stipend:
+Dalam kasus terburuk, fungsi ``receive`` hanya dapat mengandalkan 2300 gas yang
+tersedia (misalnya ketika ``send`` atau ``transfer`` digunakan), menyisakan sedikit
+ruang untuk melakukan operasi lain kecuali basic logging.
+Operasi berikut akan mengkonsumsi lebih banyak gas daripada 2300 tunjangan gas:
 
-- Writing to storage
-- Creating a contract
-- Calling an external function which consumes a large amount of gas
-- Sending Ether
-
-.. warning::
-    Contracts that receive Ether directly (without a function call, i.e. using ``send`` or ``transfer``)
-    but do not define a receive Ether function or a payable fallback function
-    throw an exception, sending back the Ether (this was different
-    before Solidity v0.4.0). So if you want your contract to receive Ether,
-    you have to implement a receive Ether function (using payable fallback functions for receiving Ether is
-    not recommended, since it would not fail on interface confusions).
-
+- Menulis ke storage
+- Membuat Kontrak
+- Memanggil fungsi eksternal yang menghabiskan banyak gas
+- Mengirim Ether
 
 .. warning::
-    A contract without a receive Ether function can receive Ether as a
-    recipient of a *coinbase transaction* (aka *miner block reward*)
-    or as a destination of a ``selfdestruct``.
+    Kontrak yang menerima Ether secara langsung (tanpa pemanggilan fungsi,
+    yaitu menggunakan ``send`` atau ``transfer``) tetapi tidak mendefinisikan
+    fungsi terima Ether atau fungsi payable fallback, melempar pengecualian,
+    mengirim kembali Ether (ini berbeda sebelum Solidity v0.4.0).
+    Jadi jika Anda ingin kontrak Anda menerima Ether, Anda harus mengimplementasikan
+    fungsi terima Ether (menggunakan fungsi payable fallback untuk menerima Ether
+    tidak disarankan, karena tidak akan gagal pada *interface confusions*).
 
-    A contract cannot react to such Ether transfers and thus also
-    cannot reject them. This is a design choice of the EVM and
-    Solidity cannot work around it.
 
-    It also means that ``address(this).balance`` can be higher
-    than the sum of some manual accounting implemented in a
-    contract (i.e. having a counter updated in the receive Ether function).
+.. warning::
+    Sebuah kontrak tanpa fungsi menerima Ether dapat menerima Ether sebagai
+    penerima *coinbase transaction* (alias *miner block reward*) atau sebagai
+    tujuan ``selfdestruct``.
 
-Below you can see an example of a Sink contract that uses function ``receive``.
+    Sebuah kontrak tidak dapat bereaksi terhadap transfer Ether tersebut dan
+    dengan demikian juga tidak dapat menolaknya. Ini adalah pilihan desain
+    EVM dan Solidity tidak dapat mengatasinya.
+
+    Ini juga berarti bahwa ``address(this).balance`` bisa lebih tinggi daripada
+    jumlah beberapa akuntansi manual yang diterapkan dalam kontrak (mis. memiliki
+    penghitung yang diperbarui dalam fungsi penerima Ether).
+
+Di bawah ini Anda dapat melihat contoh kontrak Sink yang menggunakan fungsi ``receive``.
 
 .. code-block:: solidity
 
@@ -358,48 +354,46 @@ Below you can see an example of a Sink contract that uses function ``receive``.
 
 .. _fallback-function:
 
-Fallback Function
------------------
+Fungsi Fallback
+---------------
 
-A contract can have at most one ``fallback`` function, declared using either ``fallback () external [payable]``
-or ``fallback (bytes calldata _input) external [payable] returns (bytes memory _output)``
-(both without the ``function`` keyword).
-This function must have ``external`` visibility. A fallback function can be virtual, can override
-and can have modifiers.
+Kontrak dapat memiliki paling banyak satu fungsi ``fallback``, yang dideklarasikan
+menggunakan ``fallback () external [payable]`` atau ``fallback (byte calldata _input)
+external [payable] return (bytes memory _output)`` ( keduanya tanpa kata kunci ``fungsi``).
+Fungsi ini harus memiliki visibilitas ``eksternal``. Fungsi fallback dapat berupa virtual,
+dapat ditimpa, dan dapat memiliki modifier.
 
-The fallback function is executed on a call to the contract if none of the other
-functions match the given function signature, or if no data was supplied at
-all and there is no :ref:`receive Ether function <receive-ether-function>`.
-The fallback function always receives data, but in order to also receive Ether
-it must be marked ``payable``.
+Fungsi fallback dijalankan pada panggilan ke kontrak jika tidak ada fungsi lain yang cocok
+dengan tanda tangan fungsi yang diberikan, atau jika tidak ada data yang diberikan sama sekali
+dan tidak ada :ref:`Fungsi terima Ether <receive-ether-function>` .
+Fungsi fallback selalu menerima data, tetapi untuk juga menerima Eter, fungsi tersebut harus
+ditandai ``dapat dibayar``.
 
-If the version with parameters is used, ``_input`` will contain the full data sent to the contract
-(equal to ``msg.data``) and can return data in ``_output``. The returned data will not be
-ABI-encoded. Instead it will be returned without modifications (not even padding).
+Jika versi dengan parameter digunakan, ``_input`` akan berisi data lengkap yang dikirim ke
+kontrak (sama dengan ``msg.data``) dan dapat mengembalikan data dalam ``_output``. Data yang
+dikembalikan tidak akan dikodekan ABI. Sebaliknya itu akan dikembalikan tanpa modifikasi
+(bahkan padding sekalipun).
 
-In the worst case, if a payable fallback function is also used in
-place of a receive function, it can only rely on 2300 gas being
-available (see :ref:`receive Ether function <receive-ether-function>`
-for a brief description of the implications of this).
+Dalam kasus terburuk, jika fungsi payable fallback juga digunakan sebagai pengganti fungsi
+penerimaan, itu hanya dapat mengandalkan 2300 gas yang tersedia (lihat :ref:`receive Ether
+function <receive-ether-function>` untuk deskripsi singkat dari implikasi ini).
 
-Like any function, the fallback function can execute complex
-operations as long as there is enough gas passed on to it.
+Seperti fungsi lainnya, fungsi fallback dapat menjalankan operasi
+kompleks selama ada cukup gas yang diteruskan ke sana.
 
 .. warning::
-    A ``payable`` fallback function is also executed for
-    plain Ether transfers, if no :ref:`receive Ether function <receive-ether-function>`
-    is present. It is recommended to always define a receive Ether
-    function as well, if you define a payable fallback function
-    to distinguish Ether transfers from interface confusions.
+    Fungsi fallback ``payable`` juga dijalankan untuk transfer Ether biasa, jika
+    tidak ada fungsi :ref:`terima Ether <receive-ether-function>`. Direkomendasikan
+    untuk selalu mendefinisikan fungsi Ether terima juga, jika Anda mendefinisikan
+    fungsi payablefallback untuk membedakan transfer Ether dari kebingungan antarmuka.
 
 .. note::
-    If you want to decode the input data, you can check the first four bytes
-    for the function selector and then
-    you can use ``abi.decode`` together with the array slice syntax to
-    decode ABI-encoded data:
-    ``(c, d) = abi.decode(_input[4:], (uint256, uint256));``
-    Note that this should only be used as a last resort and
-    proper functions should be used instead.
+    Jika Anda ingin mendekode data input, Anda dapat memeriksa empat byte pertama untuk
+    pemilih fungsi dan kemudian Anda dapat menggunakan ``abi.decode`` bersama dengan
+    sintaks slice array untuk mendekode data yang dikodekan ABI:
+    ``(c, d) = abi.decode(_input[4:], (uint256, uint256));`` Perhatikan bahwa ini hanya
+    boleh digunakan sebagai pilihan terakhir dan fungsi yang tepat harus digunakan
+    sebagai gantinya.
 
 
 .. code-block:: solidity
@@ -471,14 +465,13 @@ operations as long as there is enough gas passed on to it.
 
 .. _overload-function:
 
-Function Overloading
+Fungsi Overloading
 ====================
 
-A contract can have multiple functions of the same name but with different parameter
-types.
-This process is called "overloading" and also applies to inherited functions.
-The following example shows overloading of the function
-``f`` in the scope of contract ``A``.
+Kontrak dapat memiliki beberapa fungsi dengan nama yang sama tetapi dengan tipe parameter yang berbeda.
+Proses ini disebut "overloading" dan juga berlaku untuk fungsi *inherited*.
+Contoh berikut menunjukkan overloading fungsi:
+``f`` dalam lingkup kontrak ``A``.
 
 .. code-block:: solidity
 
@@ -496,8 +489,8 @@ The following example shows overloading of the function
         }
     }
 
-Overloaded functions are also present in the external interface. It is an error if two
-externally visible functions differ by their Solidity types but not by their external types.
+Fungsi Overloaded juga ada di antarmuka eksternal. adalah kesalahan jika dua
+fungsi yang terlihat secara eksternal berbedaberdasarkan tipe Solidity-nya tetapi tidak berdasarkan tipe eksternalnya.
 
 .. code-block:: solidity
 
@@ -519,19 +512,19 @@ externally visible functions differ by their Solidity types but not by their ext
     }
 
 
-Both ``f`` function overloads above end up accepting the address type for the ABI although
-they are considered different inside Solidity.
+Kedua fungsi ``f`` overloads di atas akhirnya menerima jenis alamat untuk ABI meskipun keduanya
+dianggap berbeda di dalam Solidity.
 
-Overload resolution and Argument matching
------------------------------------------
+Resolusi Overload dan Pencocokan argumen
+----------------------------------------
 
-Overloaded functions are selected by matching the function declarations in the current scope
-to the arguments supplied in the function call. Functions are selected as overload candidates
-if all arguments can be implicitly converted to the expected types. If there is not exactly one
-candidate, resolution fails.
+Fungsi Overloaded dipilih dengan mencocokkan deklarasi fungsi dalam cakupan saat ini dengan
+argumen yang disediakan dalam pemanggilan fungsi. Fungsi dipilih sebagai kandidat Overload
+jika semua argumen dapat secara implisit dikonversi ke tipe yang diharapkan. Jika tidak ada
+tepat satu kandidat, resolusi gagal.
 
 .. note::
-    Return parameters are not taken into account for overload resolution.
+    Parameter Return tidak diambil kedalam akun untuk resolusi overload.
 
 .. code-block:: solidity
 
@@ -548,6 +541,6 @@ candidate, resolution fails.
         }
     }
 
-Calling ``f(50)`` would create a type error since ``50`` can be implicitly converted both to ``uint8``
-and ``uint256`` types. On another hand ``f(256)`` would resolve to ``f(uint256)`` overload as ``256`` cannot be implicitly
-converted to ``uint8``.
+Memanggil ``f(50)`` akan membuat kesalahan tipe karena ``50`` dapat dikonversi secara implisit menjadi ``uint8``
+dan tipe ``uint256``. Di sisi lain ``f(256)`` akan diselesaikan menjadi ``f(uint256)`` overload karena ``256`` tidak dapat secara implisit
+dikonversi ke ``uint8``.
