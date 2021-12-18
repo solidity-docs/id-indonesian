@@ -6,10 +6,10 @@ Cheatsheet
 
 .. _order:
 
-Order of Precedence of Operators
-================================
+Urutan Prioritas Operator
+=========================
 
-The following is the order of precedence for operators, listed in order of evaluation.
+Berikut ini adalah urutan prioritas untuk operator, tercantum dalam urutan evaluasi.
 
 +------------+-------------------------------------+--------------------------------------------+
 | Precedence | Description                         | Operator                                   |
@@ -69,96 +69,95 @@ The following is the order of precedence for operators, listed in order of evalu
 
 .. index:: assert, block, coinbase, difficulty, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin, revert, require, keccak256, ripemd160, sha256, ecrecover, addmod, mulmod, cryptography, this, super, selfdestruct, balance, codehash, send
 
-Global Variables
-================
+Variabel Global
+===============
 
-- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: :ref:`ABI <ABI>`-decodes
-  the provided data. The types are given in parentheses as second argument.
-  Example: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
-- ``abi.encode(...) returns (bytes memory)``: :ref:`ABI <ABI>`-encodes the given arguments
-- ``abi.encodePacked(...) returns (bytes memory)``: Performs :ref:`packed encoding <abi_packed_mode>` of
-  the given arguments. Note that this encoding can be ambiguous!
-- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: :ref:`ABI <ABI>`-encodes
-  the given arguments starting from the second and prepends the given four-byte selector
-- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent
-  to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature)), ...)```
-- ``bytes.concat(...) returns (bytes memory)``: :ref:`Concatenates variable number of
-  arguments to one byte array<bytes-concat>`
-- ``block.basefee`` (``uint``): current block's base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
-- ``block.chainid`` (``uint``): current chain id
-- ``block.coinbase`` (``address payable``): current block miner's address
-- ``block.difficulty`` (``uint``): current block difficulty
-- ``block.gaslimit`` (``uint``): current block gaslimit
-- ``block.number`` (``uint``): current block number
-- ``block.timestamp`` (``uint``): current block timestamp
-- ``gasleft() returns (uint256)``: remaining gas
-- ``msg.data`` (``bytes``): complete calldata
-- ``msg.sender`` (``address``): sender of the message (current call)
-- ``msg.value`` (``uint``): number of wei sent with the message
-- ``tx.gasprice`` (``uint``): gas price of the transaction
-- ``tx.origin`` (``address``): sender of the transaction (full call chain)
-- ``assert(bool condition)``: abort execution and revert state changes if condition is ``false`` (use for internal error)
-- ``require(bool condition)``: abort execution and revert state changes if condition is ``false`` (use
-  for malformed input or error in external component)
-- ``require(bool condition, string memory message)``: abort execution and revert state changes if
-  condition is ``false`` (use for malformed input or error in external component). Also provide error message.
-- ``revert()``: abort execution and revert state changes
-- ``revert(string memory message)``: abort execution and revert state changes providing an explanatory string
-- ``blockhash(uint blockNumber) returns (bytes32)``: hash of the given block - only works for 256 most recent blocks
-- ``keccak256(bytes memory) returns (bytes32)``: compute the Keccak-256 hash of the input
-- ``sha256(bytes memory) returns (bytes32)``: compute the SHA-256 hash of the input
-- ``ripemd160(bytes memory) returns (bytes20)``: compute the RIPEMD-160 hash of the input
-- ``ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)``: recover address associated with
-  the public key from elliptic curve signature, return zero on error
-- ``addmod(uint x, uint y, uint k) returns (uint)``: compute ``(x + y) % k`` where the addition is performed with
-  arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
-- ``mulmod(uint x, uint y, uint k) returns (uint)``: compute ``(x * y) % k`` where the multiplication is performed
-  with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
-- ``this`` (current contract's type): the current contract, explicitly convertible to ``address`` or ``address payable``
-- ``super``: the contract one level higher in the inheritance hierarchy
-- ``selfdestruct(address payable recipient)``: destroy the current contract, sending its funds to the given address
-- ``<address>.balance`` (``uint256``): balance of the :ref:`address` in Wei
-- ``<address>.code`` (``bytes memory``): code at the :ref:`address` (can be empty)
-- ``<address>.codehash`` (``bytes32``): the codehash of the :ref:`address`
-- ``<address payable>.send(uint256 amount) returns (bool)``: send given amount of Wei to :ref:`address`,
-  returns ``false`` on failure
-- ``<address payable>.transfer(uint256 amount)``: send given amount of Wei to :ref:`address`, throws on failure
-- ``type(C).name`` (``string``): the name of the contract
-- ``type(C).creationCode`` (``bytes memory``): creation bytecode of the given contract, see :ref:`Type Information<meta-type>`.
-- ``type(C).runtimeCode`` (``bytes memory``): runtime bytecode of the given contract, see :ref:`Type Information<meta-type>`.
-- ``type(I).interfaceId`` (``bytes4``): value containing the EIP-165 interface identifier of the given interface, see :ref:`Type Information<meta-type>`.
-- ``type(T).min`` (``T``): the minimum value representable by the integer type ``T``, see :ref:`Type Information<meta-type>`.
-- ``type(T).max`` (``T``): the maximum value representable by the integer type ``T``, see :ref:`Type Information<meta-type>`.
-
-.. note::
-    When contracts are evaluated off-chain rather than in context of a transaction included in a
-    block, you should not assume that ``block.*`` and ``tx.*`` refer to values from any specific
-    block or transaction. These values are provided by the EVM implementation that executes the
-    contract and can be arbitrary.
+- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: :ref:`ABI <ABI>`-menerjemahkan
+  data yang disediakan. Jenis diberikan dalam tanda kurung sebagai argumen kedua.
+  Contoh: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
+- ``abi.encode(...) returns (bytes memory)``: :ref:`ABI <ABI>`-mengkodekan argumen yang diberikan
+- ``abi.encodePacked(...) returns (bytes memory)``: Melakukan :ref:`packed encoding <abi_packed_mode>` dari
+  argumen yang diberikan. Perhatikan bahwa pengkodean ini bisa ambigu!
+- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: :ref:`ABI <ABI>`-mengkodekan
+  argumen yang diberikan mulai dari yang kedua dan menambahkan four-byte selector yang diberikan
+- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Setara dengan
+  ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature)), ...)```
+- ``bytes.concat(...) returns (bytes memory)``: :ref:`Menggabungkan jumlah
+  variabel argumen ke satu byte array<bytes-concat>`
+- ``block.basefee`` (``uint``): block's base fee saat ini (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ dan `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
+- ``block.chainid`` (``uint``): chain id saat ini
+- ``block.coinbase`` (``address payable``): block miner's address saat ini
+- ``block.difficulty`` (``uint``): block difficulty saat ini
+- ``block.gaslimit`` (``uint``): block gaslimit saat ini
+- ``block.number`` (``uint``): block number saat ini
+- ``block.timestamp`` (``uint``): block timestamp saat ini
+- ``gasleft() returns (uint256)``: sisa gas
+- ``msg.data`` (``bytes``): calldata lengkap
+- ``msg.sender`` (``address``): Pengirim pesan (call saat ini)
+- ``msg.value`` (``uint``): jumlah wei yang dikirim dengan pesan
+- ``tx.gasprice`` (``uint``): harga gas saat transaksi
+- ``tx.origin`` (``address``): pengirim transaksi (full call chain)
+- ``assert(bool condition)``: batalkan eksekusi dan kembalikan perubahan state jika kondisinya ``false`` (digunakan untuk kesalahan internal)
+- ``require(bool condition)``: batalkan eksekusi dan kembalikan perubahan state jika kondisinya ``false`` (digunakan
+  untuk input yang salah atau kesalahan dalam komponen eksternal)
+- ``require(bool condition, string memory message)``: batalkan eksekusi dan kembalikan perubahan state
+  jika kondisinya ``false`` (untuk input yang salah atau kesalahan dalam komponen eksternal). Juga memberikan pesan kesalahan.
+- ``revert()``: membatalkan eksekusi dan mengembalikan perubahan state
+- ``revert(string memory message)``: batalkan eksekusi dan mengembalikan perubahan state dengan menyediakan string penjelas
+- ``blockhash(uint blockNumber) returns (bytes32)``: hash dari blok yang diberikan - hanya berfungsi untuk 256 blok terbaru
+- ``keccak256(bytes memory) returns (bytes32)``: hitung hash Keccak-256 dari input
+- ``sha256(bytes memory) returns (bytes32)``: hitung hash SHA-256 dari input
+- ``ripemd160(bytes memory) returns (bytes20)``: hitung hash RIPEMD-160 dari input
+- ``ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)``: pulihkan alamat yang terkait dengan
+  kunci publik dari tanda tangan kurva eliptik, menghasilkan nol saat error
+- ``addmod(uint x, uint y, uint k) returns (uint)``:menghitung ``(x + y) % k`` di mana penambahan dilakukan dengan
+  presisi arbitrer dan tidak membungkus pada kisaran ``2**256``.  Menegaskan bahwa ``k != 0`` mulai dari versi 0.5.0.
+- ``mulmod(uint x, uint y, uint k) returns (uint)``:menghitung ``(x * y) % k`` di mana perkalian dilakukan
+   dengan presisi arbitrer dan tidak membungkus pada kisaran ``2**256``. Menegaskan bahwa ``k != 0`` mulai dari versi 0.5.0.
+- ``this`` (jenis kontrak saat ini): kontrak saat ini, secara eksplisit dapat dikonversi menjadi ``address`` atau ``address payable``
+- ``super``: kontrak satu tingkat lebih tinggi dalam hierarki inheritance
+- ``selfdestruct(address payable recipient)``: hancurkan kontrak saat ini, kirim dananya ke alamat yang diberikan
+- ``<address>.balance`` (``uint256``): saldo dari :ref:`address` dalam Wei
+- ``<address>.code`` (``bytes memory``): kode pada :ref:`address` (can be empty)
+- ``<address>.codehash`` (``bytes32``): codehash dari :ref:`address`
+- ``<address payable>.send(uint256 amount) returns (bool)``: kirim jumlah Wei yang diberikan ke :ref:`address`,
+  menghasilkan ``false`` saat gagal.
+- ``<address payable>.transfer(uint256 amount)``: kirim jumlah Wei yang diberikan ke :ref:`address`, terlempar saat gagal.
+- ``type(C).name`` (``string``): nama kontrak
+- ``type(C).creationCode`` (``bytes memory``): pembuatan bytecode dari kontrak yang diberikan, lihat :ref:`Type Information<meta-type>`.
+- ``type(C).runtimeCode`` (``bytes memory``): bytecode runtime dari kontrak yang diberikan, lihat :ref:`Type Information<meta-type>`.
+- ``type(I).interfaceId`` (``bytes4``): nilai yang berisi interface identifier EIP-165 dari interface yang diberikan, lihat :ref:`Type Information<meta-type>`.
+- ``type(T).min`` (``T``): nilai minimum yang dapat diwakili oleh tipe integer ``T``, lihat :ref:`Type Information<meta-type>`.
+- ``type(T).max`` (``T``): nilai maksimum yang dapat direpresentasikan oleh tipe integer ``T``, lihat :ref:`Type Information<meta-type>`.
 
 .. note::
-    Do not rely on ``block.timestamp`` or ``blockhash`` as a source of randomness,
-    unless you know what you are doing.
-
-    Both the timestamp and the block hash can be influenced by miners to some degree.
-    Bad actors in the mining community can for example run a casino payout function on a chosen hash
-    and just retry a different hash if they did not receive any money.
-
-    The current block timestamp must be strictly larger than the timestamp of the last block,
-    but the only guarantee is that it will be somewhere between the timestamps of two
-    consecutive blocks in the canonical chain.
+    Ketika kontrak dievaluasi secara off-chain dan bukan dalam konteks transaksi yang termasuk
+    dalam blok, Anda tidak boleh berasumsi bahwa ``block.*`` dan ``tx.*`` merujuk ke nilai dari
+    blok atau transaksi tertentu. Nilai-nilai ini disediakan oleh implementasi EVM yang mengeksekusi
+    kontrak dan dapat berubah-ubah.
 
 .. note::
-    The block hashes are not available for all blocks for scalability reasons.
-    You can only access the hashes of the most recent 256 blocks, all other
-    values will be zero.
+    Jangan mengandalkan ``block.timestamp`` atau ``blockhash`` sebagai sumber randomness, kecuali Anda
+    tahu apa yang Anda lakukan.
+
+    Baik timestamp dan block hash dapat dipengaruhi oleh penambang sampai tingkat tertentu.
+    Aktor jahat di komunitas penambangan misalnya dapat menjalankan fungsi pembayaran kasino pada hash yang dipilih
+    dan coba ulangi hash yang berbeda jika mereka tidak menerima uang.
+
+    Timestamp blok saat ini harus benar-benar lebih besar dari timestamp blok terakhir,
+    tetapi satu-satunya jaminan adalah bahwa itu akan berada di antara timestamp dua
+    blok berturut-turut dalam canonical chain.
 
 .. note::
-    In version 0.5.0, the following aliases were removed: ``suicide`` as alias for ``selfdestruct``,
-    ``msg.gas`` as alias for ``gasleft``, ``block.blockhash`` as alias for ``blockhash`` and
-    ``sha3`` as alias for ``keccak256``.
+    Hash blok tidak tersedia untuk semua blok karena alasan skalabilitas.
+    Anda hanya dapat mengakses hash dari 256 blok terbaru, semua nilai lainnya akan menjadi nol.
+
 .. note::
-    In version 0.7.0, the alias ``now`` (for ``block.timestamp``) was removed.
+    Di versi 0.5.0, alias berikut telah dihapus: ``suicide`` sebagai alias untuk ``selfdestruct``,
+    ``msg.gas`` sebagai alias untuk ``gasleft``, ``block.blockhash`` sebagai alias untuk ``blockhash`` dan
+    ``sha3`` sebagai alias untuk ``keccak256``.
+.. note::
+    Di versi 0.7.0, alias ``now`` (untuk ``block.timestamp``) telah dihilangkan.
 
 .. index:: visibility, public, private, external, internal
 
@@ -172,10 +171,10 @@ Function Visibility Specifiers
         return true;
     }
 
-- ``public``: visible externally and internally (creates a :ref:`getter function<getter-functions>` for storage/state variables)
-- ``private``: only visible in the current contract
-- ``external``: only visible externally (only for functions) - i.e. can only be message-called (via ``this.func``)
-- ``internal``: only visible internally
+- ``public``: terlihat secara eksternal dan internal (membuat :ref:`getter function<getter-functions>` untuk variabel storage/state)
+- ``private``: hanya terlihat di kontrak saat ini
+- ``external``: hanya terlihat secara eksternal (hanya untuk fungsi) - yaitu hanya dapat dipanggil melalui pesan (via ``this.func``)
+- ``internal``: hanya terlihat secara internal
 
 
 .. index:: modifiers, pure, view, payable, constant, anonymous, indexed
@@ -183,22 +182,22 @@ Function Visibility Specifiers
 Modifiers
 =========
 
-- ``pure`` for functions: Disallows modification or access of state.
-- ``view`` for functions: Disallows modification of state.
-- ``payable`` for functions: Allows them to receive Ether together with a call.
-- ``constant`` for state variables: Disallows assignment (except initialisation), does not occupy storage slot.
-- ``immutable`` for state variables: Allows exactly one assignment at construction time and is constant afterwards. Is stored in code.
-- ``anonymous`` for events: Does not store event signature as topic.
-- ``indexed`` for event parameters: Stores the parameter as topic.
-- ``virtual`` for functions and modifiers: Allows the function's or modifier's
-  behaviour to be changed in derived contracts.
-- ``override``: States that this function, modifier or public state variable changes
-  the behaviour of a function or modifier in a base contract.
+- ``pure`` untuk fungsi: Tidak mengizinkan modifikasi atau akses state.
+- ``view`` untuk fungsi: Melarang modifikasi state.
+- ``payable`` untuk fungsi: Memungkinkan mereka menerima Ether bersama dengan panggilan.
+- ``constant`` untuk variabel state: Melarang penetapan (kecuali inisialisasi), tidak menempati slot penyimpanan.
+- ``immutable`` untuk variabel state: Memungkinkan tepat satu penugasan pada waktu konstruksi dan konstan setelahnya. Disimpan dalam kode.
+- ``anonymous`` untuk event: Tidak menyimpan tanda tangan event sebagai topik.
+- ``indexed` untuk parameter event: Menyimpan parameter sebagai topik.
+- ``virtual`` untuk fungsi dan modifier: Memungkinkan perilaku fungsi
+  atau pengubah diubah dalam kontrak turunan.
+- ``override``: Menyatakan bahwa fungsi, modifier, atau variabel state
+  publik ini mengubah perilaku fungsi atau modifier dalam basis kontrak.
 
-Reserved Keywords
-=================
+Kata Kunci Cadangan
+===================
 
-These keywords are reserved in Solidity. They might become part of the syntax in the future:
+Kata kunci ini dicadangkan di Solidity. Mereka mungkin menjadi bagian dari sintaks di masa mendatang:
 
 ``after``, ``alias``, ``apply``, ``auto``, ``byte``, ``case``, ``copyof``, ``default``,
 ``define``, ``final``, ``implements``, ``in``, ``inline``, ``let``, ``macro``, ``match``,

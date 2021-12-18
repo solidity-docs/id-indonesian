@@ -1,44 +1,46 @@
-********************
-Micropayment Channel
-********************
+************************************************
+Saluran Pembayaran Mikro (Micropayment Channel)
+************************************************
 
-In this section we will learn how to build an example implementation
-of a payment channel. It uses cryptographic signatures to make
-repeated transfers of Ether between the same parties secure, instantaneous, and
-without transaction fees. For the example, we need to understand how to
-sign and verify signatures, and setup the payment channel.
+Di bagian ini kita akan mempelajari cara membuat contoh
+implementasi saluran pembayaran. Dengan menggunakan tanda tangan
+kriptografi untuk membuat transfer Ether secara berulang antara pihak yang sama,
+aman, seketika, dan tanpa biaya transaksi. Misalnya, kita perlu memahami cara menyetujui
+dan memverifikasi tanda tangan, dan mengatur saluran pembayaran.
 
-Creating and verifying signatures
-=================================
 
-Imagine Alice wants to send some Ether to Bob, i.e.
-Alice is the sender and Bob is the recipient.
+Membuat dan memverifikasi tanda tangan
+======================================
 
-Alice only needs to send cryptographically signed messages off-chain
-(e.g. via email) to Bob and it is similar to writing checks.
+Bayangkan, Alice ingin mengirim sejumlah Ether kepada Bob, misalnya
+disini Alice sebagai pengirim dan Bob sebagai penerimanya.
 
-Alice and Bob use signatures to authorise transactions, which is possible with smart contracts on Ethereum.
-Alice will build a simple smart contract that lets her transmit Ether, but instead of calling a function herself
-to initiate a payment, she will let Bob do that, and therefore pay the transaction fee.
+Alice hanya perlu mengirim pesan yang ditandatangani secara kriptografis off-chain
+(misalnya melalui email) ke Bob dan ini mirip dengan menulis cek.
 
-The contract will work as follows:
+Alice dan Bob menggunakan tanda tangan untuk mengotorisasi transaksi, hal ini dimungkinkan dengan smart kontrak di Ethereum.
+Alice akan membuat smart kontrak sederhana yang memumngkinkan dia mengirim Ether, tetapi alih-alih memanggil fungsi sendiri
+untuk melakukan pembayaran, dia akan membiarkan Bob melakukan itu, dan sekaligus membayar biaya transaksi.
 
-    1. Alice deploys the ``ReceiverPays`` contract, attaching enough Ether to cover the payments that will be made.
-    2. Alice authorises a payment by signing a message with her private key.
-    3. Alice sends the cryptographically signed message to Bob. The message does not need to be kept secret
-       (explained later), and the mechanism for sending it does not matter.
-    4. Bob claims his payment by presenting the signed message to the smart contract, it verifies the
-       authenticity of the message and then releases the funds.
+Kontrak akan bekerja sebagai berikut:
 
-Creating the signature
+    1. Alice mendeploy kontrak ``ReceiverPays``, melampirkan cukup Ether untuk menutupi pembayaran yang akan dilakukan.
+    2. Alice mengotorisasi pembayaran dengan menandatangani pesan dengan kunci pribadinya.
+    3. Alice mengirimkan pesan yang ditandatangani secara kriptografis ke Bob. Pesan tidak perlu dirahasiakan
+       (dijelaskan nanti), dan mekanisme pengirimannya tidak masalah.
+    4. Bob mengklaim pembayarannya dengan menyerahkan pesan yang ditandatangani ke smart kontrak,ini akan memverifikasi
+       keaslian pesan dan kemudian mengeluarkan dana.
+
+Membuat tanda tangan
 ----------------------
 
-Alice does not need to interact with the Ethereum network
-to sign the transaction, the process is completely offline.
-In this tutorial, we will sign messages in the browser
-using `web3.js <https://github.com/ethereum/web3.js>`_ and
-`MetaMask <https://metamask.io>`_, using the method described in `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_,
-as it provides a number of other security benefits.
+Alice tidak perlu berinteraksi dengan jaringan Ethereum
+untuk menandatangani transaksi, prosesnya benar-benar offline.
+
+Dalam tutorial ini, kita akan menandatangani pesan di browser
+menggunakan `web3.js <https://github.com/ethereum/web3.js>`_ dan
+`MetaMask <https://metamask.io>`_, menggunakan metode yang dijelaskan dalam `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_,
+karena memberikan sejumlah manfaat keamanan lainnya.
 
 .. code-block:: javascript
 
@@ -47,48 +49,43 @@ as it provides a number of other security benefits.
     web3.eth.personal.sign(hash, web3.eth.defaultAccount, function () { console.log("Signed"); });
 
 .. note::
-  The ``web3.eth.personal.sign`` prepends the length of the
-  message to the signed data. Since we hash first, the message
-  will always be exactly 32 bytes long, and thus this length
-  prefix is always the same.
+  ``web3.eth.personal.sign`` menambahkan panjang pesan ke data yang ditandatangani.
+  karena kita melakukan hash terlebih dahulu, pesan akan selalu memiliki panjang yang tepat 32 byte,
+  dan dengan demikian prefix panjang ini selalu sama.
 
-What to Sign
-------------
+Apa yang Harus Ditandatangani?
+------------------------------
 
-For a contract that fulfils payments, the signed message must include:
+Untuk kontrak yang memenuhi pembayaran, pesan yang ditandatangani harus menyertakan:
 
-    1. The recipient's address.
-    2. The amount to be transferred.
-    3. Protection against replay attacks.
+    1. Alamat penerima.
+    2. Jumlah yang akan ditransfer.
+    3. Perlindungan terhadap serangan replay.
 
-A replay attack is when a signed message is reused to claim
-authorization for a second action. To avoid replay attacks
-we use the same technique as in Ethereum transactions themselves,
-a so-called nonce, which is the number of transactions sent by
-an account. The smart contract checks if a nonce is used multiple times.
+Serangan replay adalah ketika pesan yang ditandatangani digunakan kembali untuk mengklaim otorisasi
+untuk tindakan kedua. Untuk menghindari serangan replay, kami menggunakan teknik yang sama seperti
+dalam transaksi Ethereum, yang disebut nonce, yang merupakan jumlah transaksi yang dikirim
+oleh sebuah akun. Smart Kontrak akan memeriksa apakah nonce digunakan beberapa kali.
 
-Another type of replay attack can occur when the owner
-deploys a ``ReceiverPays`` smart contract, makes some
-payments, and then destroys the contract. Later, they decide
-to deploy the ``RecipientPays`` smart contract again, but the
-new contract does not know the nonces used in the previous
-deployment, so the attacker can use the old messages again.
+Jenis serangan replay lainnya dapat terjadi ketika pemilik mendeploy sebuah smart kontrak ``ReceiverPays``,
+melakukan beberapa pembayaran, dan kemudian menghancurkan kontrak tersebut.
+Kemudian, mereka memutuskan untuk menerapkan smart kontrak ``RecipientPays`` lagi, tetapi kontrak baru tersebut
+tidak mengetahui nonces yang digunakan dalam penerapan sebelumnya, sehingga penyerang dapat menggunakan pesan yang sama.
 
-Alice can protect against this attack by including the
-contract's address in the message, and only messages containing
-the contract's address itself will be accepted. You can find
-an example of this in the first two lines of the ``claimPayment()``
-function of the full contract at the end of this section.
+Alice dapat melindungi dari serangan ini dengan memasukkan alamat kontrak kedalam pesan,
+dan hanya pesan yang berisi alamat kontrak itu sendiri yang akan diterima.
+Anda dapat menemukan contohnya di dua baris pertama fungsi ``claimPayment()`` dari kontrak
+penuh di akhir bagian ini.
 
 Packing arguments
 -----------------
 
-Now that we have identified what information to include in the signed message,
-we are ready to put the message together, hash it, and sign it. For simplicity,
-we concatenate the data. The `ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_
-library provides a function called ``soliditySHA3`` that mimics the behaviour of
-Solidity's ``keccak256`` function applied to arguments encoded using ``abi.encodePacked``.
-Here is a JavaScript function that creates the proper signature for the ``ReceiverPays`` example:
+Sekarang kita telah mengidentifikasi informasi apa yang akan disertakan dalam pesan yang ditandatangani,
+kita siap untuk menyatukan pesan, hash, dan menandatanganinya. Untuk kesederhanaan,
+kita gabungkan datanya. Library `Ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_
+menyediakan fungsi yang disebut ``soliditySHA3`` yang meniru perilaku fungsi
+Solidity ``keccak256`` yang diterapkan pada argumen yang dikodekan menggunakan ``abi.encodePacked``.
+Berikut adalah fungsi JavaScript yang membuat tanda tangan yang tepat untuk contoh ``ReceiverPays``:
 
 .. code-block:: javascript
 
@@ -105,38 +102,37 @@ Here is a JavaScript function that creates the proper signature for the ``Receiv
         web3.eth.personal.sign(hash, web3.eth.defaultAccount, callback);
     }
 
-Recovering the Message Signer in Solidity
------------------------------------------
+Memulihkan Penandatangan Pesan dalam Solidity
+----------------------------------------------
 
-In general, ECDSA signatures consist of two parameters,
-``r`` and ``s``. Signatures in Ethereum include a third
-parameter called ``v``, that you can use to verify which
-account's private key was used to sign the message, and
-the transaction's sender. Solidity provides a built-in
-function :ref:`ecrecover <mathematical-and-cryptographic-functions>` that
-accepts a message along with the ``r``, ``s`` and ``v`` parameters
-and returns the address that was used to sign the message.
+Secara umum, tanda tangan ECDSA terdiri dari dua parameter, ``r`` dan ``s``.
+Tanda tangan di Ethereum menyertakan parameter ketiga yang disebut ``v``,
+yang dapat Anda gunakan untuk memverifikasi kunci pribadi akun mana yang digunakan
+untuk menandatangani pesan dan mengirim transaksi. Solidity menyediakan fungsi bawaan yaitu
+:ref:`ecrecover <mathematical-and-cryptographic-functions>` yang menerima pesan bersama
+dengan parameter ``r``, ``s`` dan ``v`` dan mengembalikan parameter alamat yang digunakan
+untuk menandatangani pesan.
 
-Extracting the Signature Parameters
+Mengekstrak Parameter Tanda Tangan
 -----------------------------------
 
-Signatures produced by web3.js are the concatenation of ``r``,
-``s`` and ``v``, so the first step is to split these parameters
-apart. You can do this on the client-side, but doing it inside
-the smart contract means you only need to send one signature
-parameter rather than three. Splitting apart a byte array into
-its constituent parts is a mess, so we use
-:doc:`inline assembly <assembly>` to do the job in the ``splitSignature``
-function (the third function in the full contract at the end of this section).
+Tanda tangan yang dihasilkan oleh web3.js adalah gabungan dari
+``r``, ``s`` dan ``v``, jadi langkah pertama adalah memisahkan
+3 parameter tersebut. Anda dapat melakukan ini di sisi klien, tetapi jika ingin
+melakukannya di dalam smart kontrak berarti Anda hanya perlu mengirim
+satu parameter tanda tangan, bukan tiga.
+Memisahkan array byte menjadi bagian-bagian penyusunnya merupakan hal yang berantakan,
+jadi kami menggunakan :doc:`inline assembly <assembly>` untuk melakukan pekerjaan di
+fungsi ``splitSignature`` (fungsi ketiga dalam kontrak penuh di akhir bagian ini).
 
-Computing the Message Hash
+Menghitung Hash Pesan
 --------------------------
 
-The smart contract needs to know exactly what parameters were signed, and so it
-must recreate the message from the parameters and use that for signature verification.
-The functions ``prefixed`` and ``recoverSigner`` do this in the ``claimPayment`` function.
+Smart Kontrak perlu tahu persis parameter apa yang ditandatangani, dan karenanya
+harus membuat ulang pesan dari parameter dan menggunakannya untuk verifikasi tanda tangan.
+Fungsi ``prefixed`` dan ``recoverSigner`` melakukan ini dalam fungsi ``claimPayment``.
 
-The full contract
+Kontrak penuh
 -----------------
 
 .. code-block:: solidity
@@ -206,71 +202,70 @@ The full contract
     }
 
 
-Writing a Simple Payment Channel
-================================
+Menulis Saluran Pembayaran Sederhana
+====================================
 
-Alice now builds a simple but complete implementation of a payment
-channel. Payment channels use cryptographic signatures to make
-repeated transfers of Ether securely, instantaneously, and without transaction fees.
+Alice sekarang membangun implementasi saluran pembayaran yang sederhana namun lengkap.
+Saluran pembayaran menggunakan tanda tangan kriptografi untuk melakukan transfer Ether
+secara berulang dengan aman, instan, dan tanpa biaya transaksi.
 
-What is a Payment Channel?
---------------------------
-
-Payment channels allow participants to make repeated transfers of Ether
-without using transactions. This means that you can avoid the delays and
-fees associated with transactions. We are going to explore a simple
-unidirectional payment channel between two parties (Alice and Bob). It involves three steps:
-
-    1. Alice funds a smart contract with Ether. This "opens" the payment channel.
-    2. Alice signs messages that specify how much of that Ether is owed to the recipient. This step is repeated for each payment.
-    3. Bob "closes" the payment channel, withdrawing his portion of the Ether and sending the remainder back to the sender.
-
-.. note::
-  Only steps 1 and 3 require Ethereum transactions, step 2 means that the sender
-  transmits a cryptographically signed message to the recipient via off chain
-  methods (e.g. email). This means only two transactions are required to support
-  any number of transfers.
-
-Bob is guaranteed to receive his funds because the smart contract escrows the
-Ether and honours a valid signed message. The smart contract also enforces a
-timeout, so Alice is guaranteed to eventually recover her funds even if the
-recipient refuses to close the channel. It is up to the participants in a payment
-channel to decide how long to keep it open. For a short-lived transaction,
-such as paying an internet café for each minute of network access, the payment
-channel may be kept open for a limited duration. On the other hand, for a
-recurring payment, such as paying an employee an hourly wage, the payment channel
-may be kept open for several months or years.
-
-Opening the Payment Channel
+Apa itu Saluran Pembayaran?
 ---------------------------
 
-To open the payment channel, Alice deploys the smart contract, attaching
-the Ether to be escrowed and specifying the intended recipient and a
-maximum duration for the channel to exist. This is the function
-``SimplePaymentChannel`` in the contract, at the end of this section.
+Saluran pembayaran memungkinkan peserta untuk melakukan transfer Ether berulang
+tanpa menggunakan transaksi. Ini berarti Anda dapat menghindari penundaan dan biaya
+yang terkait dengan transaksi. Kita akan mengeksplor saluran pembayaran searah sederhana
+antara dua pihak (Alice dan Bob). yang melibatkan tiga langkah berikut:
 
-Making Payments
----------------
+    1. Alice mendanai smart kontrak dengan Ether. Ini "membuka" saluran pembayaran.
+    2. Alice menandatangani pesan yang menentukan berapa banyak Ether yang terutang kepada penerima. Langkah ini diulang untuk setiap pembayaran.
+    3. Bob "menutup" saluran pembayaran, menarik bagiannya dan mengirimkan sisanya kembali ke pengirim.
 
-Alice makes payments by sending signed messages to Bob.
-This step is performed entirely outside of the Ethereum network.
-Messages are cryptographically signed by the sender and then transmitted directly to the recipient.
+.. note::
+  Hanya langkah 1 dan 3 yang memerlukan transaksi Ethereum, langkah 2 berarti pengirim
+  mengirimkan pesan yang ditandatangani secara kriptografis ke penerima melalui metode
+  off-chain (mis. melalui email). Ini berarti hanya dua transaksi yang diperlukan untuk mendukung
+  sejumlah transfer.
 
-Each message includes the following information:
+Bob dijamin akan menerima dananya karena smart kontrak menyimpan Ether dan menghormati
+pesan bertanda tangan yang valid. Smart Kontrak juga memberlakukan batas waktu, sehingga
+Alice dijamin pada akhirnya Alice akan menerima kembali dananya meskipun penerima menolak untuk
+menutup saluran. Terserah para peserta di saluran pembayaran untuk memutuskan berapa lama
+untuk tetap terbuka. Untuk transaksi yang berumur pendek, seperti membayar warnet untuk setiap
+menit akses jaringan, saluran pembayaran dapat tetap terbuka untuk jangka waktu terbatas.
+Di sisi lain, untuk pembayaran berulang, seperti membayar upah per jam kepada karyawan, saluran
+pembayaran dapat tetap terbuka selama beberapa bulan atau tahun.
 
-    * The smart contract's address, used to prevent cross-contract replay attacks.
-    * The total amount of Ether that is owed the recipient so far.
+Membuka Saluran Pembayaran
+---------------------------
 
-A payment channel is closed just once, at the end of a series of transfers.
-Because of this, only one of the messages sent is redeemed. This is why
-each message specifies a cumulative total amount of Ether owed, rather than the
-amount of the individual micropayment. The recipient will naturally choose to
-redeem the most recent message because that is the one with the highest total.
-The nonce per-message is not needed anymore, because the smart contract only
-honours a single message. The address of the smart contract is still used
-to prevent a message intended for one payment channel from being used for a different channel.
+Untuk membuka saluran pembayaran, Alice menyebarkan smart kontrak,
+melampirkan Ether untuk di*escrow*kan dan menentukan penerima yang
+dituju dan juga durasi maksimum dari saluran yang ada. Ini adalah
+fungsi dari ``SimplePaymentChannel`` dalam kontrak, di akhir bagian ini.
 
-Here is the modified JavaScript code to cryptographically sign a message from the previous section:
+Melakukan Pembayaran
+--------------------
+
+Alice melakukan pembayaran dengan mengirimkan pesan yang ditandatangani ke Bob.
+Langkah ini dilakukan sepenuhnya di luar jaringan Ethereum.
+Pesan secara kriptografis ditandatangani oleh pengirim dan kemudian dikirim langsung ke penerima.
+
+Setiap pesan mencakup informasi berikut:
+
+    * Alamat smart kontrak, digunakan untuk mencegah serangan replay di lintas kontrak.
+    * Jumlah total Ether yang terutang kepada penerima sejauh ini.
+
+Saluran pembayaran ditutup hanya sekali, di akhir serangkaian transfer.
+Karena itu, hanya satu pesan yang dikirim yang ditukarkan.
+Inilah sebabnya mengapa setiap pesan menentukan jumlah total kumulatif
+Ether yang terutang, bukan jumlah pembayaran mikro individu. Penerima secara alami
+akan memilih untuk menebus pesan terbaru karena itu adalah pesan dengan total nilai tertinggi.
+Nonce per-pesan tidak diperlukan lagi, karena smart kontrak hanya menghargai satu pesan.
+Alamat smart kontrak masih digunakan untuk mencegah pesan yang ditujukan untuk satu saluran
+pembayaran digunakan untuk saluran yang berbeda.
+
+Berikut adalah kode JavaScript yang dimodifikasi untuk menandatangani pesan secara kriptografis dari bagian sebelumnya:
 
 .. code-block:: javascript
 
@@ -298,42 +293,43 @@ Here is the modified JavaScript code to cryptographically sign a message from th
     }
 
 
-Closing the Payment Channel
+Menutup Saluran Pembayaran
 ---------------------------
 
-When Bob is ready to receive his funds, it is time to
-close the payment channel by calling a ``close`` function on the smart contract.
-Closing the channel pays the recipient the Ether they are owed and
-destroys the contract, sending any remaining Ether back to Alice. To
-close the channel, Bob needs to provide a message signed by Alice.
+Ketika Bob siap menerima dananya, saatnya untuk menutup saluran pembayaran
+dengan memanggil fungsi ``close`` pada smart kontrak.
+Menutup saluran membayar penerima Ether yang mereka miliki dan menghancurkan kontrak,
+mengirim kembali Ether yang tersisa ke Alice. Untuk menutup saluran, Bob perlu
+memberikan pesan yang ditandatangani oleh Alice.
 
-The smart contract must verify that the message contains a valid signature from the sender.
-The process for doing this verification is the same as the process the recipient uses.
-The Solidity functions ``isValidSignature`` and ``recoverSigner`` work just like their
-JavaScript counterparts in the previous section, with the latter function borrowed from the ``ReceiverPays`` contract.
+Kontrak cerdas harus memverifikasi bahwa pesan berisi tanda tangan yang valid dari pengirim.
+Proses untuk melakukan verifikasi ini sama dengan proses yang digunakan penerima.
+Fungsi Solidity ``isValidSignature`` dan ``recoverSigner`` bekerja seperti fungsi JavaScript
+yang ada di bagian sebelumnya, dan fungsi terakhir dipinjam dari kontrak ``ReceiverPays``.
 
-Only the payment channel recipient can call the ``close`` function,
-who naturally passes the most recent payment message because that message
-carries the highest total owed. If the sender were allowed to call this function,
-they could provide a message with a lower amount and cheat the recipient out of what they are owed.
+Hanya penerima saluran pembayaran yang dapat memanggil fungsi ``close``,
+yang secara alami melewati pesan pembayaran terbaru karena pesan tersebut
+membawa total hutang tertinggi. Jika pengirim diizinkan untuk memanggil
+fungsi ini, mereka dapat memberikan pesan dengan jumlah yang lebih rendah
+dan menipu penerima .
 
-The function verifies the signed message matches the given parameters.
-If everything checks out, the recipient is sent their portion of the Ether,
-and the sender is sent the rest via a ``selfdestruct``.
-You can see the ``close`` function in the full contract.
+Fungsi memverifikasi pesan yang ditandatangani cocok dengan parameter yang diberikan.
+Jika semuanya selesai, penerima menerima Ether bagiannya,
+dan pengirim dikirim sisanya melalui ``selfdestruct``.
+Anda dapat melihat fungsi ``close`` dibagian kontrak lengkap.
 
-Channel Expiration
+Kedaluwarsa Saluran
 -------------------
 
-Bob can close the payment channel at any time, but if they fail to do so,
-Alice needs a way to recover her escrowed funds. An *expiration* time was set
-at the time of contract deployment. Once that time is reached, Alice can call
-``claimTimeout`` to recover her funds. You can see the ``claimTimeout`` function in the full contract.
+Bob dapat menutup saluran pembayaran kapan saja, tetapi jika mereka gagal melakukannya,
+Alice membutuhkan cara untuk memulihkan dana escrow miliknya. Waktu *kedaluwarsa* telah ditetapkan
+pada saat pelaksanaan kontrak. Setelah waktu itu tercapai, Alice dapat ,memanggil fungsi``claimTimeout``
+untuk memulihkan dananya. Anda dapat melihat fungsi ``claimTimeout`` dibagian kontrak lengkap.
 
-After this function is called, Bob can no longer receive any Ether,
-so it is important that Bob closes the channel before the expiration is reached.
+Setelah fungsi ini dijalankan, Bob tidak dapat lagi menerima Ether apa pun,
+jadi penting bagi Bob untuk menutup saluran sebelum waktu kedaluwarsa tercapai.
 
-The full contract
+Kontrak penuh
 -----------------
 
 .. code-block:: solidity
@@ -431,30 +427,28 @@ The full contract
 
 
 .. note::
-  The function ``splitSignature`` does not use all security
-  checks. A real implementation should use a more rigorously tested library,
-  such as openzepplin's `version  <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_ of this code.
+  Fungsi ``splitSignature`` tidak menggunakan semua pemeriksaan keamanan.
+  Implementasi nyata harus menggunakan library yang telah diuji secara ketat,
+  seperti versi openzepplin <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_ of this code.
 
-Verifying Payments
-------------------
+Memverifikasi Pembayaran
+------------------------
 
-Unlike in the previous section, messages in a payment channel aren't
-redeemed right away. The recipient keeps track of the latest message and
-redeems it when it's time to close the payment channel. This means it's
-critical that the recipient perform their own verification of each message.
-Otherwise there is no guarantee that the recipient will be able to get paid
-in the end.
+Tidak seperti di bagian sebelumnya, pesan di saluran pembayaran tidak langsung ditukarkan.
+Penerima melacak pesan terbaru dan menukarnya saat tiba waktunya untuk menutup saluran pembayaran.
+Ini berarti sangat penting bahwa penerima harus melakukan verifikasi sendiri untuk setiap pesan.
+Jika tidak, pada akhirnya tidak ada jaminan bahwa penerima akan dapat menerima pembayaran.
 
-The recipient should verify each message using the following process:
+Penerima harus memverifikasi setiap pesan menggunakan proses berikut:
 
-    1. Verify that the contract address in the message matches the payment channel.
-    2. Verify that the new total is the expected amount.
-    3. Verify that the new total does not exceed the amount of Ether escrowed.
-    4. Verify that the signature is valid and comes from the payment channel sender.
+    1. Pastikan alamat kontrak dalam pesan cocok dengan saluran pembayaran.
+    2. Verifikasi bahwa total baru adalah jumlah yang diharapkan.
+    3. Pastikan jumlah baru tidak melebihi jumlah Ether yang diescrow.
+    4. Verifikasi bahwa tanda tangan itu valid dan berasal dari pengirim saluran pembayaran.
 
-We'll use the `ethereumjs-util <https://github.com/ethereumjs/ethereumjs-util>`_
-library to write this verification. The final step can be done a number of ways,
-and we use JavaScript. The following code borrows the ``constructPaymentMessage`` function from the signing **JavaScript code** above:
+Kita akan menggunakan library `ethereumjs-util <https://github.com/ethereumjs/ethereumjs-util>`_
+untuk menulis verifikasi ini. langkah terakhir dapat dilakukan dengan beberapa cara,
+dan kami menggunakan JavaScript. Kode berikut meminjam fungsi ``constructPaymentMessage`` dari **kode JavaScript** penandatanganan di atas:
 
 .. code-block:: javascript
 

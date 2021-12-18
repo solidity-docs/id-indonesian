@@ -1,18 +1,18 @@
 ###############################
-Introduction to Smart Contracts
+Pengenalan Smart Kontrak
 ###############################
 
 .. _simple-smart-contract:
 
-***********************
-A Simple Smart Contract
-***********************
+************************
+Smart Kontrak Sederhana
+************************
 
-Let us begin with a basic example that sets the value of a variable and exposes
-it for other contracts to access. It is fine if you do not understand
-everything right now, we will go into more detail later.
+Mari kita mulai dengan contoh dasar yang menetapkan nilai variabel dan mengeksposnya
+untuk dapat diakses oleh kontrak lain. Tidak mengapa jika Anda tidak memahami
+semuanya sekarang, kita akan bahas lebih detail nanti.
 
-Storage Example
+Contoh Storage
 ===============
 
 .. code-block:: solidity
@@ -32,55 +32,55 @@ Storage Example
         }
     }
 
-The first line tells you that the source code is licensed under the
-GPL version 3.0. Machine-readable license specifiers are important
-in a setting where publishing the source code is the default.
+Baris pertama memberitahu Anda bahwa kode sumber dilisensikan dibawah
+GPL versi 3.0. Penentu lisensi yang dapat dibaca mesin adalah penting,
+dalam pengaturan di mana penerbitan kode sumber adalah default.
 
-The next line specifies that the source code is written for
-Solidity version 0.4.16, or a newer version of the language up to, but not including version 0.9.0.
-This is to ensure that the contract is not compilable with a new (breaking) compiler version, where it could behave differently.
-:ref:`Pragmas<pragma>` are common instructions for compilers about how to treat the
-source code (e.g. `pragma once <https://en.wikipedia.org/wiki/Pragma_once>`_).
+Baris berikutnya menentukan bahwa kode sumber ditulis untuk
+Solidity versi 0.4.16, atau versi bahasa yang lebih baru hingga, tetapi tidak termasuk versi 0.9.0.
+Ini untuk memastikan bahwa kontrak tidak dapat dikompilasi dengan versi kompiler baru (breaking), di mana ia bisa berperilaku berbeda.
+:ref:`Pragmas<pragma>` adalah instruksi umum untuk kompiler tentang cara memperlakukan
+kode sumber (mis. `pragma Once <https://en.wikipedia.org/wiki/Pragma_once>`_).
 
-A contract in the sense of Solidity is a collection of code (its *functions*) and
-data (its *state*) that resides at a specific address on the Ethereum
-blockchain. The line ``uint storedData;`` declares a state variable called ``storedData`` of
-type ``uint`` (*u*\nsigned *int*\eger of *256* bits). You can think of it as a single slot
-in a database that you can query and alter by calling functions of the
-code that manages the database. In this example, the contract defines the
-functions ``set`` and ``get`` that can be used to modify
-or retrieve the value of the variable.
+Kontrak dalam arti Solidity adalah kumpulan kode (*fungsinya*) dan
+data (*statusnya*) yang berada di alamat tertentu di blockchain
+Ethereum. Baris ``uintstoredData;`` mendeklarasikan variabel state yang disebut ``storedData``
+bertipe ``uint`` (*u*\nsigned *int*\eger dari *256* bits). Anda dapat menganggapnya sebagai satu slot
+dalam database yang dapat Anda query dan ubah dengan memanggil fungsi
+kode yang mengelola database. Dalam contoh ini, kontrak mendefinisikan
+fungsi ``set`` dan ``get`` yang dapat digunakan untuk mengubah
+atau mengambil nilai variabel.
 
-To access a member (like a state variable) of the current contract, you do not typically add the ``this.`` prefix,
-you just access it directly via its name.
-Unlike in some other languages, omitting it is not just a matter of style,
-it results in a completely different way to access the member, but more on this later.
+Untuk mengakses member (seperti variabel state) dari kontrak saat ini, Anda biasanya tidak perlu menambahkan awalan ``this.``,
+cukup mengaksesnya langsung melalui namanya.
+Tidak seperti di beberapa bahasa lain, menghilangkannya bukan hanya masalah gaya,
+tetapi menghasilkan cara yang berbeda untuk mengakses member, kita bahas tentang ini nanti.
 
-This contract does not do much yet apart from (due to the infrastructure
-built by Ethereum) allowing anyone to store a single number that is accessible by
-anyone in the world without a (feasible) way to prevent you from publishing
-this number. Anyone could call ``set`` again with a different value
-and overwrite your number, but the number is still stored in the history
-of the blockchain. Later, you will see how you can impose access restrictions
-so that only you can alter the number.
+Kontrak ini belum bisa berbuat banyak selain dari (karena infrastruktur
+yang dibangun oleh Ethereum) memungkinkan siapa pun untuk menyimpan satu nomor yang dapat
+diakses oleh siapa saja di dunia tanpa ada cara (yang layak) untuk mencegah Anda menerbitkan
+nomor ini. Siapa pun dapat memanggil lagi fungsi ``set`` dengan nilai yang berbeda
+dan menimpa nomor Anda, tetapi nomor tersebut masih tersimpan dalam riwayat
+blockchain. Nanti, Anda akan melihat bagaimana Anda dapat memberlakukan pembatasan akses
+sehingga hanya Anda yang dapat mengubah nomor tersebut.
 
 .. warning::
-    Be careful with using Unicode text, as similar looking (or even identical) characters can
-    have different code points and as such are encoded as a different byte array.
+    Hati-hati dalam menggunakan teks Unicode, karena karakter yang terlihat serupa (atau bahkan identik)
+    dapat memiliki titik kode yang berbeda dan karenanya dikodekan sebagai byte array yang berbeda.
 
 .. note::
-    All identifiers (contract names, function names and variable names) are restricted to
-    the ASCII character set. It is possible to store UTF-8 encoded data in string variables.
+    Semua pengidentifikasi (nama kontrak, nama fungsi, dan nama variabel) dibatasi untuk
+    set karakter ASCII. Dimungkinkan untuk menyimpan data encoded UTF-8 dalam variabel string.
 
 .. index:: ! subcurrency
 
-Subcurrency Example
+Contoh Subcurrency
 ===================
 
-The following contract implements the simplest form of a
-cryptocurrency. The contract allows only its creator to create new coins (different issuance schemes are possible).
-Anyone can send coins to each other without a need for
-registering with a username and password, all you need is an Ethereum keypair.
+Kontrak berikut mengimplementasikan bentuk paling sederhana dari
+cryptocurrency. Kontrak hanya mengizinkan penciptanya untuk membuat koin baru (skema lain mungkin bisa digunakan).
+Siapa pun dapat mengirim koin satu sama lain tanpa perlu
+mendaftar dengan nama pengguna dan kata sandi, yang dibutuhkan hanyalah *keypair* Ethereum.
 
 .. code-block:: solidity
 
@@ -130,41 +130,40 @@ registering with a username and password, all you need is an Ethereum keypair.
         }
     }
 
-This contract introduces some new concepts, let us go through them one by one.
+Kontrak ini memperkenalkan beberapa konsep baru, mari kita bahas satu per satu.
 
-The line ``address public minter;`` declares a state variable of type :ref:`address<address>`.
-The ``address`` type is a 160-bit value that does not allow any arithmetic operations.
-It is suitable for storing addresses of contracts, or a hash of the public half
-of a keypair belonging to :ref:`external accounts<accounts>`.
+Baris ``address public minter;`` mendeklarasikan variabel state dengan tipe :ref:`alamat<address>`.
+Tipe ``alamat`` adalah 160-bit yang tidak mengizinkan operasi aritmatika apa pun.
+Sangat cocok untuk menyimpan alamat kontrak, atau hash dari setengah pasangan
+keypair publik milik :ref:`akun external<accounts>`.
 
-The keyword ``public`` automatically generates a function that allows you to access the current value of the state
-variable from outside of the contract. Without this keyword, other contracts have no way to access the variable.
-The code of the function generated by the compiler is equivalent
-to the following (ignore ``external`` and ``view`` for now):
+Kata kunci ``public`` secara otomatis menghasilkan fungsi yang memungkinkan Anda mengakses nilai variabel state
+saat ini dari luar kontrak. Tanpa kata kunci ini, kontrak lain tidak memiliki cara untuk mengakses variabel.
+Kode fungsi yang dihasilkan oleh *compiler* setara dengan
+kode berikut (untuk saat ini, abaikan ``external`` dan ``view``):
 
 .. code-block:: solidity
 
     function minter() external view returns (address) { return minter; }
 
-You could add a function like the above yourself, but you would have a function and state variable with the same name.
-You do not need to do this, the compiler figures it out for you.
+Anda dapat menambahkan sendiri fungsi seperti di atas, Anda akan memiliki fungsi dan variabel state dengan nama yang sama.
+Anda tidak perlu melakukan ini, *compiler* akan mencarikannya untuk Anda.
 
 .. index:: mapping
 
-The next line, ``mapping (address => uint) public balances;`` also
-creates a public state variable, but it is a more complex datatype.
-The :ref:`mapping <mapping-types>` type maps addresses to :ref:`unsigned integers <integers>`.
+Baris berikutnya, ``mapping (address => uint) public balances;`` juga
+membuat variabel state publik, tetapi ini adalah datatype yang lebih kompleks.
+Jenis :ref:`mapping <mapping-types>` memetakan alamat ke :ref:`unsigned integer <integer>`.
 
-Mappings can be seen as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_ which are
-virtually initialised such that every possible key exists from the start and is mapped to a
-value whose byte-representation is all zeros. However, it is neither possible to obtain a list of all keys of
-a mapping, nor a list of all values. Record what you
-added to the mapping, or use it in a context where this is not needed. Or
-even better, keep a list, or use a more suitable data type.
+Mapping dapat dilihat sebagai `tabel hash <https://en.wikipedia.org/wiki/Hash_table>`_ yang secara
+virtual diinisialisasi sedemikian rupa sehingga setiap kunci yang mungkin ada sejak awal dan dipetakan
+ke nilai yang representasi byte-nya adalah semua nol. Namun, tidak mungkin untuk mendapatkan semua daftar kunci mapping,
+atau daftar semua values. Catat apa yang Anda tambahkan ke mapping,
+atau gunakan dalam konteks di mana ini tidak diperlukan.
+bahkan lebih baik, simpan daftar atau gunakan tipe data yang lebih cocok.
 
-The :ref:`getter function<getter-functions>` created by the ``public`` keyword
-is more complex in the case of a mapping. It looks like the
-following:
+:ref:`getter function<getter-functions>` yang dibuat oleh kata kunci ``public``
+lebih kompleks dalam hal mapping. Ini terlihat seperti berikut:
 
 .. code-block:: solidity
 
@@ -172,21 +171,21 @@ following:
         return balances[_account];
     }
 
-You can use this function to query the balance of a single account.
+Anda dapat menggunakan fungsi ini untuk menampilkan saldo satu akun.
 
 .. index:: event
 
-The line ``event Sent(address from, address to, uint amount);`` declares
-an :ref:`"event" <events>`, which is emitted in the last line of the function
-``send``. Ethereum clients such as web applications can
-listen for these events emitted on the blockchain without much
-cost. As soon as it is emitted, the listener receives the
-arguments ``from``, ``to`` and ``amount``, which makes it possible to track
-transactions.
+Baris ``event Sent(address from, address to, uint amount);`` mendeklarasikan
+sebuah :ref:`"event" <events>`, yang dikeluarkan di baris terakhir fungsi
+``send``. Klien Ethereum seperti aplikasi web dapat mendengarkan
+event yang dikeluarkan didalam blockchain tanpa membutuhkan banyak
+biaya. Sesegera setelah dikeluarkan, pendengar menerima
+argumen ``from``, ``to`` dan ``amount``, yang memungkinkan untuk
+melacak transaksi.
 
-To listen for this event, you could use the following
-JavaScript code, which uses `web3.js <https://github.com/ethereum/web3.js/>`_ to create the ``Coin`` contract object,
-and any user interface calls the automatically generated ``balances`` function from above::
+Untuk mendengarkan event ini, anda harus menggunakan kode
+JavaScript berikut, yang menggunakan `web3.js <https://github.com/ethereum/web3.js/>`_ untuk membuat objek kontrak  ``Coin``,
+dan setiap antarmuka pengguna memanggil fungsi ``balances`` yang dibuat secara otomatis dari atas::
 
     Coin.Sent().watch({}, '', function(error, result) {
         if (!error) {
@@ -201,357 +200,348 @@ and any user interface calls the automatically generated ``balances`` function f
 
 .. index:: coin
 
-The :ref:`constructor<constructor>` is a special function that is executed during the creation of the contract and
-cannot be called afterwards. In this case, it permanently stores the address of the person creating the
-contract. The ``msg`` variable (together with ``tx`` and ``block``) is a
-:ref:`special global variable <special-variables-functions>` that
-contains properties which allow access to the blockchain. ``msg.sender`` is
-always the address where the current (external) function call came from.
+:ref:`Constructor<constructor>` adalah fungsi khusus yang dijalankan selama pembuatan kontrak dan
+tidak dapat dipanggil setelahnya. Dalam hal ini, secara permanen menyimpan alamat orang yang membuat kontrak.
+``msg`` variable (bersama dengan ``tx`` dan ``block``) adalah
+:ref:`variabel global khusus <special-variables-functions>`
+berisi properti yang memungkinkan akses ke blockchain. ``msg.sender`` selalu
+merupakan alamat dari mana panggilan fungsi (eksternal) saat ini berasal.
 
-The functions that make up the contract, and that users and contracts can call are ``mint`` and ``send``.
+Fungsi yang membentuk kontrak, dan yang dapat dipanggil oleh pengguna dan kontrak adalah ``mint`` dan ``send``.
 
-The ``mint`` function sends an amount of newly created coins to another address. The :ref:`require
-<assert-and-require>` function call defines conditions that reverts all changes if not met. In this
-example, ``require(msg.sender == minter);`` ensures that only the creator of the contract can call
-``mint``. In general, the creator can mint as many tokens as they like, but at some point, this will
-lead to a phenomenon called "overflow". Note that because of the default :ref:`Checked arithmetic
-<unchecked>`, the transaction would revert if the expression ``balances[receiver] += amount;``
-overflows, i.e., when ``balances[receiver] + amount`` in arbitrary precision arithmetic is larger
-than the maximum value of ``uint`` (``2**256 - 1``). This is also true for the statement
-``balances[receiver] += amount;`` in the function ``send``.
+Fungsi ``mint`` mengirimkan sejumlah koin yang baru dibuat ke alamat lain. Panggilan fungsi
+:ref:`require <assert-and-require>` mendefinisikan kondisi yang mengembalikan semua perubahan jika tidak terpenuhi. dalam
+contoh ini, ``require(msg.sender == minter);`` memastikan bahwa hanya pembuat kontrak yang dapat memanggil funsi
+``mint``. Secara umum, si pencipta dapat mencetak token sebanyak yang mereka suka, tapi di beberapa poin, ini akan
+menyebabkan fenomena yang disebut "overflow". Perhatikan bahwa karena :ref:`Checked arithmetic
+<unchecked>` adalah default, transaksi akan dikembalikan jika ekspresi ``balances[receiver] += amount;``
+overflows, yaitu, ketika ``balances[receiver] + amount`` dalam aritmatika presisi arbitrer lebih besar dari
+nilai maksimum ``uint`` (``2**256 - 1``). Hal ini juga berlaku untuk statement
+``balances[receiver] += amount;`` dalam fungsi ``send``.
 
-:ref:`Errors <errors>` allow you to provide more information to the caller about
-why a condition or operation failed. Errors are used together with the
-:ref:`revert statement <revert-statement>`. The revert statement unconditionally
-aborts and reverts all changes similar to the ``require`` function, but it also
-allows you to provide the name of an error and additional data which will be supplied to the caller
-(and eventually to the front-end application or block explorer) so that
-a failure can more easily be debugged or reacted upon.
+:ref:`Errors <errors>` memungkinkan Anda memberikan informasi lebih lanjut kepada pemanggil tentang
+mengapa suatu kondisi atau operasi gagal. Kesalahan digunakan bersama dengan
+:ref:`mengembalikan pernyataan <revert-statement>`. Pernyataan revert tanpa syarat membatalkan
+dan mengembalikan semua perubahan yang serupa dengan fungsi ``require``, tetapi juga memungkinkan
+Anda untuk memberikan nama kesalahan dan data tambahan yang akan diberikan ke pemanggil
+(dan pada akhirnya ke aplikasi front-end atau block explorer) sehingga
+kegagalan dapat lebih mudah di-debug atau direaksikan.
 
-The ``send`` function can be used by anyone (who already
-has some of these coins) to send coins to anyone else. If the sender does not have
-enough coins to send, the ``if`` condition evaluates to true. As a result, the ``revert`` will cause the operation to fail
-while providing the sender with error details using the ``InsufficientBalance`` error.
+Fungsi ``send`` dapat digunakan oleh siapa saja (yang telah
+memiliki beberapa koin ini) untuk mengirim koin kepada orang lain. Jika pengirim tidak memiliki
+cukup koin untuk dikirim, kondisi ``if`` bernilai true. Akibatnya, ``revert`` akan menyebabkan operasi gagal
+sambil memberikan detail kesalahan kepada pengirim menggunakan ``InsufficientBalance`` eror.
 
 .. note::
-    If you use
-    this contract to send coins to an address, you will not see anything when you
-    look at that address on a blockchain explorer, because the record that you sent
-    coins and the changed balances are only stored in the data storage of this
-    particular coin contract. By using events, you can create
-    a "blockchain explorer" that tracks transactions and balances of your new coin,
-    but you have to inspect the coin contract address and not the addresses of the
-    coin owners.
+    Jika Anda menggunakan
+    kontrak ini untuk mengirimkan koin ke sebuah alamat, anda tidak akan melihat apapun ketika anda
+    melihat alamat tersebut di blockchain explorer, karena catatan bahwa Anda mengirim koin
+    dan saldo yang diubah hanya disimpan dalam penyimpanan data kontrak koin khusus ini.
+    Dengan menggunakan events, anda dapat membuat sebuah "blockchain explorer" yang melacak transaksi dan saldo koin baru anda,
+    tetapi Anda harus memeriksa alamat kontrak koin dan bukan alamat pemilik koin.
 
 .. _blockchain-basics:
 
-*****************
-Blockchain Basics
-*****************
+**********************
+Dasar-dasar Blockchain
+**********************
 
-Blockchains as a concept are not too hard to understand for programmers. The reason is that
-most of the complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_,
+Blockchain sebagai sebuah konsep tidak terlalu sulit untuk dipahami oleh programmer. Alasannya adalah
+sebagian besar komplikasi (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_,
 `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_,
 `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.)
-are just there to provide a certain set of features and promises for the platform. Once you accept these
-features as given, you do not have to worry about the underlying technology - or do you have
-to know how Amazon's AWS works internally in order to use it?
+hanya ada untuk menyediakan serangkaian fitur dan janji tertentu untuk platform. Setelah Anda menerima
+fitur-fitur seperti yang diberikan, Anda tidak perlu khawatir tentang teknologi yang mendasarinya - atau
+apakah Anda harus tahu bagaimana Amazon AWS bekerja secara internal untuk menggunakannya? ora kan?
 
 .. index:: transaction
 
-Transactions
+Transaksi
 ============
 
-A blockchain is a globally shared, transactional database.
-This means that everyone can read entries in the database just by participating in the network.
-If you want to change something in the database, you have to create a so-called transaction
-which has to be accepted by all others.
-The word transaction implies that the change you want to make (assume you want to change
-two values at the same time) is either not done at all or completely applied. Furthermore,
-while your transaction is being applied to the database, no other transaction can alter it.
+Blockchain adalah basis data transaksional yang dibagikan secara global.
+Ini berarti bahwa setiap orang dapat membaca entri dalam database hanya dengan berpartisipasi dalam jaringan.
+Jika Anda ingin mengubah sesuatu dalam database, Anda harus membuat apa yang disebut dengan transaksi, yang
+harus diterima oleh semua orang.
+Kata transaksi menyiratkan bahwa perubahan yang ingin Anda buat (anggap anda ingin mengubah
+dua nilai pada saat yang sama) sebenarnya tidak dilakukan sama sekali atau diterapkan secara menyeluruh. Selain itu,
+ketika transaksi Anda diterapkan ke database, tidak ada transaksi lain yang dapat mengubahnya.
 
-As an example, imagine a table that lists the balances of all accounts in an
-electronic currency. If a transfer from one account to another is requested,
-the transactional nature of the database ensures that if the amount is
-subtracted from one account, it is always added to the other account. If due
-to whatever reason, adding the amount to the target account is not possible,
-the source account is also not modified.
+Sebagai contoh, bayangkan sebuah tabel yang mencantumkan saldo semua akun dalam
+mata uang elektronik. Jika transfer dari satu akun ke akun lain diminta,
+sifat transaksional database memastikan bahwa jika jumlahnya
+dikurangi dari satu akun tersebut, selalu ditambahkan ke akun lain. Jika karena suatu hal
+menambahkan jumlah ke akun target tidak memungkinkan, akun sumber juga tidak akan diubah.
 
-Furthermore, a transaction is always cryptographically signed by the sender (creator).
-This makes it straightforward to guard access to specific modifications of the
-database. In the example of the electronic currency, a simple check ensures that
-only the person holding the keys to the account can transfer money from it.
+Selanjutnya, transaksi selalu ditandatangani secara kriptografis oleh pengirim (creator).
+Sehingga membuatnya mudah untuk menjaga akses ke modifikasi tertentu dari database.
+Dalam contoh mata uang elektronik, pemeriksaan sederhana memastikan bahwa
+hanya orang yang memegang kunci akun yang dapat mentransfer uang darinya.
 
 .. index:: ! block
 
 Blocks
 ======
 
-One major obstacle to overcome is what (in Bitcoin terms) is called a "double-spend attack":
-What happens if two transactions exist in the network that both want to empty an account?
-Only one of the transactions can be valid, typically the one that is accepted first.
-The problem is that "first" is not an objective term in a peer-to-peer network.
+Salah satu kendala utama yang harus diatasi adalah apa (dalam istilah Bitcoin) yang disebut dengan "double-spend attack":
+Apa yang terjadi jika ada dua transaksi di satu jaringan yang keduanya sama sama ingin mengosongkan sebuah akun?
+Hanya satu transaksi yang valid, biasanya yang pertama diterima.
+Masalahnya adalah bahwa "pertama" bukanlah istilah objektif dalam jaringan peer-to-peer.
 
-The abstract answer to this is that you do not have to care. A globally accepted order of the transactions
-will be selected for you, solving the conflict. The transactions will be bundled into what is called a "block"
-and then they will be executed and distributed among all participating nodes.
-If two transactions contradict each other, the one that ends up being second will
-be rejected and not become part of the block.
+Jawaban abstrak untuk hal ini adalah Anda tidak perlu peduli. Urutan transaksi yang diterima secara global
+akan dipilih, untuk menyelesaikan konflik ini. Transaksi akan digabungkan ke dalam apa yang disebut dengan "block"
+dan kemudian akan dieksekusi dan didistribusikan ke semua node yang berpartisipasi.
+Jika dua transaksi bertentangan satu sama lain, salah satu yang berakhir menjadi yang kedua akan
+ditolak dan tidak menjadi bagian dari block.
 
-These blocks form a linear sequence in time and that is where the word "blockchain"
-derives from. Blocks are added to the chain in rather regular intervals - for
-Ethereum this is roughly every 17 seconds.
+Block-block ini membentuk urutan linier dalam waktu dan dari situlah kata "blockchain" berasal.
+Block ditambahkan ke rantai/(chain) dalam interval yang agak teratur - untuk Ethereum, kira-kira setiap 17 detik.
 
-As part of the "order selection mechanism" (which is called "mining") it may happen that
-blocks are reverted from time to time, but only at the "tip" of the chain. The more
-blocks are added on top of a particular block, the less likely this block will be reverted. So it might be that your transactions
-are reverted and even removed from the blockchain, but the longer you wait, the less
-likely it will be.
+Sebagai bagian dari "order selection mechanism" (yang disebut "menambang/*mining*") mungkin saja terjadi
+pengembalian blocks dari waktu to waktu, tetapi hanya terjadi di "ujung" rantai/(chain). Semakin banyak
+blok ditambahkan di atas blok tertentu, semakin kecil kemungkinan block ini akan dikembalikan. Jadi mungkin saja transaksi Anda dikembalikan
+dan bahkan dihapus dari blockchain, tetapi semakin lama Anda menunggu, semakin kecil kemungkinannya.
 
 .. note::
-    Transactions are not guaranteed to be included in the next block or any specific future block,
-    since it is not up to the submitter of a transaction, but up to the miners to determine in which block the transaction is included.
+    Transaksi tidak dijamin untuk dimasukkan dalam block berikutnya atau block selanjutnya yang spesifik,
+    karena tidak tergantung pada pengirim transaksi, tetapi tergantung pada penambang untuk menentukan di block mana transaksi tersebut disertakan.
 
-    If you want to schedule future calls of your contract, you can use
-    the `alarm clock <https://www.ethereum-alarm-clock.com/>`_ or a similar oracle service.
+    Jika Anda ingin menjadwalkan panggilan di masa mendatang dari kontrak Anda, Anda dapat menggunakan
+    `jam alarm <https://www.ethereum-alarm-clock.com/>`_ atau layanan oracle serupa.
 
 .. _the-ethereum-virtual-machine:
 
 .. index:: !evm, ! ethereum virtual machine
 
 ****************************
-The Ethereum Virtual Machine
+Mesin Virtual Ethereum
 ****************************
 
-Overview
+Gambaran
 ========
 
-The Ethereum Virtual Machine or EVM is the runtime environment
-for smart contracts in Ethereum. It is not only sandboxed but
-actually completely isolated, which means that code running
-inside the EVM has no access to network, filesystem or other processes.
-Smart contracts even have limited access to other smart contracts.
+Mesin Virtual Ethereum atau EVM adalah lingkungan runtime
+untuk smart kontrak di Ethereum. Tidak hanya ter-*sandboxed* tetapi
+benar benar sangat terisolasi, ini berarti kode yang berjalan
+didalam EVM tidak memiliki akses ke jaringan, filesystem atau proses lain.
+Smart kontrak bahkan memiliki akses terbatas ke smart kontrak lainnya.
 
 .. index:: ! account, address, storage, balance
 
 .. _accounts:
 
-Accounts
+Akun
 ========
 
-There are two kinds of accounts in Ethereum which share the same
-address space: **External accounts** that are controlled by
-public-private key pairs (i.e. humans) and **contract accounts** which are
-controlled by the code stored together with the account.
+Ada dua jenis akun di Ethereum yang berbagi ruang alamat yang sama:
+**Akun Eksternal** yang dikontrol oleh public-private key pairs
+(yaitu manusia) dan **Akun Kontrak** yang dikontrol oleh sebuah kode
+yang disimpan bersama dengan akun tersebut.
 
-The address of an external account is determined from
-the public key while the address of a contract is
-determined at the time the contract is created
-(it is derived from the creator address and the number
-of transactions sent from that address, the so-called "nonce").
+Alamat akun eksternal ditentukan dari public key
+sementara alamat sebuah kontrak ditentukan pada saat
+kontrak tersebut dibuat (berasal dari alamat si pembuat dan jumlah transaksi yang
+dikirim dari alamat tersebut, yang disebut "nonce").
 
-Regardless of whether or not the account stores code, the two types are
-treated equally by the EVM.
+Terlepas dari apakah akun menyimpan kode atau tidak, kedua jenis akun tersebut
+diperlakukan sama oleh EVM.
 
-Every account has a persistent key-value store mapping 256-bit words to 256-bit
-words called **storage**.
+Setiap akun memiliki penyimpanan key-value persisten yang memetakan kata 256-bit
+ke kata 256-bit yang disebut **storage**.
 
-Furthermore, every account has a **balance** in
-Ether (in "Wei" to be exact, ``1 ether`` is ``10**18 wei``) which can be modified by sending transactions that
-include Ether.
+Selanjutnya, setiap akun memiliki **saldo** dalam Ether (tepatnya di "Wei", ``1 ether`` adalah ``10**18 wei``)
+yang dapat dimodifikasi dengan mengirimkan transaksi yang menyertakan Ether.
 
 .. index:: ! transaction
 
-Transactions
+Transaksi
 ============
 
-A transaction is a message that is sent from one account to another
-account (which might be the same or empty, see below).
-It can include binary data (which is called "payload") and Ether.
+Transaksi adalah pesan yang dikirim dari satu akun ke akun lain
+(yang mungkin sama atau kosong, lihat di bawah).
+Ini dapat mencakup data biner (yang disebut "payload") dan Ether.
 
-If the target account contains code, that code is executed and
-the payload is provided as input data.
+Jika akun target berisi kode, kode itu akan dieksekusi dan
+payload disediakan sebagai data input.
 
-If the target account is not set (the transaction does not have
-a recipient or the recipient is set to ``null``), the transaction
-creates a **new contract**.
-As already mentioned, the address of that contract is not
-the zero address but an address derived from the sender and
-its number of transactions sent (the "nonce"). The payload
-of such a contract creation transaction is taken to be
-EVM bytecode and executed. The output data of this execution is
-permanently stored as the code of the contract.
-This means that in order to create a contract, you do not
-send the actual code of the contract, but in fact code that
-returns that code when executed.
+Jika akun target tidak di set (transaksi tidak memiliki penerima atau penerima di set ke ``null``),
+transaksi akan membuat **kontrak baru**.
+Seperti yang telah disebutkan, alamat kontrak tersebut bukanlah
+alamat kosong tetapi alamat yang berasal dari pengirim dan
+nomor transaksi yang dikirim ("nonce"). payload
+transaksi pembuatan kontrak semacam itu dianggap sebagai
+bytecode EVM dan dieksekusi. Output data dari eksekusi ini
+disimpan secara permanen sebagai kode kontrak.
+Ini berarti bahwa untuk membuat kontrak, anda tidak perlu
+mengirim kode aktual dari kontrak tersebut, tetapi sebenarnya
+kode yang mengembalikan kode itu saat dieksekusi.
 
 .. note::
-  While a contract is being created, its code is still empty.
-  Because of that, you should not call back into the
-  contract under construction until its constructor has
-  finished executing.
+  Saat kontrak sedang dibuat, kodenya masih kosong.
+  Karena itu, Anda tidak boleh memanggil kembali
+  kontrak yang sedang dibuat sampai konstruktornya
+  selesai mengeksekusi.
 
 .. index:: ! gas, ! gas price
 
 Gas
 ===
 
-Upon creation, each transaction is charged with a certain amount of **gas**,
-whose purpose is to limit the amount of work that is needed to execute
-the transaction and to pay for this execution at the same time. While the EVM executes the
-transaction, the gas is gradually depleted according to specific rules.
+Pada saat pembuatan, setiap transaksi dikenakan sejumlah **gas**,
+yang tujuannya adalah untuk membatasi jumlah pekerjaan yang diperlukan untuk
+melaksanakan transaksi dan untuk membayar biaya eksekusi pada waktu yang sama. Saat EVM melakukan
+transaksi, gas secara bertahap habis sesuai dengan aturan tertentu.
 
-The **gas price** is a value set by the creator of the transaction, who
-has to pay ``gas_price * gas`` up front from the sending account.
-If some gas is left after the execution, it is refunded to the creator in the same way.
+**harga gas** adalah nilai yang ditetapkan oleh pembuat transaksi,
+yang harus membayar ``gas_price * gas`` di muka dari rekening pengirim.
+Jika beberapa gas tersisa setelah eksekusi, akan dikembalikan ke pengirim dengan cara yang sama.
 
-If the gas is used up at any point (i.e. it would be negative),
-an out-of-gas exception is triggered, which reverts all modifications
-made to the state in the current call frame.
+Jika gas habis pada titik tertentu (yaitu akan menjadi negatif),
+akan memicu *out-of-gas exception*, yang akan mengembalikan semua perubahan
+yang dibuat pada state dalam rentang waktu saat ini.
 
 .. index:: ! storage, ! memory, ! stack
 
-Storage, Memory and the Stack
+Storage, Memory dan Stack
 =============================
 
-The Ethereum Virtual Machine has three areas where it can store data-
-storage, memory and the stack, which are explained in the following
-paragraphs.
+Mesin Virtual Ethereum memiliki tiga area di mana ia dapat menyimpan data-
+storage, memory dan stack, yang akan dijelaskan dalam paragraf berikut.
 
-Each account has a data area called **storage**, which is persistent between function calls
-and transactions.
-Storage is a key-value store that maps 256-bit words to 256-bit words.
-It is not possible to enumerate storage from within a contract, it is
-comparatively costly to read, and even more to initialise and modify storage. Because of this cost,
-you should minimize what you store in persistent storage to what the contract needs to run.
-Store data like derived calculations, caching, and aggregates outside of the contract.
-A contract can neither read nor write to any storage apart from its own.
+Setiap akun memiliki area data yang disebut **storage**, yang persisten antara fungsi memanggil
+dan transaksi.
+Storage adalah sebuah *key-value store* yang memetakan kata 256-bit ke kata 256-bit.
+Tidak mungkin untuk menghitung storage dari dalam kontrak, itu relatif
+mahal untuk dibaca, dan bahkan lebih mahal untuk menginisialisasi dan memodifikasi storage. Karena mahalnya biaya,
+Anda harus meminimalkan apa yang Anda simpan di presistant storage dengan apa yang perlu dihalankan oleh kontrak.
+Simpan data seperti perhitungan turunan, caching, dan agregat di luar kontrak.
+Kontrak tidak dapat membaca atau menulis ke storage manapun selain miliknya sendiri.
 
-The second data area is called **memory**, of which a contract obtains
-a freshly cleared instance for each message call. Memory is linear and can be
-addressed at byte level, but reads are limited to a width of 256 bits, while writes
-can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when
-accessing (either reading or writing) a previously untouched memory word (i.e. any offset
-within a word). At the time of expansion, the cost in gas must be paid. Memory is more
-costly the larger it grows (it scales quadratically).
+Area data kedua disebut **memory**, di mana kontrak memperoleh instance
+yang baru dan fresh untuk setiap pesna panggilan. Memory bersifat linier dan bisa
+dialamatkan pada tingkat byte, untuk membaca dibatasi dengan kelebaran 256 bit, sedangkan untuk menulis
+dapat berupa 8 bit atau lebar 256 bit. Memori diperluas dengan kata (256-bit), ketika
+mengakses (baik membaca ataupun menulis) kata memori yang sebelumnya tidak tersentuh (yaitu offset apa pun
+dalam satu kata tsb). Pada saat ekspansi, biaya dalam gas harus dibayar. Semakin mahal Memori
+semakin besar pertumbuhannya (berskala kuadrat).
 
-The EVM is not a register machine but a stack machine, so all
-computations are performed on a data area called the **stack**. It has a maximum size of
-1024 elements and contains words of 256 bits. Access to the stack is
-limited to the top end in the following way:
-It is possible to copy one of
-the topmost 16 elements to the top of the stack or swap the
-topmost element with one of the 16 elements below it.
-All other operations take the topmost two (or one, or more, depending on
-the operation) elements from the stack and push the result onto the stack.
-Of course it is possible to move stack elements to storage or memory
-in order to get deeper access to the stack,
-but it is not possible to just access arbitrary elements deeper in the stack
-without first removing the top of the stack.
+EVM bukanlah mesin register tetapi mesin tumpukan, jadi semua
+perhitungan dilakukan pada area data yang disebut **stack**. memiliki ukuran maksimum
+1024 element dan berisi kata-kata 256 bit. Akses ke stack
+terbatas pada *top end* dengan cara sebagai berikut:
+Dimungkinkan untuk menyalin
+salah satu dari 16 elemen teratas ke stack teratas atau menukar elemen
+teratas dengan salah satu dari 16 elemen di bawahnya.
+Semua operasi lain mengambil dua (atau satu, atau lebih, tergantung pada
+operasi) elemen teratas dan mendorong hasilnya ke stack.
+Tentu saja dimungkinkan untuk memindahkan elemen stack ke storage atau memory
+untuk mendapatkan akses yang lebih dalam,
+tetapi tidak mungkin hanya mengakses elemen arbitrer lebih dalam di stack
+tanpa terlebih dahulu menghapus bagian atas stack.
 
 .. index:: ! instruction
 
-Instruction Set
+Set Instruksi
 ===============
 
-The instruction set of the EVM is kept minimal in order to avoid
-incorrect or inconsistent implementations which could cause consensus problems.
-All instructions operate on the basic data type, 256-bit words or on slices of memory
-(or other byte arrays).
-The usual arithmetic, bit, logical and comparison operations are present.
-Conditional and unconditional jumps are possible. Furthermore,
-contracts can access relevant properties of the current block
-like its number and timestamp.
+Set instruksi EVM dijaga agar tetap seminimal mungkin untuk menghindari
+implementasi yang salah atau tidak konsisten yang dapat menyebabkan masalah konsensus.
+Semua instruksi beroperasi pada tipe data dasar, 256-bit kata atau pada slice memory
+(atau array byte lainnya).
+Operasi aritmatika, bit, logika, dan perbandingan yang biasa ada.
+Lompatan bersyarat dan tidak bersyarat dimungkinkan. Selanjutnya,
+kontrak dapat mengakses properti yang relevan dari block saat ini
+seperti nomor dan stempel waktunya.
 
-For a complete list, please see the :ref:`list of opcodes <opcodes>` as part of the inline
-assembly documentation.
+Untuk daftar lengkapnya, silakan lihat :ref:`daftar opcodes <opcodes>` sebagai bagian dari dokumentasi
+inline *assembly*.
 
 .. index:: ! message call, function;call
 
-Message Calls
-=============
+Pesan Panggilan (message call)
+==============================
 
-Contracts can call other contracts or send Ether to non-contract
-accounts by the means of message calls. Message calls are similar
-to transactions, in that they have a source, a target, data payload,
-Ether, gas and return data. In fact, every transaction consists of
-a top-level message call which in turn can create further message calls.
+Kontrak dapat memanggil kontrak lain atau mengirim Ether ke akun
+non-kontrak melalui pesan panggilan. Pesan panggilan mirip dengan
+transaksi, karena mereka memiliki sumber, target, payload data, Ether,
+gas, dan data pengembalian. Faktanya, setiap transaksi terdiri dari pesan
+panggilan tingkat atas yang pada gilirannya dapat membuat pesan panggilan lebih lanjut.
 
-A contract can decide how much of its remaining **gas** should be sent
-with the inner message call and how much it wants to retain.
-If an out-of-gas exception happens in the inner call (or any
-other exception), this will be signaled by an error value put onto the stack.
-In this case, only the gas sent together with the call is used up.
-In Solidity, the calling contract causes a manual exception by default in
-such situations, so that exceptions "bubble up" the call stack.
+Sebuah kontrak dapat memutuskan berapa banyak sisa **gas** yang harus dikirim
+dengan pesan panggilan *inner* dan seberapa banyak yang ingin dipertahankan.
+Jika pengecualian *out-of-gas* terjadi di panggilan *inner* (atau
+pengecualian lainnya), ini akan ditandai dengan nilai kesalahan yang dimasukkan ke dalam stack.
+Dalam hal ini, hanya gas yang dikirim bersamaan dengan panggilan yang digunakan.
+Di Solidity, dalam situasi seperti itu panggilan kontrak menyebabkan pengecualian
+manual secara default, sehingga pengecualian tersebut *mem-"bubble up"* panggilan stack.
 
-As already said, the called contract (which can be the same as the caller)
-will receive a freshly cleared instance of memory and has access to the
-call payload - which will be provided in a separate area called the **calldata**.
-After it has finished execution, it can return data which will be stored at
-a location in the caller's memory preallocated by the caller.
-All such calls are fully synchronous.
+Seperti yang sudah dikatakan, kontrak yang dipanggil (yang bisa sama dengan pemanggil)
+akan menerima instance memori yang baru dibersihkan dan memiliki akses ke
+payload panggilan - yang akan disediakan di area terpisah yang disebut **calldata**.
+Setelah selesai dieksekusi, ia dapat mengembalikan data yang akan disimpan
+didalam memori pemanggil yang telah dialokasikan sebelumnya oleh pemanggil.
+Semua panggilan tersebut sepenuhnya sinkron.
 
-Calls are **limited** to a depth of 1024, which means that for more complex
-operations, loops should be preferred over recursive calls. Furthermore,
-only 63/64th of the gas can be forwarded in a message call, which causes a
-depth limit of a little less than 1000 in practice.
+Panggilan **terbatas** hingga kedalaman 1024, yang berarti untuk operasi yang lebih
+kompleks, loop harus lebih didahulukan daripada panggilan rekursif. Selain itu,
+hanya 63/64 gas yang dapat diteruskan dalam pesan panggilan, yang menyebabkan
+batas kedalaman sedikit kurang dari 1000 dalam prakteknya.
 
 .. index:: delegatecall, callcode, library
 
-Delegatecall / Callcode and Libraries
+Delegatecall / Callcode dan Libraries
 =====================================
 
-There exists a special variant of a message call, named **delegatecall**
-which is identical to a message call apart from the fact that
-the code at the target address is executed in the context of the calling
-contract and ``msg.sender`` and ``msg.value`` do not change their values.
+Terdapat varian khusus dari pesan panggilan, bernama **delegatecall**
+yang identik dengan pesan panggilan terlepas dari kenyataan bahwa
+kode di alamat target dieksekusi dalam konteks panggilan
+kontrak dan ``msg.sender`` dan ``msg.value`` tidak mengubah nilainya.
 
-This means that a contract can dynamically load code from a different
-address at runtime. Storage, current address and balance still
-refer to the calling contract, only the code is taken from the called address.
+Ini berarti bahwa kontrak dapat memuat kode secara dinamis dari alamat yang
+berbeda saat *runtime*. Storage, alamat saat ini, dan saldo masih mengacu pada panggilan kontrak,
+hanya kode yang diambil dari alamat yang dipanggil.
 
-This makes it possible to implement the "library" feature in Solidity:
-Reusable library code that can be applied to a contract's storage, e.g. in
-order to implement a complex data structure.
+Ini memungkinkan untuk mengimplementasikan fitur "perpustakaan" di Solidity:
+Kode perpustakaan yang dapat digunakan kembali yang dapat diterapkan ke penyimpanan kontrak,
+mis. untuk mengimplementasikan struktur data yang kompleks.
 
 .. index:: log
 
 Logs
 ====
 
-It is possible to store data in a specially indexed data structure
-that maps all the way up to the block level. This feature called **logs**
-is used by Solidity in order to implement :ref:`events <events>`.
-Contracts cannot access log data after it has been created, but they
-can be efficiently accessed from outside the blockchain.
-Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
-possible to search for this data in an efficient and cryptographically
-secure way, so network peers that do not download the whole blockchain
-(so-called "light clients") can still find these logs.
+Dimungkinkan untuk menyimpan data dalam struktur data yang diindeks secara khusus
+yang memetakan sampai ke tingkat block. Fitur ini disebut **logs**
+digunakan oleh Solidity untuk mengimplementasikan :ref:`events <events>`.
+Kontrak tidak dapat mengakses data log setelah dibuat,
+tetapi dapat diakses secara efisien dari luar blockchain.
+Karena beberapa bagian dari data log disimpan di `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, dimungkinkan
+untuk mencari data ini dengan cara yang efisien dan aman secara kriptografis,
+sehingga rekan jaringan yang tidak mengunduh seluruh blockchain (disebut "klien ringan") masih dapat menemukan log ini.
 
 .. index:: contract creation
 
-Create
-======
+Membuat (Create)
+================
 
-Contracts can even create other contracts using a special opcode (i.e.
-they do not simply call the zero address as a transaction would). The only difference between
-these **create calls** and normal message calls is that the payload data is
-executed and the result stored as code and the caller / creator
-receives the address of the new contract on the stack.
+Kontrak bahkan dapat membuat kontrak lain menggunakan opcode khusus (yaitu
+mereka tidak hanya memanggil alamat nol sebagai transaksi). Satu-satunya perbedaan
+antara **create calls** dan pesan panggilan normal ini adalah bahwa data payload
+ijalankan dan hasilnya disimpan sebagai kode dan pemanggil/pembuat
+menerima alamat kontrak baru di stack.
+
 
 .. index:: selfdestruct, self-destruct, deactivate
 
-Deactivate and Self-destruct
-============================
+Nonaktifkan dan penghancuran diri (Deactivate and Self-destruct)
+================================================================
 
-The only way to remove code from the blockchain is when a contract at that
-address performs the ``selfdestruct`` operation. The remaining Ether stored
-at that address is sent to a designated target and then the storage and code
-is removed from the state. Removing the contract in theory sounds like a good
-idea, but it is potentially dangerous, as if someone sends Ether to removed
-contracts, the Ether is forever lost.
+Satu-satunya cara untuk menghapus kode dari blockchain adalah ketika kontrak
+di alamat tersebut melakukan operasi ``selfdestruct``. Ether yang tersisa disimpan
+di alamat itu dikirim ke target yang ditentukan dan kemudian storage dan kode
+akan dihapus dari state. Menghapus kontrak secara teori terdengar seperti ide
+yang bagus, tetapi berpotensi berbahaya, seolah-olah seseorang mengirim Ether untuk menghapus
+kontrak, Ether tersebut akan hilang selamanya.
 
 .. warning::
     Even if a contract is removed by ``selfdestruct``, it is still part of the
@@ -571,18 +561,18 @@ makes it impossible to use the contract, as it returns Ether immediately.
 
 .. _precompiledContracts:
 
-Precompiled Contracts
-=====================
+Kontrak prakompilasi (Precompiled contracts)
+============================================
 
-There is a small set of contract addresses that are special:
-The address range between ``1`` and (including) ``8`` contains
-"precompiled contracts" that can be called as any other contract
-but their behaviour (and their gas consumption) is not defined
-by EVM code stored at that address (they do not contain code)
-but instead is implemented in the EVM execution environment itself.
+Ada satu set kecil alamat kontrak yang khusus:
+Rentang alamat antara ``1`` dan (termasuk) ``8`` berisi
+"kontrak prakompilasi" yang dapat disebut sebagai kontrak lain
+tetapi perilakunya (dan konsumsi gasnya) tidak ditentukan oleh
+kode EVM yang disimpan di alamat itu (tidak mengandung kode)
+melainkan diimplementasikan di lingkungan eksekusi EVM itu sendiri.
 
-Different EVM-compatible chains might use a different set of
-precompiled contracts. It might also be possible that new
-precompiled contracts are added to the Ethereum main chain in the future,
-but you can reasonabyly expect them to always be in the range between
-``1`` and ``0xffff`` (inclusive).
+Rantai yang kompatibel dengan EVM yang berbeda mungkin menggunakan kumpulan
+kontrak prakompilasi yang berbeda. Mungkin juga kontrak prakompilasi baru
+akan ditambahkan ke rantai utama Ethereum di masa depan,
+tetapi Anda dapat secara wajar mengharapkannya untuk selalu berada dalam
+kisaran antara ``1`` dan ``0xffff`` (inklusif).

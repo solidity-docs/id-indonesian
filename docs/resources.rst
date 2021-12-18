@@ -1,8 +1,8 @@
-#########
-Resources
-#########
+###########
+Sumber daya
+###########
 
-General Resources
+Sumber Daya Umum
 =================
 
 * `Ethereum.org Developer Portal <https://ethereum.org/en/developers/>`_
@@ -16,128 +16,128 @@ General Resources
 * `Solidity by Example <https://solidity-by-example.org/>`_
 
 
-Integrated (Ethereum) Development Environments
-==============================================
+Lingkungan Pengembangan Terintegrasi (Ethereum)
+===============================================
 
     * `Brownie <https://eth-brownie.readthedocs.io/en/stable/>`_
-        Python-based development and testing framework for smart contracts targeting the Ethereum Virtual Machine.
+        Kerangka kerja pengembangan dan pengujian berbasis Python untuk kontrak pintar yang menargetkan Mesin Virtual Ethereum.
 
     * `Dapp <https://dapp.tools/>`_
-        Tool for building, testing and deploying smart contracts from the command line.
+        Alat untuk membangun, menguji, dan menerapkan kontrak pintar dari baris perintah.
 
     * `Embark <https://framework.embarklabs.io/>`_
-        Developer platform for building and deploying decentralized applications.
+        Platform pengembang untuk membangun dan menerapkan aplikasi terdesentralisasi.
 
     * `Hardhat <https://hardhat.org/>`_
-        Ethereum development environment with local Ethereum network, debugging features and plugin ecosystem.
+        Lingkungan pengembangan Ethereum dengan jaringan Ethereum lokal, fitur debugging dan ekosistem plugin.
 
     * `Remix <https://remix.ethereum.org/>`_
-        Browser-based IDE with integrated compiler and Solidity runtime environment without server-side components.
+        IDE berbasis browser dengan compiler terintegrasi dan lingkungan runtime Solidity tanpa komponen sisi server.
 
     * `Scaffold-ETH <https://github.com/austintgriffith/scaffold-eth>`_
-        Ethereum development stack focused on fast product iterations.
+        Tumpukan pengembangan Ethereum berfokus pada iterasi produk yang cepat.
 
     * `Truffle <https://www.trufflesuite.com/truffle>`_
-        Ethereum development framework.
+        Kerangka pengembangan Ethereum.
 
-Editor Integrations
-===================
+Integrasi Editor
+================
 
 * Atom
 
     * `Etheratom <https://github.com/0mkara/etheratom>`_
-        Plugin for the Atom editor that features syntax highlighting, compilation and a runtime environment (Backend node & VM compatible).
+        Plugin untuk editor Atom yang menampilkan penyorotan sintaks, kompilasi, dan lingkungan runtime (kompatibel dengan node Backend & VM).
 
     * `Atom Solidity Linter <https://atom.io/packages/linter-solidity>`_
-        Plugin for the Atom editor that provides Solidity linting.
+        Plugin untuk editor Atom yang menyediakan linting Solidity.
 
     * `Atom Solium Linter <https://atom.io/packages/linter-solium>`_
-        Configurable Solidity linter for Atom using Solium (now Ethlint) as a base.
+        Linter Solidity yang Dapat Dikonfigurasi untuk Atom menggunakan Solium (sekarang Ethlint) sebagai basis.
 
 * Emacs
 
     * `Emacs Solidity <https://github.com/ethereum/emacs-solidity/>`_
-        Plugin for the Emacs editor providing syntax highlighting and compilation error reporting.
+        Plugin untuk editor Emacs menyediakan penyorotan sintaks dan pelaporan kesalahan kompilasi.
 
 * IntelliJ
 
     * `IntelliJ IDEA plugin <https://plugins.jetbrains.com/plugin/9475-intellij-solidity>`_
-        Solidity plugin for IntelliJ IDEA (and all other JetBrains IDEs)
+        Plugin solidity untuk IntelliJ IDEA (dan semua IDE JetBrains lainnya)
 
 * Sublime
 
     * `Package for SublimeText - Solidity language syntax <https://packagecontrol.io/packages/Ethereum/>`_
-        Solidity syntax highlighting for SublimeText editor.
+        Penyorotan sintaks soliditas untuk editor SublimeText.
 
 * Vim
 
     * `Vim Solidity <https://github.com/tomlion/vim-solidity/>`_
-        Plugin for the Vim editor providing syntax highlighting.
+        Plugin untuk editor Vim menyediakan penyorotan sintaks.
 
     * `Vim Syntastic <https://github.com/vim-syntastic/syntastic>`_
-        Plugin for the Vim editor providing compile checking.
+        Plugin untuk editor Vim yang menyediakan pemeriksaan kompilasi.
 
 * Visual Studio Code
 
     * `Visual Studio Code extension <https://juan.blanco.ws/solidity-contracts-in-visual-studio-code/>`_
-        Solidity plugin for Microsoft Visual Studio Code that includes syntax highlighting and the Solidity compiler.
+        Plugin Solidity untuk Microsoft Visual Studio Code yang menyertakan penyorotan sintaks dan compiler Solidity.
 
 Solidity Tools
 ==============
 
 * `ABI to Solidity interface converter <https://gist.github.com/chriseth/8f533d133fa0c15b0d6eaf3ec502c82b>`_
-    A script for generating contract interfaces from the ABI of a smart contract.
+    Skrip untuk menghasilkan antarmuka kontrak dari ABI kontrak pintar.
 
 * `abi-to-sol <https://github.com/gnidan/abi-to-sol>`_
-    Tool to generate Solidity interface source from a given ABI JSON.
+    Alat untuk menghasilkan sumber antarmuka Solidity dari ABI JSON yang diberikan.
 
 * `Doxity <https://github.com/DigixGlobal/doxity>`_
-    Documentation Generator for Solidity.
+    Generator Dokumentasi untuk Soliditay.
 
 * `Ethlint <https://github.com/duaraghav8/Ethlint>`_
-    Linter to identify and fix style and security issues in Solidity.
+    Linter untuk mengidentifikasi dan memperbaiki masalah gaya dan keamanan di Solidity.
 
 * `evmdis <https://github.com/Arachnid/evmdis>`_
-    EVM Disassembler that performs static analysis on the bytecode to provide a higher level of abstraction than raw EVM operations.
+    EVM Disassembler yang melakukan analisis statis pada bytecode untuk memberikan tingkat abstraksi yang lebih tinggi daripada operasi EVM mentah.
 
 * `EVM Lab <https://github.com/ethereum/evmlab/>`_
-    Rich tool package to interact with the EVM. Includes a VM, Etherchain API, and a trace-viewer with gas cost display.
+    Paket alat yang kaya untuk berinteraksi dengan EVM. Termasuk VM, API Etherchain, dan penampil jejak dengan tampilan biaya bahan bakar.
 
 * `hevm <https://github.com/dapphub/dapptools/tree/master/src/hevm#readme>`_
-    EVM debugger and symbolic execution engine.
+    Debugger EVM dan mesin eksekusi simbolis.
 
 * `leafleth <https://github.com/clemlak/leafleth>`_
-    A documentation generator for Solidity smart-contracts.
+    Generator dokumentasi untuk kontrak pintar Solidity.
 
 * `PIET <https://piet.slock.it/>`_
-    A tool to develop, audit and use Solidity smart contracts through a simple graphical interface.
+    Alat untuk mengembangkan, mengaudit, dan menggunakan kontrak pintar Solidity melalui antarmuka grafis sederhana.
 
 * `sol2uml <https://www.npmjs.com/package/sol2uml>`_
-    Unified Modeling Language (UML) class diagram generator for Solidity contracts.
+    Generator diagram kelas Unified Modeling Language (UML) untuk kontrak Solidity.
 
 * `solc-select <https://github.com/crytic/solc-select>`_
-    A script to quickly switch between Solidity compiler versions.
+    Skrip untuk beralih dengan cepat di antara versi kompiler Solidity.
 
 * `Solidity prettier plugin <https://github.com/prettier-solidity/prettier-plugin-solidity>`_
-    A Prettier Plugin for Solidity.
+    Plugin Cantik untuk Solidity.
 
 * `Solidity REPL <https://github.com/raineorshine/solidity-repl>`_
-    Try Solidity instantly with a command-line Solidity console.
+    Coba Solidity secara instan dengan konsol Solidity baris perintah.
 
 * `solgraph <https://github.com/raineorshine/solgraph>`_
-    Visualize Solidity control flow and highlight potential security vulnerabilities.
+    Visualisasikan aliran kontrol Solidity dan soroti potensi kerentanan keamanan.
 
 * `Solhint <https://github.com/protofire/solhint>`_
-    Solidity linter that provides security, style guide and best practice rules for smart contract validation.
+    Linter solidity yang menyediakan keamanan, panduan gaya, dan aturan praktik terbaik untuk validasi kontrak pintar.
 
 * `Sūrya <https://github.com/ConsenSys/surya/>`_
-    Utility tool for smart contract systems, offering a number of visual outputs and information about the contracts' structure. Also supports querying the function call graph.
+    Alat utilitas untuk sistem kontrak pintar, menawarkan sejumlah keluaran visual dan informasi tentang struktur kontrak. Juga mendukung kueri grafik panggilan fungsi.
 
 * `Universal Mutator <https://github.com/agroce/universalmutator>`_
-    A tool for mutation generation, with configurable rules and support for Solidity and Vyper.
+    Alat untuk menghasilkan mutasi, dengan aturan dan dukungan yang dapat dikonfigurasi untuk Solidity dan Vyper.
 
-Third-Party Solidity Parsers and Grammars
-=========================================
+Pengurai Solidity Pihak Ketiga dan Tata Bahasa
+==============================================
 
 * `Solidity Parser for JavaScript <https://github.com/solidity-parser/parser>`_
-    A Solidity parser for JS built on top of a robust ANTLR4 grammar.
+    Pengurai Solidity untuk JS dibangun di atas tata bahasa ANTLR4 yang kuat.

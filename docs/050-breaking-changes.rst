@@ -2,296 +2,288 @@
 Solidity v0.5.0 Breaking Changes
 ********************************
 
-This section highlights the main breaking changes introduced in Solidity
-version 0.5.0, along with the reasoning behind the changes and how to update
-affected code.
-For the full list check
-`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_.
+Bagian ini menyoroti perubahan utama yang diperkenalkan di Solidity
+versi 0.5.0, beserta alasan di balik perubahan dan cara memperbarui
+kode yang terpengaruh.
+Untuk daftar lengkap cek
+`catatan perubahan rilis <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_.
 
 .. note::
-   Contracts compiled with Solidity v0.5.0 can still interface with contracts
-   and even libraries compiled with older versions without recompiling or
-   redeploying them.  Changing the interfaces to include data locations and
-   visibility and mutability specifiers suffices. See the
-   :ref:`Interoperability With Older Contracts <interoperability>` section below.
+   Kontrak yang dikompilasi dengan Solidity v0.5.0 masih dapat berinteraksi dengan kontrak
+   dan bahkan library yang dikompilasi dengan versi yang lebih lama tanpa mengkompilasi ulang atau
+   memindahkan mereka. Mengubah antarmuka untuk menyertakan lokasi data dan
+   penentu visibilitas dan mutabilitas sudah cukup. Lihat
+   :ref:`Interoperabilitas Dengan Kontrak Lama <interoperabilitas>` bagian di bawah.
 
-Semantic Only Changes
-=====================
+Perubahan Semantik Saja
+=======================
 
-This section lists the changes that are semantic-only, thus potentially
-hiding new and different behavior in existing code.
+Bagian ini mencantumkan perubahan yang hanya bersifat semantik, sehingga berpotensi
+menyembunyikan perilaku baru dan berbeda dalam kode yang ada.
 
-* Signed right shift now uses proper arithmetic shift, i.e. rounding towards
-  negative infinity, instead of rounding towards zero.  Signed and unsigned
-  shift will have dedicated opcodes in Constantinople, and are emulated by
-  Solidity for the moment.
+* Shift kanan bertanda sekarang menggunakan shift aritmatika yang tepat, yaitu pembulatan ke arah
+  tak terhingga negatif, bukannya pembulatan menuju nol. Ditandatangani dan tidak ditandatangani
+  shift akan memiliki opcode khusus di Konstantinopel, dan ditiru oleh
+  Solidity untuk saat ini.
 
-* The ``continue`` statement in a ``do...while`` loop now jumps to the
-  condition, which is the common behavior in such cases. It used to jump to the
-  loop body. Thus, if the condition is false, the loop terminates.
+* Pernyataan ``continue`` dalam loop ``do... while`` sekarang melompat ke kondisi, yang
+  merupakan perilaku umum dalam kasus tersebut. Itu digunakan untuk melompat ke
+  tubuh loop. Jadi, jika kondisinya false, loop berakhir.
 
-* The functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` do not
-  pad anymore when given a single ``bytes`` parameter.
+* Fungsi ``.call()``, ``.delegatecall()`` dan ``.staticcall()`` tidak
+  pad lagi ketika diberi parameter ``byte`` tunggal.
 
-* Pure and view functions are now called using the opcode ``STATICCALL``
-  instead of ``CALL`` if the EVM version is Byzantium or later. This
-  disallows state changes on the EVM level.
+* Fungsi Pure dan view sekarang dipanggil menggunakan opcode ``STATICCALL``
+  alih-alih ``CALL`` jika versi EVM adalah Byzantium atau yang lebih baru. Ini
+  tidak mengizinkan perubahan state pada level EVM.
 
-* The ABI encoder now properly pads byte arrays and strings from calldata
-  (``msg.data`` and external function parameters) when used in external
-  function calls and in ``abi.encode``. For unpadded encoding, use
-  ``abi.encodePacked``.
+* Encoder ABI sekarang menempatkan array byte dan string dengan benar dari calldata
+  (``msg.data`` dan parameter fungsi eksternal) saat digunakan dalam panggilan
+  fungsi eksternal dan di ``abi.encode``. Untuk unpadded encoding, gunakan
+  ``abi.encodePacked``.`.
 
-* The ABI decoder reverts in the beginning of functions and in
-  ``abi.decode()`` if passed calldata is too short or points out of bounds.
-  Note that dirty higher order bits are still simply ignored.
+* Dekoder ABI kembali ke awal fungsi dan dalam
+  ``abi.decode()`` jika data panggilan yang diteruskan terlalu pendek atau melampaui batas.
+  Perhatikan bahwa bit order tertinggi yang kotor masih diabaikan begitu saja.
 
-* Forward all available gas with external function calls starting from
+* Meneruskan semua gas yang tersedia dengan panggilan fungsi eksternal mulai dari
   Tangerine Whistle.
 
-Semantic and Syntactic Changes
-==============================
+Perubahan Semantic dan Syntactic
+================================
 
-This section highlights changes that affect syntax and semantics.
+Bagian ini menyoroti perubahan yang memengaruhi sintaks dan semantik.
 
-* The functions ``.call()``, ``.delegatecall()``, ``staticcall()``,
-  ``keccak256()``, ``sha256()`` and ``ripemd160()`` now accept only a single
-  ``bytes`` argument. Moreover, the argument is not padded. This was changed to
-  make more explicit and clear how the arguments are concatenated. Change every
-  ``.call()`` (and family) to a ``.call("")`` and every ``.call(signature, a,
-  b, c)`` to use ``.call(abi.encodeWithSignature(signature, a, b, c))`` (the
-  last one only works for value types).  Change every ``keccak256(a, b, c)`` to
-  ``keccak256(abi.encodePacked(a, b, c))``. Even though it is not a breaking
-  change, it is suggested that developers change
-  ``x.call(bytes4(keccak256("f(uint256)")), a, b)`` to
+* Fungsi ``.call()``, ``.delegatecall()``, ``staticcall()``,
+  ``keccak256()``, ``sha256()`` dan ``ripemd160()`` sekarang hanya menerima argumen
+  single ``bytes``. Apalagi argumennya tidak di padded. Ini diubah untuk
+  membuat lebih eksplisit dan jelas bagaimana argumen digabungkan. Mengubah setiap
+  ``.call()`` (dan sejenisnya) menjadi ``.call("")`` dan setiap ``.call(signature, a,
+  b, c)`` untuk menggunakan ``.call(abi.encodeWithSignature(signature, a, b, c))`` (yang
+  terakhir hanya berfungsi untuk tipe nilai). Mengubah setiap ``keccak256(a, b, c)`` menjadi
+  ``keccak256(abi.encodePacked(a, b, c))``. Meskipun itu bukan sebuah breaking
+  change, developer disarankan untuk mengubah
+  ``x.call(bytes4(keccak256("f(uint256)")), a, b)`` menjadi
   ``x.call(abi.encodeWithSignature("f(uint256)", a, b))``.
 
-* Functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` now return
-  ``(bool, bytes memory)`` to provide access to the return data.  Change
-  ``bool success = otherContract.call("f")`` to ``(bool success, bytes memory
+* Fungsi ``.call()``, ``.delegatecall()`` dan ``.staticcall()`` sekarang menghasilkan
+  ``(bool, bytes memory)`` untuk memberikan akses ke return data.  Ubah
+  ``bool success = otherContract.call("f")`` menjadi ``(bool success, bytes memory
   data) = otherContract.call("f")``.
 
-* Solidity now implements C99-style scoping rules for function local
-  variables, that is, variables can only be used after they have been
-  declared and only in the same or nested scopes. Variables declared in the
-  initialization block of a ``for`` loop are valid at any point inside the
+* Solidity sekarang mengimplementasikan aturan C99-style scoping untuk fungsi variabel
+  lokal, yaitu, variabel hanya dapat digunakan setelah mereka
+  dideklarasikan dan hanya dalam lingkup yang sama atau netsted. Variabel yang dideklarasikan dalam
+  blok inisialisasi dari loop ``for`` valid pada titik mana pun di dalam
   loop.
 
-Explicitness Requirements
+Persyaratan Eksplisititas
 =========================
 
-This section lists changes where the code now needs to be more explicit.
-For most of the topics the compiler will provide suggestions.
+Bagian ini mencantumkan perubahan di mana kode sekarang perlu lebih eksplisit.
+Untuk sebagian besar topik, kompiler akan memberikan saran.
 
-* Explicit function visibility is now mandatory.  Add ``public`` to every
-  function and constructor, and ``external`` to every fallback or interface
-  function that does not specify its visibility already.
+* Visibilitas fungsi eksplisit sekarang wajib. Tambahkan ``public`` ke setiap
+  fungsi dan konstruktor, dan ``external`` ke setiap fungsi fallback atau interface
+  yang belum menentukan visibilitasnya.
 
-* Explicit data location for all variables of struct, array or mapping types is
-  now mandatory. This is also applied to function parameters and return
-  variables.  For example, change ``uint[] x = m_x`` to ``uint[] storage x =
-  m_x``, and ``function f(uint[][] x)`` to ``function f(uint[][] memory x)``
-  where ``memory`` is the data location and might be replaced by ``storage`` or
-  ``calldata`` accordingly.  Note that ``external`` functions require
-  parameters with a data location of ``calldata``.
+* Lokasi data eksplisit untuk semua variabel tipe struct, array, atau mapping
+  sekarang wajib. Ini juga diterapkan pada parameter fungsi dan variabel
+  return. Misalnya, ubah ``uint[] x = m_x`` menjadi ``uint[] storage x =
+  m_x``, dan ``function f(uint[][] x)`` menjadi ``function f(uint[ ][] memory x)``
+  di mana ``memory`` adalah lokasi data dan dapat diganti dengan ``storage`` atau
+  ``calldata`` yang sesuai. Perhatikan bahwa fungsi ``external`` memerlukan parameter
+  dengan lokasi data ``calldata``.
 
-* Contract types do not include ``address`` members anymore in
-  order to separate the namespaces.  Therefore, it is now necessary to
-  explicitly convert values of contract type to addresses before using an
-  ``address`` member.  Example: if ``c`` is a contract, change
-  ``c.transfer(...)`` to ``address(c).transfer(...)``,
-  and ``c.balance`` to ``address(c).balance``.
+* Jenis kontrak tidak lagi menyertakan anggota ``address``
+  untuk memisahkan namespace. Oleh karena itu, sekarang perlu
+  untuk secara eksplisit mengonversi nilai tipe kontrak ke alamat sebelum
+  menggunakan anggota ``address``. Contoh: jika ``c`` adalah
+  kontrak, ubah ``c.transfer(...)`` menjadi ``address(c).transfer(...)``,
+  dan ``c.balance`` ke ``address(c).balance``.
 
-* Explicit conversions between unrelated contract types are now disallowed. You can only
-  convert from a contract type to one of its base or ancestor types. If you are sure that
-  a contract is compatible with the contract type you want to convert to, although it does not
-  inherit from it, you can work around this by converting to ``address`` first.
-  Example: if ``A`` and ``B`` are contract types, ``B`` does not inherit from ``A`` and
-  ``b`` is a contract of type ``B``, you can still convert ``b`` to type ``A`` using ``A(address(b))``.
-  Note that you still need to watch out for matching payable fallback functions, as explained below.
+* Konversi eksplisit antara jenis kontrak yang tidak terkait sekarang tidak diizinkan. Anda hanya
+  dapat mengonversi dari jenis kontrak ke salah satu jenis basis atau ancestornya. Jika Anda yakin bahwa
+  suatu kontrak kompatibel dengan jenis kontrak yang ingin Anda konversi, meskipun kontrak tersebut
+  tidak mewarisi darinya, Anda dapat mengatasinya dengan mengonversi ke ``address`` terlebih dahulu.
+  Contoh: jika ``A`` dan ``B`` adalah tipe kontrak, ``B`` tidak mewarisi dari ``A`` dan
+  ``b`` adalah kontrak bertipe ``B``, Anda masih dapat mengonversi ``b`` untuk tipe ``A`` menggunakan ``A(address(b))``.
+  Perhatikan bahwa Anda masih perlu berhati-hati untuk mencocokkan fungsi fallback payable, seperti yang dijelaskan di bawah ini.
 
-* The ``address`` type  was split into ``address`` and ``address payable``,
-  where only ``address payable`` provides the ``transfer`` function.  An
-  ``address payable`` can be directly converted to an ``address``, but the
-  other way around is not allowed. Converting ``address`` to ``address
-  payable`` is possible via conversion through ``uint160``. If ``c`` is a
-  contract, ``address(c)`` results in ``address payable`` only if ``c`` has a
-  payable fallback function. If you use the :ref:`withdraw pattern<withdrawal_pattern>`,
-  you most likely do not have to change your code because ``transfer``
-  is only used on ``msg.sender`` instead of stored addresses and ``msg.sender``
-  is an ``address payable``.
+* Jenis ``address`` dibagi menjadi ``address`` dan ``address payable``,
+  di mana hanya ``address payable`` yang menyediakan fungsi ``transfer``. Sebuah
+  ``Address payable`` dapat langsung dikonversi menjadi ``address``, tetapi
+  sebaliknya tidak diperbolehkan. Konversi ``address`` ke ``address payable``
+  dapat dilakukan melalui konversi melalui ``uint160``. Jika ``c`` adalah kontrak,
+  ``address(c)`` menghasilkan ``address payable`` hanya jika ``c`` memiliki fungsi
+  fallback payable. Jika Anda menggunakan :ref:`withdraw pattern<withdrawal_pattern>`,
+  kemungkinan besar Anda tidak perlu mengubah kode karena ``transfer`` hanya digunakan pada ``msg.sender``
+  alih-alih alamat tersimpan dan ``msg .sender`` adalah ``address payable``.
 
-* Conversions between ``bytesX`` and ``uintY`` of different size are now
-  disallowed due to ``bytesX`` padding on the right and ``uintY`` padding on
-  the left which may cause unexpected conversion results.  The size must now be
-  adjusted within the type before the conversion.  For example, you can convert
-  a ``bytes4`` (4 bytes) to a ``uint64`` (8 bytes) by first converting the
-  ``bytes4`` variable to ``bytes8`` and then to ``uint64``. You get the
-  opposite padding when converting through ``uint32``. Before v0.5.0 any
-  conversion between ``bytesX`` and ``uintY`` would go through ``uint8X``. For
-  example ``uint8(bytes3(0x291807))`` would be converted to ``uint8(uint24(bytes3(0x291807)))``
-  (the result is ``0x07``).
+* Konversi antara ``bytesX`` dan ``uintY`` dengan ukuran berbeda sekarang tidak
+  diizinkan karena pengisi ``bytesX`` di sebelah kanan dan pengisi ``uintY`` di sebelah kiri
+  yang dapat menyebabkan hasil konversi yang tidak diharapkan. Ukuran sekarang
+  harus disesuaikan dalam jenis sebelum konversi. Misalnya, Anda dapat mengonversi
+  ``bytes4`` (4 byte) menjadi ``uint64`` (8 byte) dengan terlebih dahulu mengonversi variabel
+  ``bytes4`` ke ``bytes8`` lalu ke ``uint64` `. Anda mendapatkan padding yang
+  berlawanan saat mengonversi melalui ``uint32``. Sebelum v0.5.0 konversi apa pun
+  antara ``bytesX`` dan ``uintY`` akan melalui ``uint8X``. Misalnya
+  ``uint8(bytes3(0x291807))`` akan dikonversi menjadi ``uint8(uint24(bytes3(0x291807))``
+  (hasilnya adalah ``0x07``).
 
-* Using ``msg.value`` in non-payable functions (or introducing it via a
-  modifier) is disallowed as a security feature. Turn the function into
-  ``payable`` or create a new internal function for the program logic that
-  uses ``msg.value``.
+* Menggunakan ``msg.value`` dalam non-payable fungsi (atau memperkenalkannya melalui
+  modifier) tidak diizinkan sebagai fitur keamanan. Ubah fungsi menjadi ``payable``
+  atau buat fungsi internal baru untuk logika program yang menggunakan
+  ``msg.value``.
 
-* For clarity reasons, the command line interface now requires ``-`` if the
-  standard input is used as source.
+* Untuk alasan kejelasan, command line interface sekarang memerlukan ``-`` jika input
+  standar digunakan sebagai sumber.
 
-Deprecated Elements
-===================
+Elemen Usang
+============
 
-This section lists changes that deprecate prior features or syntax.  Note that
-many of these changes were already enabled in the experimental mode
+Bagian ini mencantumkan perubahan yang menghentikan fitur atau sintaks sebelumnya. Perhatikan bahwa
+banyak dari perubahan ini sudah diaktifkan dalam mode eksperimental
 ``v0.5.0``.
 
-Command Line and JSON Interfaces
+Command Line dan JSON Interfaces
 --------------------------------
 
-* The command line option ``--formal`` (used to generate Why3 output for
-  further formal verification) was deprecated and is now removed.  A new
-  formal verification module, the SMTChecker, is enabled via ``pragma
-  experimental SMTChecker;``.
+* Opsi baris perintah ``--formal`` (digunakan untuk menghasilkan output Why3 untuk
+  verifikasi formal lebih lanjut) tidak digunakan lagi dan sekarang dihapus. Modul verifikasi
+  formal baru, SMTChecker, diaktifkan melalui ``pragma experimental SMTChecker;``.
 
-* The command line option ``--julia`` was renamed to ``--yul`` due to the
-  renaming of the intermediate language ``Julia`` to ``Yul``.
+* Opsi baris perintah ``--julia`` diubah namanya menjadi ``--yul`` karena
+  penggantian nama bahasa perantara ``Julia`` menjadi ``Yul``.
 
-* The ``--clone-bin`` and ``--combined-json clone-bin`` command line options
-  were removed.
+* Opsi baris perintah ``--clone-bin`` dan ``--combined-json clone-bin`` telah dihapus.
 
-* Remappings with empty prefix are disallowed.
+* Remapping dengan awalan kosong tidak diizinkan.
 
-* The JSON AST fields ``constant`` and ``payable`` were removed. The
-  information is now present in the ``stateMutability`` field.
+* Kolom AST JSON ``constant`` dan ``payable`` telah dihapus. Informasi sekarang
+  ada di bidang ``stateMutability``.
 
-* The JSON AST field ``isConstructor`` of the ``FunctionDefinition``
-  node was replaced by a field called ``kind`` which can have the
-  value ``"constructor"``, ``"fallback"`` or ``"function"``.
+* Bidang JSON AST ``isConstructor`` dari simpul ``FunctionDefinition`` digantikan
+  oleh bidang yang disebut ``kind`` yang dapat memiliki nilai ``"constructor"``, ``"fallback"``
+  atau ``"function"``.
 
-* In unlinked binary hex files, library address placeholders are now
-  the first 36 hex characters of the keccak256 hash of the fully qualified
-  library name, surrounded by ``$...$``. Previously,
-  just the fully qualified library name was used.
-  This reduces the chances of collisions, especially when long paths are used.
-  Binary files now also contain a list of mappings from these placeholders
-  to the fully qualified names.
+* Dalam file hex biner yang tidak ditautkan, placeholder alamat library sekarang menjadi
+  36 karakter hex pertama dari hash keccak256 dari nama library yang sepenuhnya memenuhi
+  syarat, dikelilingi oleh ``$...$``. Sebelumnya, hanya nama library yang sepenuhnya memenuhi
+  syarat yang digunakan. Hal ini mengurangi kemungkinan tabrakan, terutama ketika jalur
+  panjang digunakan. File biner sekarang juga berisi daftar mapping dari placeholder ini ke
+  nama yang sepenuhnya memenuhi syarat.
 
 Constructors
 ------------
 
-* Constructors must now be defined using the ``constructor`` keyword.
+* Konstruktor sekarang harus didefinisikan menggunakan kata kunci ``constructor``.
 
-* Calling base constructors without parentheses is now disallowed.
+* Memanggil konstruktor dasar tanpa tanda kurung sekarang tidak diizinkan.
 
-* Specifying base constructor arguments multiple times in the same inheritance
-  hierarchy is now disallowed.
+* Menentukan argumen konstruktor dasar beberapa kali dalam warisan yang sama
+  hierarki sekarang tidak diizinkan.
 
-* Calling a constructor with arguments but with wrong argument count is now
-  disallowed.  If you only want to specify an inheritance relation without
-  giving arguments, do not provide parentheses at all.
+* Memanggil konstruktor dengan argumen tetapi dengan jumlah argumen yang salah sekarang
+  tidak diizinkan. Jika Anda hanya ingin menentukan relasi pewarisan tanpa
+  memberikan argumen, tidak memberikan tanda kurung sama sekali.
 
 Functions
 ---------
 
-* Function ``callcode`` is now disallowed (in favor of ``delegatecall``). It
-  is still possible to use it via inline assembly.
+* Fungsi ``callcode`` sekarang tidak diizinkan (untuk kepentingan ``delegatecall``). Masih
+  dimungkinkan untuk menggunakannya melalui perakitan
 
-* ``suicide`` is now disallowed (in favor of ``selfdestruct``).
+* ``suicide`` sekarang tidak diizinkan (untuk kepentingan ``selfdestruct``).
 
-* ``sha3`` is now disallowed (in favor of ``keccak256``).
+* ``sha3`` sekarang tidak diizinkan (untuk kepentingan ``keccak256``).
 
-* ``throw`` is now disallowed (in favor of ``revert``, ``require`` and
+* ``throw`` sekarang tidak diizinkan (untuk kepentingan ``revert``, ``require`` dan
   ``assert``).
 
 Conversions
 -----------
 
-* Explicit and implicit conversions from decimal literals to ``bytesXX`` types
-  is now disallowed.
+* Konversi eksplisit dan implisit dari literal desimal ke tipe ``bytesXX`` sekarang tidak diizinkan.
 
-* Explicit and implicit conversions from hex literals to ``bytesXX`` types
-  of different size is now disallowed.
+* Konversi eksplisit dan implisit dari literal hex ke tipe ``bytesXX`` dengan ukuran berbeda sekarang tidak diizinkan.
 
 Literals and Suffixes
 ---------------------
 
-* The unit denomination ``years`` is now disallowed due to complications and
-  confusions about leap years.
+* Denominasi satuan ``years`` sekarang tidak diizinkan karena komplikasi dan
+  kebingungan tentang tahun kabisat.
 
-* Trailing dots that are not followed by a number are now disallowed.
+* Titik-titik trailing yang tidak diikuti oleh angka sekarang tidak diizinkan.
 
-* Combining hex numbers with unit denominations (e.g. ``0x1e wei``) is now
-  disallowed.
+* Menggabungkan angka heksadesimal dengan denominasi satuan (mis. ``0x1e wei``) sekarang
+  tidak diizinkan.
 
-* The prefix ``0X`` for hex numbers is disallowed, only ``0x`` is possible.
+* Awalan ``0X`` untuk nomor hex tidak diizinkan, hanya ``0x`` yang dimungkinkan.
 
 Variables
 ---------
 
-* Declaring empty structs is now disallowed for clarity.
+* Mendeklarasikan struct kosong sekarang tidak diizinkan untuk kejelasan.
 
-* The ``var`` keyword is now disallowed to favor explicitness.
+* Kata kunci ``var`` sekarang tidak diizinkan untuk mendukung ketegasan.
 
-* Assignments between tuples with different number of components is now
-  disallowed.
+* Tugas antara tupel dengan jumlah komponen yang berbeda sekarang
+  tidak diizinkan.
 
-* Values for constants that are not compile-time constants are disallowed.
+* Nilai untuk konstanta yang bukan konstanta compile-time tidak diizinkan.
 
-* Multi-variable declarations with mismatching number of values are now
-  disallowed.
+* Deklarasi multi-variabel dengan jumlah nilai yang tidak cocok sekarang
+  tidak diizinkan.
 
-* Uninitialized storage variables are now disallowed.
+* Variabel penyimpanan yang tidak diinisialisasi sekarang tidak diizinkan.
 
-* Empty tuple components are now disallowed.
+* Komponen tuple kosong sekarang tidak diizinkan.
 
-* Detecting cyclic dependencies in variables and structs is limited in
-  recursion to 256.
+* Mendeteksi dependensi siklik dalam variabel dan struct terbatas di
+  rekursi menjadi 256.
 
-* Fixed-size arrays with a length of zero are now disallowed.
+* Fixed-size array dengan panjang nol sekarang tidak diizinkan.
 
 Syntax
 ------
 
-* Using ``constant`` as function state mutability modifier is now disallowed.
+* Menggunakan ``constant`` sebagai fungsi state mutability modifier sekarang tidak diizinkan.
 
-* Boolean expressions cannot use arithmetic operations.
+* Ekspresi Boolean tidak dapat menggunakan operasi aritmatika.
 
-* The unary ``+`` operator is now disallowed.
+* Operator ``+`` unary sekarang tidak diizinkan.
 
-* Literals cannot anymore be used with ``abi.encodePacked`` without prior
-  conversion to an explicit type.
+* Literal tidak dapat lagi digunakan dengan ``abi.encodePacked`` tanpa konversi sebelumnya ke tipe eksplisit.
 
-* Empty return statements for functions with one or more return values are now
-  disallowed.
+* Return statement kosong untuk fungsi dengan satu atau lebih nilai pengembalian sekarang tidak diizinkan.
 
-* The "loose assembly" syntax is now disallowed entirely, that is, jump labels,
-  jumps and non-functional instructions cannot be used anymore. Use the new
-  ``while``, ``switch`` and ``if`` constructs instead.
+* Syntax "loose assembly" sekarang dilarang sama sekali, yaitu, jump labels,
+  jumps dan non-functional instructions tidak dapat digunakan lagi. Gunakan konstruksi
+  `` while``, ``switch`` dan ``if`` yang baru sebagai gantinya.
 
-* Functions without implementation cannot use modifiers anymore.
+* Fungsi tanpa implementasi tidak dapat menggunakan modifier.
 
-* Function types with named return values are now disallowed.
+* Fungsi types dengan nama return values sekarang tidak diizinkan.
 
-* Single statement variable declarations inside if/while/for bodies that are
-  not blocks are now disallowed.
+* Single statement variable declarations didalam tubuh if/while/for yang bukan
+  block sekarang tidak diizinkan.
 
-* New keywords: ``calldata`` and ``constructor``.
+* Keywords baru: ``calldata`` dan ``constructor``.
 
-* New reserved keywords: ``alias``, ``apply``, ``auto``, ``copyof``,
+* Keywords cadangan baru: ``alias``, ``apply``, ``auto``, ``copyof``,
   ``define``, ``immutable``, ``implements``, ``macro``, ``mutable``,
   ``override``, ``partial``, ``promise``, ``reference``, ``sealed``,
-  ``sizeof``, ``supports``, ``typedef`` and ``unchecked``.
+  ``sizeof``, ``supports``, ``typedef`` dan ``unchecked``.
 
 .. _interoperability:
 
-Interoperability With Older Contracts
+Interoperabilitas Dengan Kontrak Lama
 =====================================
 
-It is still possible to interface with contracts written for Solidity versions prior to
-v0.5.0 (or the other way around) by defining interfaces for them.
-Consider you have the following pre-0.5.0 contract already deployed:
+Masih dimungkinkan untuk berinteraksi dengan kontrak yang ditulis untuk versi Solidity sebelum
+v0.5.0 (atau sebaliknya) dengan mendefinisikan antarmuka untuk mereka.
+Pertimbangkan Anda memiliki kontrak pra-0.5.0 berikut yang sudah diterapkan:
 
 .. code-block:: solidity
 
@@ -309,7 +301,7 @@ Consider you have the following pre-0.5.0 contract already deployed:
         // ...
     }
 
-This will no longer compile with Solidity v0.5.0. However, you can define a compatible interface for it:
+Ini tidak akan lagi dikompilasi dengan Solidity v0.5.0. Namun, Anda dapat menentukan antarmuka yang kompatibel untuknya:
 
 .. code-block:: solidity
 
@@ -320,14 +312,14 @@ This will no longer compile with Solidity v0.5.0. However, you can define a comp
         function anotherOldFunction() external returns (bool);
     }
 
-Note that we did not declare ``anotherOldFunction`` to be ``view``, despite it being declared ``constant`` in the original
-contract. This is due to the fact that starting with Solidity v0.5.0 ``staticcall`` is used to call ``view`` functions.
-Prior to v0.5.0 the ``constant`` keyword was not enforced, so calling a function declared ``constant`` with ``staticcall``
-may still revert, since the ``constant`` function may still attempt to modify storage. Consequently, when defining an
-interface for older contracts, you should only use ``view`` in place of ``constant`` in case you are absolutely sure that
-the function will work with ``staticcall``.
+Perhatikan bahwa kami tidak mendeklarasikan ``anotherOldFunction`` sebagai ``view``, meskipun dinyatakan ``constant`` dalam
+kontrak asli. Hal ini disebabkan oleh fakta bahwa dimulai dengan Solidity v0.5.0 ``staticcall`` digunakan untuk memanggil fungsi ``view``.
+Sebelum v0.5.0 kata kunci ``constant`` tidak diterapkan, jadi memanggil fungsi yang dideklarasikan ``constant`` dengan ``staticcall``
+masih dapat dikembalikan, karena fungsi ``constant`` mungkin masih mencoba mengubah penyimpanan. Akibatnya, ketika mendefinisikan suatu
+antarmuka untuk kontrak lama, Anda hanya boleh menggunakan ``view`` sebagai ganti ``constant`` jika Anda benar-benar yakin bahwa
+fungsi akan bekerja dengan ``staticcall``.
 
-Given the interface defined above, you can now easily use the already deployed pre-0.5.0 contract:
+Dengan antarmuka yang ditentukan di atas, Anda sekarang dapat dengan mudah menggunakan kontrak pra-0.5.0 yang sudah diterapkan:
 
 .. code-block:: solidity
 
@@ -346,9 +338,9 @@ Given the interface defined above, you can now easily use the already deployed p
         }
     }
 
-Similarly, pre-0.5.0 libraries can be used by defining the functions of the library without implementation and
-supplying the address of the pre-0.5.0 library during linking (see :ref:`commandline-compiler` for how to use the
-commandline compiler for linking):
+Demikian pula, library pra-0.5.0 dapat digunakan dengan mendefinisikan fungsi library tanpa implementasi dan
+memberikan alamat library pra-0.5.0 selama penautan (lihat :ref:`commandline-compiler` untuk cara menggunakan comamand line
+kompiler untuk menautkan):
 
 .. code-block:: solidity
 
@@ -367,13 +359,13 @@ commandline compiler for linking):
     }
 
 
-Example
+Contoh
 =======
 
-The following example shows a contract and its updated version for Solidity
-v0.5.0 with some of the changes listed in this section.
+Contoh berikut menunjukkan kontrak dan versi terbarunya untuk Solidity
+v0.5.0 dengan beberapa perubahan yang tercantum di bagian ini.
 
-Old version:
+Versi lama:
 
 .. code-block:: solidity
 
@@ -436,7 +428,7 @@ Old version:
         }
     }
 
-New version:
+Versi baru:
 
 .. code-block:: solidity
 

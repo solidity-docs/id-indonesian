@@ -6,17 +6,17 @@
 Types
 *****
 
-Solidity is a statically typed language, which means that the type of each
-variable (state and local) needs to be specified.
-Solidity provides several elementary types which can be combined to form complex types.
+Solidity adalah bahasa yang diketik secara statis, yang berarti bahwa jenis masing-masing
+variabel (state dan lokal) perlu ditentukan.
+Solidity menyediakan beberapa type dasar yang dapat digabungkan untuk membentuk type kompleks.
 
-In addition, types can interact with each other in expressions containing
-operators. For a quick reference of the various operators, see :ref:`order`.
+Selain itu, type dapat berinteraksi satu sama lain dalam ekspresi yang mengandung operator.
+Untuk referensi cepat dari berbagai operator, lihat :ref:`order`.
 
-The concept of "undefined" or "null" values does not exist in Solidity, but newly
-declared variables always have a :ref:`default value<default-value>` dependent
-on its type. To handle any unexpected values, you should use the :ref:`revert function<assert-and-require>` to revert the whole transaction, or return a
-tuple with a second ``bool`` value denoting success.
+Konsep nilai "undefined" atau "null" tidak ada di Solidity, tetapi variabel yang baru
+dideklarasikan selalu memiliki :ref:`default value<default-value>` bergantung pada tipenya.
+Untuk menangani nilai yang tidak diharapkan, Anda harus menggunakan :ref:`revert function<assert-and-require>`
+untuk mengembalikan seluruh transaksi, atau mengembalikan tuple dengan nilai ``bool`` kedua yang menunjukkan keberhasilan.
 
 .. include:: types/value-types.rst
 

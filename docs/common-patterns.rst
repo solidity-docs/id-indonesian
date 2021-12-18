@@ -1,5 +1,5 @@
 ###############
-Common Patterns
+Pola Umum
 ###############
 
 .. index:: withdrawal
@@ -7,23 +7,23 @@ Common Patterns
 .. _withdrawal_pattern:
 
 *************************
-Withdrawal from Contracts
+Penarikan dari Kontrak
 *************************
 
-The recommended method of sending funds after an effect
-is using the withdrawal pattern. Although the most intuitive
-method of sending Ether, as a result of an effect, is a
-direct ``transfer`` call, this is not recommended as it
-introduces a potential security risk. You may read
-more about this on the :ref:`security_considerations` page.
+Metode pengiriman dana setelah sebuah effect yang disarankan
+adalah menggunakan pola penarikan. Meskipun metode pengiriman
+Ether yang paling intuitif, sebagai akibat dari suatu efek, adalah
+panggilan ``transfer`` langsung, ini tidak disarankan karena
+memperkenalkan potensi risiko keamanan. Anda dapat membaca lebih
+lanjut tentang ini di halaman :ref:`security_considerations`.
 
-The following is an example of the withdrawal pattern in practice in
-a contract where the goal is to send the most money to the
-contract in order to become the "richest", inspired by
-`King of the Ether <https://www.kingoftheether.com/>`_.
+Berikut ini adalah contoh pola penarikan dalam praktik dalam sebuah
+kontrak dimana tujuannya adalah untuk mengirimkan uang sebanyak-banyaknya
+ke dalam kontrak agar menjadi “yang terkaya”, terinspirasi dari
+`Raja Ether <https://www.kingoftheether.com/>`_.
 
-In the following contract, if you are no longer the richest,
-you receive the funds of the person who is now the richest.
+Dalam kontrak berikut, jika Anda bukan lagi yang terkaya,
+Anda menerima dana dari orang yang sekarang paling kaya.
 
 .. code-block:: solidity
 
@@ -61,7 +61,7 @@ you receive the funds of the person who is now the richest.
         }
     }
 
-This is as opposed to the more intuitive sending pattern:
+Ini berbeda dengan pola pengiriman yang lebih intuitif:
 
 .. code-block:: solidity
 
@@ -90,44 +90,44 @@ This is as opposed to the more intuitive sending pattern:
         }
     }
 
-Notice that, in this example, an attacker could trap the
-contract into an unusable state by causing ``richest`` to be
-the address of a contract that has a receive or fallback function
-which fails (e.g. by using ``revert()`` or by just
-consuming more than the 2300 gas stipend transferred to them). That way,
-whenever ``transfer`` is called to deliver funds to the
-"poisoned" contract, it will fail and thus also ``becomeRichest``
-will fail, with the contract being stuck forever.
+Perhatikan bahwa, dalam contoh ini, penyerang dapat menjebak
+kontrak ke dalam status yang tidak dapat digunakan dengan menyebabkan
+``terkaya`` menjadi alamat kontrak yang memiliki fungsi receive atau
+fallback yang gagal (misalnya dengan menggunakan ``revert()`` atau
+dengan hanya mengkonsumsi lebih dari 2300 cadangan gas yang ditransfer ke mereka). Dengan cara itu,
+kapan pun ``transfer`` dipanggil untuk mengirimkan dana ke
+kontrak yang "diracuni", itu akan gagal dan dengan demikian juga ``menjadi Terkaya``
+akan gagal, dengan kontrak macet selamanya.
 
-In contrast, if you use the "withdraw" pattern from the first example,
-the attacker can only cause his or her own withdraw to fail and not the
-rest of the contract's workings.
+Sebaliknya, jika Anda menggunakan pola "withdraw" dari contoh pertama,
+penyerang hanya dapat menyebabkan penarikannya sendiri yang gagal dan bukan
+pekerjaan kontrak yang lainnya.
 
 .. index:: access;restricting
 
 ******************
-Restricting Access
+Membatasi Akses
 ******************
 
-Restricting access is a common pattern for contracts.
-Note that you can never restrict any human or computer
-from reading the content of your transactions or
-your contract's state. You can make it a bit harder
-by using encryption, but if your contract is supposed
-to read the data, so will everyone else.
+Membatasi akses adalah pola umum untuk kontrak.
+Perhatikan bahwa Anda tidak pernah dapat membatasi
+manusia atau komputer mana pun untuk membaca konten
+transaksi Anda atau status kontrak Anda. Anda dapat membuatnya
+sedikit lebih sulit dengan menggunakan enkripsi, tetapi jika kontrak
+Anda seharusnya membaca data, begitu juga orang lain.
 
-You can restrict read access to your contract's state
-by **other contracts**. That is actually the default
-unless you declare your state variables ``public``.
+Anda dapat membatasi akses baca ke status kontrak
+Anda dengan **kontrak lain**. Ini sebenarnya default
+kecuali Anda mendeklarasikan variabel state Anda sebagai ``public``.
 
-Furthermore, you can restrict who can make modifications
-to your contract's state or call your contract's
-functions and this is what this section is about.
+Selanjutnya, Anda dapat membatasi siapa yang dapat melakukan
+modifikasi pada status kontrak Anda atau memanggil fungsi
+kontrak Anda dan inilah yang dijelaskan dibagian ini.
 
 .. index:: function;modifier
 
-The use of **function modifiers** makes these
-restrictions highly readable.
+Penggunaan **function modifiers** membuat
+batasan ini sangat mudah dibaca.
 
 .. code-block:: solidity
     :force:
@@ -229,9 +229,9 @@ restrictions highly readable.
         }
     }
 
-A more specialised way in which access to function
-calls can be restricted will be discussed
-in the next example.
+Cara yang lebih khusus di mana akses ke fungsi
+panggilan dapat dibatasi akan dibahas
+dalam contoh berikutnya.
 
 .. index:: state machine
 
@@ -239,59 +239,58 @@ in the next example.
 State Machine
 *************
 
-Contracts often act as a state machine, which means
-that they have certain **stages** in which they behave
-differently or in which different functions can
-be called. A function call often ends a stage
-and transitions the contract into the next stage
-(especially if the contract models **interaction**).
-It is also common that some stages are automatically
-reached at a certain point in **time**.
+Kontrak sering bertindak sebagai mesin state, yang berarti
+bahwa mereka memiliki **stages** tertentu di mana mereka berperilaku
+berbeda atau di mana fungsi yang berbeda dapat
+dipanggil. Pemanggilan fungsi sering kali mengakhiri sebuah stage
+dan mentransisikan kontrak ke tahap berikutnya
+(terutama jika model kontrak **interaksi**).
+Juga umum bahwa beberapa tahapan secara otomatis
+dicapai pada titik tertentu dalam **waktu**.
 
-An example for this is a blind auction contract which
-starts in the stage "accepting blinded bids", then
-transitions to "revealing bids" which is ended by
-"determine auction outcome".
+Contoh untuk ini adalah kontrak lelang buta yang
+dimulai pada tahap "menerima tawaran buta", lalu
+transisi ke "mengungkapkan tawaran" yang diakhiri dengan
+“menentukan hasil lelang”.
 
 .. index:: function;modifier
 
-Function modifiers can be used in this situation
-to model the states and guard against
-incorrect usage of the contract.
+Fungsi modifier dapat digunakan dalam situasi ini
+untuk mencontoh state dan waspada terhadap
+penggunaan kontrak yang salah.
 
-Example
+Contoh
 =======
 
-In the following example,
-the modifier ``atStage`` ensures that the function can
-only be called at a certain stage.
+Dalam contoh berikut,
+pengubah ``atStage`` memastikan bahwa fungsi hanya
+dapat dipanggil pada tahap tertentu.
 
-Automatic timed transitions
-are handled by the modifier ``timedTransitions``, which
-should be used for all functions.
-
-.. note::
-    **Modifier Order Matters**.
-    If atStage is combined
-    with timedTransitions, make sure that you mention
-    it after the latter, so that the new stage is
-    taken into account.
-
-Finally, the modifier ``transitionNext`` can be used
-to automatically go to the next stage when the
-function finishes.
+Transisi berwaktu otomatis ditangani oleh
+pengubah ``timedTransitions``, yang
+harus digunakan untuk semua fungsi.
 
 .. note::
-    **Modifier May be Skipped**.
-    This only applies to Solidity before version 0.4.0:
-    Since modifiers are applied by simply replacing
-    code and not by using a function call,
-    the code in the transitionNext modifier
-    can be skipped if the function itself uses
-    return. If you want to do that, make sure
-    to call nextStage manually from those functions.
-    Starting with version 0.4.0, modifier code
-    will run even if the function explicitly returns.
+    **Urutan Modifier Penting**.
+    Jika atStage digabungkan
+    dengan timedTransitions, pastikan Anda menyebutkan
+    itu setelah yang terakhir, sehingga tahap baru diperhitungkan.
+
+Akhirnya, pengubah ``transitionNext`` dapat digunakan
+untuk secara otomatis pergi ke tahap berikutnya ketika
+fungsi selesai.
+
+.. note::
+    **modifier Mungkin Dilewati**.
+    Ini hanya berlaku untuk Solidity sebelum versi 0.4.0:
+    Karena pengubah diterapkan hanya dengan mengganti
+    kode dan bukan dengan menggunakan panggilan fungsi,
+    kode dalam pengubah transitionNext
+    dapat dilewati jika fungsi itu sendiri menggunakan
+    return. Jika Anda ingin melakukan itu, pastikan
+    untuk memanggil nextStage secara manual dari fungsi-fungsi itu.
+    Dimulai dengan versi 0.4.0, kode pengubah
+    akan berjalan bahkan jika fungsi secara eksplisit kembali.
 
 .. code-block:: solidity
     :force:

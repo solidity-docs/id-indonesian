@@ -2,83 +2,81 @@
 
 .. _known_bugs:
 
-##################
-List of Known Bugs
-##################
+#########################
+Daftar Bug yang Diketahui
+#########################
 
-Below, you can find a JSON-formatted list of some of the known security-relevant bugs in the
-Solidity compiler. The file itself is hosted in the `Github repository
+Di bawah, Anda dapat menemukan daftar berformat JSON dari beberapa bug terkait keamanan yang diketahui di
+Kompiler solidity. File itu sendiri di-host di `repositori Github
 <https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_.
-The list stretches back as far as version 0.3.0, bugs known to be present only
-in versions preceding that are not listed.
+Daftar ini terbentang hingga versi 0.3.0, bug yang diketahui hanya ada
+dalam versi sebelumnya yang tidak terdaftar.
 
-There is another file called `bugs_by_version.json
+Ada file lain bernama `bugs_by_version.json
 <https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_,
-which can be used to check which bugs affect a specific version of the compiler.
+yang dapat digunakan untuk memeriksa bug mana yang memengaruhi versi kompiler tertentu.
 
-Contract source verification tools and also other tools interacting with
-contracts should consult this list according to the following criteria:
+Alat verifikasi sumber kontrak dan juga alat lain yang berinteraksi dengan
+kontrak harus berkonsultasi dengan daftar ini sesuai dengan kriteria berikut:
 
-- It is mildly suspicious if a contract was compiled with a nightly
-  compiler version instead of a released version. This list does not keep
-  track of unreleased or nightly versions.
-- It is also mildly suspicious if a contract was compiled with a version that was
-  not the most recent at the time the contract was created. For contracts
-  created from other contracts, you have to follow the creation chain
-  back to a transaction and use the date of that transaction as creation date.
-- It is highly suspicious if a contract was compiled with a compiler that
-  contains a known bug and the contract was created at a time where a newer
-  compiler version containing a fix was already released.
+- Agak mencurigakan jika kontrak dikompilasi dengan versi kompiler nightly,
+  bukan versi yang dirilis. Daftar ini tidak melacak versi yang belum dirilis
+  atau versi nightly.
+- Juga agak mencurigakan jika kontrak dikompilasi dengan versi yang bukan yang
+  terbaru pada saat kontrak dibuat. Untuk kontrak yang dibuat dari kontrak lain,
+  Anda harus mengikuti rantai pembuatan kembali ke transaksi dan menggunakan tanggal
+  transaksi tersebut sebagai tanggal pembuatan.
+- Sangat mencurigakan jika kontrak dikompilasi dengan kompiler yang berisi bug yang
+  diketahui dan kontrak dibuat pada saat versi kompiler yang lebih baru yang berisi
+  perbaikan sudah dirilis.
 
-The JSON file of known bugs below is an array of objects, one for each bug,
-with the following keys:
+File JSON dari bug yang diketahui di bawah ini adalah array objek, satu untuk setiap bug,
+dengan kunci berikut:
 
 uid
-    Unique identifier given to the bug in the form of ``SOL-<year>-<number>``.
-    It is possible that multiple entries exists with the same uid. This means
-    multiple version ranges are affected by the same bug.
+    Pengenal unik yang diberikan untuk bug dalam bentuk ``SOL-<year>-<number>``.
+    Ada kemungkinan bahwa ada beberapa entri dengan uid yang sama. Ini berarti
+    beberapa rentang versi dipengaruhi oleh bug yang sama.
 name
-    Unique name given to the bug
+    Nama unik yang diberikan untuk bug
 summary
-    Short description of the bug
+    Deskripsi singkat tentang bug
 description
-    Detailed description of the bug
+    Deskripsi rinci tentang bug
 link
-    URL of a website with more detailed information, optional
+    URL situs web dengan informasi lebih rinci, opsional
 introduced
-    The first published compiler version that contained the bug, optional
+    Versi kompiler pertama yang diterbitkan yang berisi bug, opsional
 fixed
-    The first published compiler version that did not contain the bug anymore
+    Versi kompiler pertama yang diterbitkan yang tidak mengandung bug lagi
 publish
-    The date at which the bug became known publicly, optional
+    Tanggal saat bug diketahui publik, opsional
 severity
-    Severity of the bug: very low, low, medium, high. Takes into account
-    discoverability in contract tests, likelihood of occurrence and
-    potential damage by exploits.
+    Tingkat keparahan bug: sangat rendah, rendah, sedang, tinggi. Mempertimbangkan
+    kemampuan untuk ditemukan dalam pengujian kontrak, kemungkinan terjadinya, dan
+    potensi kerusakan akibat eksploitasi.
 conditions
-    Conditions that have to be met to trigger the bug. The following
-    keys can be used:
-    ``optimizer``, Boolean value which
-    means that the optimizer has to be switched on to enable the bug.
-    ``evmVersion``, a string that indicates which EVM version compiler
-    settings trigger the bug. The string can contain comparison
-    operators. For example, ``">=constantinople"`` means that the bug
-    is present when the EVM version is set to ``constantinople`` or
-    later.
-    If no conditions are given, assume that the bug is present.
+    Kondisi yang harus dipenuhi untuk memicu bug. Kunci berikut
+    dapat digunakan:
+    ``optimizer``, nilai boolean yang
+    berarti pengoptimal harus diaktifkan untuk mengaktifkan bug.
+    ``evmVersion``, string yang menunjukkan setelan kompiler
+    versi EVM mana yang memicu bug. String dapat berisi operator
+    perbandingan. Misalnya, ``">=constantinopel"`` berarti bug
+    ada ketika versi EVM diatur ke ``constantinople`` atau
+    nanti.
+    Jika tidak ada kondisi yang diberikan, asumsikan bahwa bug tetap ada.
 check
-    This field contains different checks that report whether the smart contract
-    contains the bug or not. The first type of check are Javascript regular
-    expressions that are to be matched against the source code ("source-regex")
-    if the bug is present.  If there is no match, then the bug is very likely
-    not present. If there is a match, the bug might be present.  For improved
-    accuracy, the checks should be applied to the source code after stripping
-    comments.
-    The second type of check are patterns to be checked on the compact AST of
-    the Solidity program ("ast-compact-json-path"). The specified search query
-    is a `JsonPath <https://github.com/json-path/JsonPath>`_ expression.
-    If at least one path of the Solidity AST matches the query, the bug is
-    likely present.
+    Bidang ini berisi pemeriksaan berbeda yang melaporkan apakah kontrak pintar
+    mengandung bug atau tidak. Jenis pemeriksaan pertama adalah ekspresi Javascript
+    reguler yang akan dicocokkan dengan kode sumber ("source-regex")
+    jika bug itu ada.  Jika tidak ada kecocokan, maka kemungkinan besar bug tersebut
+    tidak ada. Jika ada kecocokan, bug mungkin ada. Untuk meningkatkan akurasi,
+    pemeriksaan harus diterapkan ke kode sumber setelah menghapus komentar.
+    Jenis pemeriksaan kedua adalah pola yang akan diperiksa pada compact AST dari
+    program Solidity ("ast-compact-json-path"). Kueri penelusuran yang ditentukan
+    adalah ekspresi `JsonPath <https://github.com/json-path/JsonPath>`_.
+    Jika setidaknya satu jalur AST Soliditas cocok dengan kueri, kemungkinan besar bug ada.
 
 .. literalinclude:: bugs.json
    :language: js

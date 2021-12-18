@@ -6,49 +6,44 @@
 Libraries
 *********
 
-Libraries are similar to contracts, but their purpose is that they are deployed
-only once at a specific address and their code is reused using the ``DELEGATECALL``
-(``CALLCODE`` until Homestead)
-feature of the EVM. This means that if library functions are called, their code
-is executed in the context of the calling contract, i.e. ``this`` points to the
-calling contract, and especially the storage from the calling contract can be
-accessed. As a library is an isolated piece of source code, it can only access
-state variables of the calling contract if they are explicitly supplied (it
-would have no way to name them, otherwise). Library functions can only be
-called directly (i.e. without the use of ``DELEGATECALL``) if they do not modify
-the state (i.e. if they are ``view`` or ``pure`` functions),
-because libraries are assumed to be stateless. In particular, it is
-not possible to destroy a library.
+Libraries mirip dengan kontrak, tetapi tujuannya adalah bahwa mereka hanya digunakan
+sekali di alamat tertentu dan kodenya digunakan kembali menggunakan fitur ``DELEGATECALL``
+(``CALLCODE`` hingga Homestead) dari EVM. Ini berarti bahwa jika fungsi library dipanggil, kodenya
+dieksekusi dalam konteks kontrak panggilan, yaitu ``this`` menunjuk ke kontrak panggilan, dan terutama
+penyimpanan dari kontrak panggilan dapat diakses. Karena library adalah bagian dari kode sumber yang
+terisolasi, ia hanya dapat mengakses variabel state dari kontrak panggilan jika mereka disediakan secara
+eksplisit (jika tidak, tidak ada cara untuk menamainya). Fungsi library hanya dapat dipanggil secara
+langsung (yaitu tanpa menggunakan ``DELEGATECALL``) jika fungsi tersebut tidak mengubah state (yaitu
+jika fungsi tersebut adalah ``view`` atau ``pure``), karena library diasumsikan menjadi *stateless*. Secara
+khusus, tidak mungkin untuk menghancurkan library.
 
 .. note::
-    Until version 0.4.20, it was possible to destroy libraries by
-    circumventing Solidity's type system. Starting from that version,
-    libraries contain a :ref:`mechanism<call-protection>` that
-    disallows state-modifying functions
-    to be called directly (i.e. without ``DELEGATECALL``).
+    Hingga versi 0.4.20, library dapat dihancurkan dengan menghindari sistem tipe Solidity. Mulai dari
+    versi tersebut, library berisi :ref:`mekanisme<call-protection>` yang melarang fungsi state-modifying
+    dipanggil secara langsung (yaitu tanpa ``DELEGATECALL``).
 
-Libraries can be seen as implicit base contracts of the contracts that use them.
-They will not be explicitly visible in the inheritance hierarchy, but calls
-to library functions look just like calls to functions of explicit base
-contracts (using qualified access like ``L.f()``).
-Of course, calls to internal functions
-use the internal calling convention, which means that all internal types
-can be passed and types :ref:`stored in memory <data-location>` will be passed by reference and not copied.
-To realize this in the EVM, code of internal library functions
-and all functions called from therein will at compile time be included in the calling
-contract, and a regular ``JUMP`` call will be used instead of a ``DELEGATECALL``.
+Perpustakaan dapat dilihat sebagai basis kontrak implisit dari kontrak yang menggunakannya.
+Mereka tidak akan terlihat secara eksplisit dalam hierarki pewarisan, tetapi panggilan ke
+fungsi library terlihat seperti panggilan ke fungsi  eksplisit basis kontrak (menggunakan akses
+yang memenuhi syarat seperti ``L.f()``).
+Tentu saja, panggilan ke fungsi internal menggunakan konvensi panggilan internal,
+yang berarti bahwa semua tipe internal dapat diteruskan dan tipe :ref:`disimpan dalam
+memori <data-location>` akan diteruskan dengan referensi dan tidak disalin.
+Untuk merealisasikan hal ini dalam EVM, kode fungsi library internal dan semua fungsi yang dipanggil
+dari dalamnya pada waktu kompilasi akan dimasukkan dalam kontrak panggilan, dan panggilan ``JUMP`` biasa
+akan digunakan sebagai pengganti ``DELEGATECALL``.
 
 .. note::
-    The inheritance analogy breaks down when it comes to public functions.
-    Calling a public library function with ``L.f()`` results in an external call (``DELEGATECALL``
-    to be precise).
-    In contrast, ``A.f()`` is an internal call when ``A`` is a base contract of the current contract.
+    Analogi inheritance rusak ketika datang ke fungsi publik.
+    Memanggil fungsi library umum dengan ``L.f()`` menghasilkan
+    panggilan eksternal (``DELEGATECALL`` tepatnya). Sebaliknya, ``A.f()`` adalah
+    panggilan internal ketika ``A`` adalah basis kontrak dari kontrak saat ini.
 
 .. index:: using for, set
 
-The following example illustrates how to use libraries (but using a manual method,
-be sure to check out :ref:`using for <using-for>` for a
-more advanced example to implement a set).
+Contoh berikut mengilustrasikan cara menggunakan library (tetapi menggunakan metode manual,
+pastikan untuk memeriksa :ref:`using for <using-for>` untuk contoh lebih lanjut untuk mengimplementasikan
+satu set).
 
 .. code-block:: solidity
 
@@ -111,23 +106,19 @@ more advanced example to implement a set).
         // In this contract, we can also directly access knownValues.flags, if we want.
     }
 
-Of course, you do not have to follow this way to use
-libraries: they can also be used without defining struct
-data types. Functions also work without any storage
-reference parameters, and they can have multiple storage reference
-parameters and in any position.
+Tentu saja, Anda tidak harus mengikuti cara ini untuk menggunakan
+library: mereka juga dapat digunakan tanpa mendefinisikan struct
+tipe data. Fungsi juga berfungsi tanpa parameter referensi
+penyimpanan apa pun, dan mereka dapat memiliki beberapa referensi parameter
+penyimpanan dan dalam posisi apapun.
 
-The calls to ``Set.contains``, ``Set.insert`` and ``Set.remove``
-are all compiled as calls (``DELEGATECALL``) to an external
-contract/library. If you use libraries, be aware that an
-actual external function call is performed.
-``msg.sender``, ``msg.value`` and ``this`` will retain their values
-in this call, though (prior to Homestead, because of the use of ``CALLCODE``, ``msg.sender`` and
-``msg.value`` changed, though).
+Panggilan ke ``Set.contains``, ``Set.insert`` dan ``Set.remove`` semuanya dikompilasi sebagai panggilan (``DELEGATECALL``) ke kontrak/library eksternal.
+Jika Anda menggunakan library, ketahuilah bahwa panggilan fungsi eksternallah yang sebenarnya dilakukan.
+``msg.sender``, ``msg.value`` dan ``this`` akan mempertahankan nilainya dalam panggilan ini, meskipun (sebelum Homestead, karena penggunaan ``CALLCODE``, ``msg. sender`` dan ``msg.value`` berubah)
 
-The following example shows how to use :ref:`types stored in memory <data-location>` and
-internal functions in libraries in order to implement
-custom types without the overhead of external function calls:
+Contoh berikut menunjukkan cara menggunakan :ref:`types yang disimpan di memori <data-location>`
+dan fungsi internal di library untuk mengimplementasikan tipe kustom tanpa overhead dari panggilan
+fungsi eksternal:
 
 .. code-block:: solidity
     :force:
@@ -191,56 +182,56 @@ custom types without the overhead of external function calls:
         }
     }
 
-It is possible to obtain the address of a library by converting
-the library type to the ``address`` type, i.e. using ``address(LibraryName)``.
+Dimungkinkan untuk memperoleh alamat library dengan mengonversi tipe library
+ke tipe ``address``, yaitu menggunakan ``address(LibraryName)``.
 
-As the compiler does not know the address where the library will be deployed, the compiled hex code
-will contain placeholders of the form ``__$30bbc0abd4d6364515865950d3e0d10953$__``. The placeholder
-is a 34 character prefix of the hex encoding of the keccak256 hash of the fully qualified library
-name, which would be for example ``libraries/bigint.sol:BigInt`` if the library was stored in a file
-called ``bigint.sol`` in a ``libraries/`` directory. Such bytecode is incomplete and should not be
-deployed. Placeholders need to be replaced with actual addresses. You can do that by either passing
-them to the compiler when the library is being compiled or by using the linker to update an already
-compiled binary. See :ref:`library-linking` for information on how to use the commandline compiler
-for linking.
+Karena kompilator tidak mengetahui alamat tempat library akan di-deploy, kode hex yang dikompilasi
+akan berisi placeholder dalam bentuk ``__$30bbc0abd4d6364515865950d3e0d10953$__``. Placeholder adalah
+prefiks 34 karakter dari pengkodean hex dari hash keccak256 dari nama libraray yang sepenuhnya memenuhi
+syarat, yang akan menjadi contoh ``libraries/bigint.sol:BigInt`` jika perpustakaan disimpan dalam file
+bernama ``bigint .sol`` dalam direktori ``libraries/``. Bytecode tersebut tidak lengkap dan tidak boleh
+dideploy. Placeholder perlu diganti dengan alamat sebenarnya. Anda dapat melakukannya dengan meneruskannya
+ke kompiler saat library sedang dikompilasi atau dengan menggunakan tautan untuk memperbarui biner yang sudah
+dikompilasi. Lihat :ref:`library-linking` untuk informasi tentang cara menggunakan kompiler baris perintah
+untuk penautan.
 
-In comparison to contracts, libraries are restricted in the following ways:
+Dibandingkan dengan kontrak, library dibatasi dengan cara berikut:
 
-- they cannot have state variables
-- they cannot inherit nor be inherited
-- they cannot receive Ether
-- they cannot be destroyed
+- mereka tidak dapat memiliki variabel state
+- mereka tidak dapat mewarisi atau diwarisi
+- mereka tidak dapat menerima Ether
+- mereka tidak dapat dihancurkan
 
-(These might be lifted at a later point.)
+(hal Ini mungkin akan diangkat di lain waktu.)
 
 .. _library-selectors:
 .. index:: selector
 
-Function Signatures and Selectors in Libraries
-==============================================
+Fungsi Tanda Tangan dan Selektor di library
+===========================================
 
-While external calls to public or external library functions are possible, the calling convention for such calls
-is considered to be internal to Solidity and not the same as specified for the regular :ref:`contract ABI<ABI>`.
-External library functions support more argument types than external contract functions, for example recursive structs
-and storage pointers. For that reason, the function signatures used to compute the 4-byte selector are computed
-following an internal naming schema and arguments of types not supported in the contract ABI use an internal encoding.
+Meskipun panggilan eksternal ke fungsi library publik atau eksternal dimungkinkan, konvensi panggilan untuk panggilan
+tersebut dianggap internal untuk Solidity dan tidak sama seperti yang ditentukan untuk :ref:`contract ABI<ABI>` reguler.
+Fungsi library eksternal mendukung lebih banyak tipe argumen daripada fungsi kontrak eksternal, misalnya struct rekursif
+dan pointer penyimpanan. Untuk alasan itu, fungsi tanda tangan yang digunakan untuk menghitung pemilih 4-byte dihitung
+mengikuti skema penamaan internal dan argumen jenis yang tidak didukung dalam kontrak ABI menggunakan pengkodean internal.
 
-The following identifiers are used for the types in the signatures:
+Pengidentifikasi berikut digunakan untuk tipe dalam tanda tangan:
 
-- Value types, non-storage ``string`` and non-storage ``bytes`` use the same identifiers as in the contract ABI.
-- Non-storage array types follow the same convention as in the contract ABI, i.e. ``<type>[]`` for dynamic arrays and
-  ``<type>[M]`` for fixed-size arrays of ``M`` elements.
-- Non-storage structs are referred to by their fully qualified name, i.e. ``C.S`` for ``contract C { struct S { ... } }``.
-- Storage pointer mappings use ``mapping(<keyType> => <valueType>) storage`` where ``<keyType>`` and ``<valueType>`` are
-  the identifiers for the key and value types of the mapping, respectively.
-- Other storage pointer types use the type identifier of their corresponding non-storage type, but append a single space
-  followed by ``storage`` to it.
+- Jenis nilai, non-storage ``string``, dan non-storage ``byte`` menggunakan pengidentifikasi yang sama seperti dalam kontrak ABI.
+- Jenis Non-storage array mengikuti konvensi yang sama seperti dalam kontrak ABI, yaitu ``<type>[]`` untuk array dinamis dan
+  ``<type>[M]`` untuk array berukuran tetap ``M` ` elemen.
+- Struktur Non-storage dirujuk dengan nama yang sepenuhnya memenuhi syarat, yaitu ``C.S`` untuk ``contract C { struct S { ... } }``.
+- Storage pointer mapping menggunakan ``mapping(<keyType> =><valueType>) storage`` di mana ``<keyType>`` dan ``<valueType>`` adalah
+  pengidentifikasi untuk tipe kunci dan nilai mapping, berturut-turut.
+- Tipe storage pointer lainnya menggunakan tipe identifier dari tipe non-storage yang sesuai, tetapi menambahkan satu spasi diikuti oleh
+  ``storage`` ke dalamnya.
 
-The argument encoding is the same as for the regular contract ABI, except for storage pointers, which are encoded as a
-``uint256`` value referring to the storage slot to which they point.
+Encoding argumen sama dengan kontrak ABI reguler, kecuali untuk storage pointer, yang dikodekan sebagai nilai
+``uint256`` yang mengacu pada slot penyimpanan yang ditunjuknya.
 
-Similarly to the contract ABI, the selector consists of the first four bytes of the Keccak256-hash of the signature.
-Its value can be obtained from Solidity using the ``.selector`` member as follows:
+Sama halnya dengan kontrak ABI, pemilih terdiri dari empat byte pertama dari tanda tangan Keccak256-hash.
+Nilainya dapat diperoleh dari Solidity menggunakan anggota ``.selector`` sebagai berikut:
 
 .. code-block:: solidity
 
@@ -261,30 +252,26 @@ Its value can be obtained from Solidity using the ``.selector`` member as follow
 
 .. _call-protection:
 
-Call Protection For Libraries
-=============================
+Perlindungan Panggilan Untuk Libraries
+======================================
 
-As mentioned in the introduction, if a library's code is executed
-using a ``CALL`` instead of a ``DELEGATECALL`` or ``CALLCODE``,
-it will revert unless a ``view`` or ``pure`` function is called.
+Seperti disebutkan dalam pendahuluan, jika kode library dieksekusi menggunakan
+``CALL`` alih-alih ``DELEGATECALL`` atau ``CALLCODE``, kode tersebut akan dikembalikan
+kecuali fungsi ``view`` atau ``pure`` disebut.
 
-The EVM does not provide a direct way for a contract to detect
-whether it was called using ``CALL`` or not, but a contract
-can use the ``ADDRESS`` opcode to find out "where" it is
-currently running. The generated code compares this address
-to the address used at construction time to determine the mode
-of calling.
+EVM tidak menyediakan cara langsung bagi sebuah kontrak untuk mendeteksi
+apakah kontrak tersebut dipanggil menggunakan ``CALL`` atau tidak, tetapi sebuah kontrak
+dapat menggunakan opcode ``ADDRESS`` untuk mengetahui "di mana" kontrak
+tersebut sedang berjalan. Kode yang dihasilkan membandingkan alamat ini
+dengan alamat yang digunakan pada waktu konstruksi untuk menentukan mode panggilan.
 
-More specifically, the runtime code of a library always starts
-with a push instruction, which is a zero of 20 bytes at
-compilation time. When the deploy code runs, this constant
-is replaced in memory by the current address and this
-modified code is stored in the contract. At runtime,
-this causes the deploy time address to be the first
-constant to be pushed onto the stack and the dispatcher
-code compares the current address against this constant
-for any non-view and non-pure function.
+Lebih khusus lagi, kode runtime library selalu dimulai dengan instruksi push, yang merupakan
+nol dari 20 byte pada waktu kompilasi. Ketika kode penerapan berjalan, konstanta ini diganti
+dalam memori dengan alamat saat ini dan kode yang dimodifikasi ini disimpan dalam kontrak.
+Saat runtime, ini menyebabkan alamat waktu penerapan menjadi konstanta pertama yang didorong
+ke stack dan kode operator membandingkan alamat saat ini dengan konstanta ini untuk fungsi
+non-view dan non-pure.
 
-This means that the actual code stored on chain for a library
-is different from the code reported by the compiler as
+Ini berarti bahwa kode sebenarnya disimpan di rantai untuk Library
+berbeda dari kode yang dilaporkan oleh kompiler sebagai
 ``deployedBytecode``.

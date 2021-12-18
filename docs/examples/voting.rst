@@ -2,33 +2,31 @@
 
 .. _voting:
 
-******
-Voting
-******
+*************************
+Pemungutan suara (Voting)
+*************************
 
-The following contract is quite complex, but showcases
-a lot of Solidity's features. It implements a voting
-contract. Of course, the main problems of electronic
-voting is how to assign voting rights to the correct
-persons and how to prevent manipulation. We will not
-solve all problems here, but at least we will show
-how delegated voting can be done so that vote counting
-is **automatic and completely transparent** at the
-same time.
+Kontrak berikut cukup rumit, tetapi menampilkan
+banyak fitur Solidity. Termasuk  menerapkan kontrak
+pemungutan suara. Tentu saja, masalah utama pemungutan
+suara elektronik adalah bagaimana memberikan hak suara
+kepada orang yang tepat dan bagaimana mencegah manipulasi.
+Kami tidak akan menyelesaikan semua masalah di sini, tetapi setidaknya
+kami akan menunjukkan bagaimana pemungutan suara yang didelegasikan
+dapat dilakukan sehingga penghitungan suara **otomatis dan sepenuhnya transparan**
+pada saat yang bersamaan.
 
-The idea is to create one contract per ballot,
-providing a short name for each option.
-Then the creator of the contract who serves as
-chairperson will give the right to vote to each
-address individually.
+Idenya adalah untuk membuat satu kontrak per surat suara,
+memberikan nama pendek untuk setiap opsi.
+Kemudian pembuat kontrak yang berfungsi sebagai
+ketua akan memberikan hak suara kepada masing-masing
+alamat secara individual.
 
-The persons behind the addresses can then choose
-to either vote themselves or to delegate their
-vote to a person they trust.
+Orang-orang di belakang alamat kemudian dapat memilih untuk memilih sendiri atau
+mendelegasikan suara mereka kepada orang yang mereka percayai.
 
-At the end of the voting time, ``winningProposal()``
-will return the proposal with the largest number
-of votes.
+Di akhir waktu pemungutan suara, ``winningProposal()``
+akan mengembalikan proposal dengan jumlah suara terbanyak.
 
 .. code-block:: solidity
 
@@ -184,8 +182,8 @@ of votes.
     }
 
 
-Possible Improvements
-=====================
+Kemungkinan Peningkatan
+=======================
 
-Currently, many transactions are needed to assign the rights
-to vote to all participants. Can you think of a better way?
+Saat ini, banyak transaksi diperlukan untuk menetapkan hak
+untuk memberikan suara kepada semua peserta. Bisakah Anda memikirkan cara yang lebih baik?

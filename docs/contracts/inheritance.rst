@@ -1,38 +1,36 @@
 .. index:: ! inheritance, ! base class, ! contract;base, ! deriving
 
-***********
-Inheritance
-***********
+***********************
+Inheritance (Pewarisan)
+***********************
 
-Solidity supports multiple inheritance including polymorphism.
+Solidity mendukung multiple inheritance termasuk Polimorfisme.
 
-Polymorphism means that a function call (internal and external)
-always executes the function of the same name (and parameter types)
-in the most derived contract in the inheritance hierarchy.
-This has to be explicitly enabled on each function in the
-hierarchy using the ``virtual`` and ``override`` keywords.
-See :ref:`Function Overriding <function-overriding>` for more details.
+Polimorfisme berarti pemanggilan fungsi (internal dan eksternal)
+selalu menjalankan fungsi dengan nama yang sama (dan tipe parameter)
+dalam kontrak yang paling diturunkan dalam hierarki pewarisan.
+Ini harus diaktifkan secara eksplisit pada setiap fungsi di
+hierarki menggunakan kata kunci ``virtual`` dan ``override``.
+Lihat :ref:`Function Overriding <function-overriding>` untuk detail selengkapnya.
 
-It is possible to call functions further up in the inheritance
-hierarchy internally by explicitly specifying the contract
-using ``ContractName.functionName()`` or using ``super.functionName()``
-if you want to call the function one level higher up in
-the flattened inheritance hierarchy (see below).
+Dimungkinkan untuk memanggil fungsi lebih jauh dalam hierarki pewarisan secara internal
+dengan menetapkan kontrak secara eksplisit menggunakan ``ContractName.functionName()``
+atau menggunakan ``super.functionName()`` jika Anda ingin memanggil fungsi satu tingkat
+lebih tinggi dalam hierarki pewarisan yang diratakan (lihat di bawah).
 
-When a contract inherits from other contracts, only a single
-contract is created on the blockchain, and the code from all the base contracts
-is compiled into the created contract. This means that all internal calls
-to functions of base contracts also just use internal function calls
-(``super.f(..)`` will use JUMP and not a message call).
+Ketika sebuah kontrak mewarisi dari kontrak lain, hanya satu kontrak yang dibuat di blockchain,
+dan kode dari semua kontrak dasar dikompilasi ke dalam kontrak yang dibuat. Ini berarti bahwa
+semua panggilan internal ke fungsi kontrak dasar juga hanya menggunakan panggilan fungsi
+internal (``super.f(..)`` akan menggunakan JUMP dan bukan panggilan pesan).
 
-State variable shadowing is considered as an error.  A derived contract can
-only declare a state variable ``x``, if there is no visible state variable
-with the same name in any of its bases.
+Variabel state shadowing dianggap sebagai kesalahan. Kontrak turunan hanya dapat mendeklarasikan
+variabel state ``x``, jika tidak ada variabel state yang terlihat dengan nama yang sama di salah
+satu basisnya.
 
-The general inheritance system is very similar to
-`Python's <https://docs.python.org/3/tutorial/classes.html#inheritance>`_,
-especially concerning multiple inheritance, but there are also
-some :ref:`differences <multi-inheritance>`.
+Sistem pewarisan umum sangat mirip dengan
+`Python <https://docs.python.org/3/tutorial/classes.html#inheritance>`_,
+terutama tentang pewarisan berganda, tetapi ada juga
+beberapa :ref:`perbedaan <multi-inheritance>`.
 
 Details are given in the following example.
 
@@ -122,9 +120,8 @@ Details are given in the following example.
         uint info;
     }
 
-Note that above, we call ``Destructible.destroy()`` to "forward" the
-destruction request. The way this is done is problematic, as
-seen in the following example:
+Perhatikan bahwa di atas, kita memanggil ``Destructible.destroy()`` untuk "meneruskan" permintaan
+penghancuran. Cara ini bermasalah, seperti yang terlihat pada contoh berikut:
 
 .. code-block:: solidity
 
@@ -154,9 +151,9 @@ seen in the following example:
         function destroy() public override(Base1, Base2) { Base2.destroy(); }
     }
 
-A call to ``Final.destroy()`` will call ``Base2.destroy`` because we specify it
-explicitly in the final override, but this function will bypass
-``Base1.destroy``. The way around this is to use ``super``:
+Panggilan ke ``Final.destroy()`` akan memanggil ``Base2.destroy`` karena kami menetapkannya secara
+eksplisit dalam penggantian akhir, tetapi fungsi ini akan melewati
+``Base1.destroy``. Cara mengatasinya adalah dengan menggunakan ``super``:
 
 .. code-block:: solidity
 
@@ -187,33 +184,30 @@ explicitly in the final override, but this function will bypass
         function destroy() public override(Base1, Base2) { super.destroy(); }
     }
 
-If ``Base2`` calls a function of ``super``, it does not simply
-call this function on one of its base contracts.  Rather, it
-calls this function on the next base contract in the final
-inheritance graph, so it will call ``Base1.destroy()`` (note that
-the final inheritance sequence is -- starting with the most
-derived contract: Final, Base2, Base1, Destructible, owned).
-The actual function that is called when using super is
-not known in the context of the class where it is used,
-although its type is known. This is similar for ordinary
-virtual method lookup.
+Jika ``Base2`` memanggil fungsi ``super``, ia tidak hanya memanggil fungsi ini pada salah
+satu kontrak dasarnya. Sebaliknya, ia memanggil fungsi ini pada kontrak dasar berikutnya
+dalam grafik pewarisan akhir, sehingga ia akan memanggil ``Base1.destroy()`` (perhatikan
+bahwa urutan pewarisan terakhir adalah -- dimulai dengan kontrak yang paling diturunkan:
+Final, Base2 , Base1, Dapat dirusak, dimiliki). Fungsi aktual yang dipanggil saat menggunakan
+super tidak diketahui dalam konteks kelas di mana ia digunakan, meskipun jenisnya diketahui.
+Ini mirip dengan pencarian metode virtual biasa.
 
 .. index:: ! overriding;function
 
 .. _function-overriding:
 
-Function Overriding
-===================
+Fungsi Overriding
+=================
 
-Base functions can be overridden by inheriting contracts to change their
-behavior if they are marked as ``virtual``. The overriding function must then
-use the ``override`` keyword in the function header.
-The overriding function may only change the visibility of the overridden function from ``external`` to ``public``.
-The mutability may be changed to a more strict one following the order:
-``nonpayable`` can be overridden by ``view`` and ``pure``. ``view`` can be overridden by ``pure``.
-``payable`` is an exception and cannot be changed to any other mutability.
+Fungsi dasar dapat diganti dengan mewarisi kontrak untuk mengubah perilakunya
+jika ditandai sebagai ``virtual``. Fungsi override kemudian harus menggunakan
+kata kunci ``override`` di header fungsi.
+Fungsi override hanya dapat mengubah visibilitas fungsi yang diganti dari ``external`` menjadi ``public``.
+Mutabilitas dapat diubah menjadi yang lebih ketat mengikuti perintah:
+``nonpayable`` dapat diganti dengan ``view`` dan ``pure``. ``view`` dapat diganti dengan ``pure``.
+``payable`` adalah pengecualian dan tidak dapat diubah ke mutabilitas lainnya.
 
-The following example demonstrates changing mutability and visibility:
+Contoh berikut menunjukkan perubahan mutabilitas dan visibilitas:
 
 .. code-block:: solidity
 
@@ -232,12 +226,9 @@ The following example demonstrates changing mutability and visibility:
         function foo() override public pure {}
     }
 
-For multiple inheritance, the most derived base contracts that define the same
-function must be specified explicitly after the ``override`` keyword.
-In other words, you have to specify all base contracts that define the same function
-and have not yet been overridden by another base contract (on some path through the inheritance graph).
-Additionally, if a contract inherits the same function from multiple (unrelated)
-bases, it has to explicitly override it:
+Untuk multiple inheritance, kontrak turunan paling dasar yang mendefinisikan fungsi yang sama harus ditentukan secara eksplisit setelah kata kunci ``override``.
+Dengan kata lain, Anda harus menentukan semua basis kontrak yang mendefinisikan fungsi yang sama dan belum ditimpa oleh basis kontrak lain (pada beberapa jalur melalui grafik pewarisan).
+Selain itu, jika kontrak mewarisi fungsi yang sama dari beberapa basis (yang tidak terkait), kontrak harus secara eksplisit menimpanya:
 
 .. code-block:: solidity
 
@@ -261,10 +252,8 @@ bases, it has to explicitly override it:
         function foo() public override(Base1, Base2) {}
     }
 
-An explicit override specifier is not required if
-the function is defined in a common base contract
-or if there is a unique function in a common base contract
-that already overrides all other functions.
+Penentu override eksplisit tidak diperlukan jika fungsi didefinisikan dalam basis kontrak umum atau
+jika ada fungsi unik dalam basis kontrak umum yang telah menimpa semua fungsi lainnya.
 
 .. code-block:: solidity
 
@@ -277,42 +266,36 @@ that already overrides all other functions.
     // No explicit override required
     contract D is B, C {}
 
-More formally, it is not required to override a function (directly or
-indirectly) inherited from multiple bases if there is a base contract
-that is part of all override paths for the signature, and (1) that
-base implements the function and no paths from the current contract
-to the base mentions a function with that signature or (2) that base
-does not implement the function and there is at most one mention of
-the function in all paths from the current contract to that base.
+Secara lebih formal, tidak diperlukan untuk menimpa fungsi (langsung atau tidak langsung) yang diwarisi
+dari beberapa basis jika ada basis kontrak yang merupakan bagian dari semua jalur penimpaan untuk tanda
+tangan, dan (1) basis tersebut mengimplementasikan fungsi dan tidak ada jalur dari kontrak saat ini ke
+basis menyebutkan fungsi dengan tanda tangan itu atau (2) basis itu tidak mengimplementasikan fungsi dan
+paling banyak ada satu penyebutan fungsi di semua jalur dari kontrak saat ini ke basis tersebut.
 
-In this sense, an override path for a signature is a path through
-the inheritance graph that starts at the contract under consideration
-and ends at a contract mentioning a function with that signature
-that does not override.
+Dalam pengertian ini, jalur override untuk tanda tangan adalah jalur melalui grafik pewarisan yang dimulai
+pada kontrak yang sedang dipertimbangkan dan berakhir pada kontrak yang menyebutkan fungsi dengan tanda tangan
+tersebut yang tidak menimpa.
 
-If you do not mark a function that overrides as ``virtual``, derived
-contracts can no longer change the behaviour of that function.
+Jika Anda tidak menandai fungsi yang diganti sebagai ``virtual``, kontrak turunan tidak dapat lagi
+mengubah perilaku fungsi tersebut.
 
 .. note::
 
-  Functions with the ``private`` visibility cannot be ``virtual``.
+  Fungsi dengan visibilitas ``private`` tidak bisa menjadi ``virtual``.
 
 .. note::
 
-  Functions without implementation have to be marked ``virtual``
-  outside of interfaces. In interfaces, all functions are
-  automatically considered ``virtual``.
+  Fungsi tanpa implementasi harus ditandai ``virtual`` di luar antarmuka.
+  Dalam antarmuka, semua fungsi secara otomatis dianggap ``virtual``.
 
 .. note::
 
-  Starting from Solidity 0.8.8, the ``override`` keyword is not
-  required when overriding an interface function, except for the
-  case where the function is defined in multiple bases.
+  Mulai dari Solidity 0.8.8, kata kunci ``override`` tidak diperlukan saat mengganti fungsi antarmuka,
+  kecuali untuk kasus di mana fungsi didefinisikan dalam banyak basis.
 
 
-Public state variables can override external functions if the
-parameter and return types of the function matches the getter function
-of the variable:
+Variabel state publik dapat menimpa fungsi eksternal jika parameter dan tipe return dari
+fungsi cocok dengan fungsi pengambil variabel:
 
 .. code-block:: solidity
 
@@ -331,8 +314,8 @@ of the variable:
 
 .. note::
 
-  While public state variables can override external functions, they themselves cannot
-  be overridden.
+  Sementara variabel state publik dapat menggantikan fungsi eksternal, mereka sendiri
+  tidak dapat diganti.
 
 .. index:: ! overriding;modifier
 
@@ -341,10 +324,10 @@ of the variable:
 Modifier Overriding
 ===================
 
-Function modifiers can override each other. This works in the same way as
-:ref:`function overriding <function-overriding>` (except that there is no overloading for modifiers). The
-``virtual`` keyword must be used on the overridden modifier
-and the ``override`` keyword must be used in the overriding modifier:
+Fungsi modifier dapat saling menimpa. Ini bekerja dengan cara yang sama seperti
+:ref:`function overriding <function-overriding>` (kecuali bahwa tidak ada overloading
+untuk pengubah). Kata kunci ``virtual`` harus digunakan pada modifier yang ditimpa
+dan kata kunci ``override`` harus digunakan dalam pengubah utama:
 
 .. code-block:: solidity
 
@@ -362,8 +345,8 @@ and the ``override`` keyword must be used in the overriding modifier:
     }
 
 
-In case of multiple inheritance, all direct base contracts must be specified
-explicitly:
+Dalam kasus pewarisan berganda, semua basis kontrak langsung harus ditentukan
+secara eksplisit:
 
 .. code-block:: solidity
 
@@ -391,27 +374,22 @@ explicitly:
 
 .. _constructor:
 
-Constructors
+Konstruktor
 ============
 
-A constructor is an optional function declared with the ``constructor`` keyword
-which is executed upon contract creation, and where you can run contract
-initialisation code.
+Konstruktor adalah fungsi opsional yang dideklarasikan dengan kata kunci ``constructor`` yang
+dijalankan saat pembuatan kontrak, dan tempat Anda dapat menjalankan kode inisialisasi kontrak.
 
-Before the constructor code is executed, state variables are initialised to
-their specified value if you initialise them inline, or their :ref:`default value<default-value>` if you do not.
+Sebelum kode konstruktor dieksekusi, variabel state diinisialisasi ke nilai yang ditentukan jika
+Anda menginisialisasinya secara inline, atau :ref:`nilai default<default-value>` jika tidak.
 
-After the constructor has run, the final code of the contract is deployed
-to the blockchain. The deployment of
-the code costs additional gas linear to the length of the code.
-This code includes all functions that are part of the public interface
-and all functions that are reachable from there through function calls.
-It does not include the constructor code or internal functions that are
-only called from the constructor.
+Setelah konstruktor berjalan, kode akhir kontrak dideploy ke blockchain.
+Penerapan kode memerlukan biaya tambahan linier gas dengan panjang kode.
+Kode ini mencakup semua fungsi yang merupakan bagian dari antarmuka publik dan semua fungsi yang dapat dijangkau dari sana melalui pemanggilan fungsi.
+Itu tidak termasuk kode konstruktor atau fungsi internal yang hanya dipanggil dari konstruktor.
 
-If there is no
-constructor, the contract will assume the default constructor, which is
-equivalent to ``constructor() {}``. For example:
+Jika tidak ada konstruktor, kontrak akan menganggap konstruktor default, yang setara
+dengan ``constructor() {}``. Sebagai contoh:
 
 .. code-block:: solidity
 
@@ -430,27 +408,27 @@ equivalent to ``constructor() {}``. For example:
         constructor() {}
     }
 
-You can use internal parameters in a constructor (for example storage pointers). In this case,
-the contract has to be marked :ref:`abstract <abstract-contract>`, because these parameters
-cannot be assigned valid values from outside but only through the constructors of derived contracts.
+Anda dapat menggunakan parameter internal dalam konstruktor (misalnya pointer storage).
+Dalam hal ini, kontrak harus ditandai sebagai :ref:`abstract <abstract-contract>`, karena
+parameter ini tidak dapat diberi nilai valid dari luar tetapi hanya melalui konstruktor kontrak turunan.
 
 .. warning ::
-    Prior to version 0.4.22, constructors were defined as functions with the same name as the contract.
-    This syntax was deprecated and is not allowed anymore in version 0.5.0.
+    Sebelum versi 0.4.22, konstruktor didefinisikan sebagai fungsi dengan nama yang sama dengan kontrak.
+    Sintaks ini tidak digunakan lagi dan tidak diizinkan lagi di versi 0.5.0.
 
 .. warning ::
-    Prior to version 0.7.0, you had to specify the visibility of constructors as either
-    ``internal`` or ``public``.
+    Sebelum versi 0.7.0, Anda harus menentukan visibilitas konstruktor sebagai
+    ``internal`` atau ``publik``.
 
 
 .. index:: ! base;constructor
 
-Arguments for Base Constructors
-===============================
+Argumen untuk  Basis Konstruktor
+================================
 
-The constructors of all the base contracts will be called following the
-linearization rules explained below. If the base constructors have arguments,
-derived contracts need to specify all of them. This can be done in two ways:
+Konstruktor dari semua basis kontrak akan dipanggil mengikuti aturan
+linearisasi yang dijelaskan di bawah ini. Jika Basis konstruktor  memiliki argumen,
+kontrak turunan perlu menentukan semuanya. Ini dapat dilakukan dengan dua cara:
 
 .. code-block:: solidity
 
@@ -472,45 +450,42 @@ derived contracts need to specify all of them. This can be done in two ways:
         constructor(uint _y) Base(_y * _y) {}
     }
 
-One way is directly in the inheritance list (``is Base(7)``).  The other is in
-the way a modifier is invoked as part of
-the derived constructor (``Base(_y * _y)``). The first way to
-do it is more convenient if the constructor argument is a
-constant and defines the behaviour of the contract or
-describes it. The second way has to be used if the
-constructor arguments of the base depend on those of the
-derived contract. Arguments have to be given either in the
-inheritance list or in modifier-style in the derived constructor.
-Specifying arguments in both places is an error.
+Salah satu caranya adalah langsung di daftar inheritance (``is Base(7)``).  Cara yang lainnya
+adalah modifier dipanggil sebagai bagian dari
+konstruktor turunan (``Base(_y * _y)``). Cara pertama untuk
+melakukannya lebih mudah jika argumen konstruktor adalah konstan
+dan mendefinisikan perilaku kontrak atau menggambarkannya. Cara kedua harus
+digunakan jika argumen konstruktor dari basis bergantung pada argumen dari kontrak turunan.
+Argumen harus diberikan baik dalam daftar pewarisan atau dalam gaya pengubah di konstruktor turunan.
+Menentukan argumen di kedua tempat adalah kesalahan.
 
-If a derived contract does not specify the arguments to all of its base
-contracts' constructors, it will be abstract.
+Jika kontrak turunan tidak menentukan argumen untuk semua basis konstruktor
+kontraknya, itu akan menjadi abstrak.
 
 .. index:: ! inheritance;multiple, ! linearization, ! C3 linearization
 
 .. _multi-inheritance:
 
-Multiple Inheritance and Linearization
-======================================
+Multiple Inheritance dan Linearisasi
+====================================
 
-Languages that allow multiple inheritance have to deal with
-several problems.  One is the `Diamond Problem <https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem>`_.
-Solidity is similar to Python in that it uses "`C3 Linearization <https://en.wikipedia.org/wiki/C3_linearization>`_"
-to force a specific order in the directed acyclic graph (DAG) of base classes. This
-results in the desirable property of monotonicity but
-disallows some inheritance graphs. Especially, the order in
-which the base classes are given in the ``is`` directive is
-important: You have to list the direct base contracts
-in the order from "most base-like" to "most derived".
-Note that this order is the reverse of the one used in Python.
+Bahasa yang memungkinkan multiple inheritance harus menghadapi
+beberapa masalah. Salah satunya adalah `Diamond Problem <https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem>`_.
+mirip dengan Python karena menggunakan "`linerarisasi C3 <https://en.wikipedia.org/wiki/C3_linearization>`_"
+untuk memaksa urutan tertentu dalam directed acyclic graph (DAG) dari kelas dasar. Ini
+menghasilkan properti monotonisitas yang diinginkan tetapi
+tidak mengizinkan beberapa grafik inheritance. Khususnya, urutan dimana
+basis kelas diberikan dalam direktif ``is`` adalah penting: Anda harus membuat
+daftar basis kontrak langsung dalam urutan dari "most base-like" hingga "most derived".
+Perhatikan bahwa urutan ini adalah kebalikan dari yang digunakan dalam Python.
 
-Another simplifying way to explain this is that when a function is called that
-is defined multiple times in different contracts, the given bases
-are searched from right to left (left to right in Python) in a depth-first manner,
-stopping at the first match. If a base contract has already been searched, it is skipped.
+Cara penyederhanaan lain untuk menjelaskan hal ini adalah bahwa ketika suatu fungsi
+dipanggil yang didefinisikan beberapa kali dalam kontrak yang berbeda, basis yang diberikan
+dicari dari kanan ke kiri (kiri ke kanan di Python) secara depth-first, berhenti pada kecocokan
+pertama . Jika basis kontrak telah dicari, itu akan dilewati.
 
-In the following code, Solidity will give the
-error "Linearization of inheritance graph impossible".
+Dalam kode berikut, Solidity akan memberikan
+kesalahan "Linearisasi grafik inheritance tidak memungkinkan".
 
 .. code-block:: solidity
 
@@ -522,16 +497,15 @@ error "Linearization of inheritance graph impossible".
     // This will not compile
     contract C is A, X {}
 
-The reason for this is that ``C`` requests ``X`` to override ``A``
-(by specifying ``A, X`` in this order), but ``A`` itself
-requests to override ``X``, which is a contradiction that
-cannot be resolved.
+Alasan untuk ini adalah bahwa ``C`` meminta ``X`` untuk menimpa ``A``
+(dengan menentukan ``A, X`` dalam urutan ini), tetapi ``A`` sendiri meminta
+untuk menimpa ``X``, yang merupakan kontradiksi yang tidak dapat diselesaikan.
 
-Due to the fact that you have to explicitly override a function
-that is inherited from multiple bases without a unique override,
-C3 linearization is not too important in practice.
+Karena kenyataan bahwa Anda harus secara eksplisit mengganti fungsi
+yang diwarisi dari banyak basis tanpa penimpaan yang unik,
+Linearisasi C3 tidak terlalu penting dalam praktek.
 
-One area where inheritance linearization is especially important and perhaps not as clear is when there are multiple constructors in the inheritance hierarchy. The constructors will always be executed in the linearized order, regardless of the order in which their arguments are provided in the inheriting contract's constructor.  For example:
+Satu area di mana linearisasi pewarisan sangat penting dan mungkin tidak begitu jelas adalah ketika ada banyak konstruktor dalam hierarki pewarisan. Konstruktor akan selalu dieksekusi dalam urutan linier, terlepas dari urutan argumen mereka disediakan dalam konstruktor kontrak pewarisan. Sebagai contoh:
 
 .. code-block:: solidity
 
@@ -571,12 +545,12 @@ One area where inheritance linearization is especially important and perhaps not
     }
 
 
-Inheriting Different Kinds of Members of the Same Name
+Mewarisi Berbagai Jenis Anggota dengan Nama Yang Sama
 ======================================================
 
-It is an error when any of the following pairs in a contract have the same name due to inheritance:
-  - a function and a modifier
-  - a function and an event
-  - an event and a modifier
+Ini adalah kesalahan ketika salah satu dari pasangan berikut dalam kontrak memiliki nama yang sama karena warisan:
+  - sebuah fungsi dan modifier
+  - sebuah fungsi dan event
+  - senuah event dan modifier
 
-As an exception, a state variable getter can override an external function.
+Sebagai pengecualian, state variabel getter dapat menimpa fungsi eksternal.

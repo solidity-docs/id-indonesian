@@ -1,13 +1,13 @@
 /**
- * Solidity is a statically typed, contract-oriented, high-level language for implementing smart contracts on the Ethereum platform.
+ * Solidity adalah bahasa tingkat tinggi yang diketik secara statis, berorientasi pada kontrak, untuk menerapkan smart kontrak pada platform Ethereum.
  */
 parser grammar SolidityParser;
 
 options { tokenVocab=SolidityLexer; }
 
 /**
- * On top level, Solidity allows pragmas, import directives, and
- * definitions of contracts, interfaces, libraries, structs, enums and constants.
+ * Dalam top level, Solidity mengizinkan pragmas, import directives, dan
+ * definitions of contracts, interfaces, libraries, structs, enums dan constants.
  */
 sourceUnit: (
 	pragmaDirective
@@ -27,7 +27,7 @@ sourceUnit: (
 pragmaDirective: Pragma PragmaToken+ PragmaSemicolon;
 
 /**
- * Import directives import identifiers from different files.
+ * Import directives import identifiers file yang berbeda.
  */
 importDirective:
 	Import (
@@ -39,30 +39,30 @@ importDirective:
 //@doc:name aliases
 importAliases: symbol=identifier (As alias=identifier)?;
 /**
- * Path of a file to be imported.
+ * Jalur file yang akan diimport.
  */
 path: NonEmptyStringLiteral;
 /**
- * List of aliases for symbols to be imported.
+ * Daftar alias untuk simbol yang akan diimport.
  */
 symbolAliases: LBrace aliases+=importAliases (Comma aliases+=importAliases)* RBrace;
 
 /**
- * Top-level definition of a contract.
+ * Definisi Top-level sebuah kontrak.
  */
 contractDefinition:
 	Abstract? Contract name=identifier
 	inheritanceSpecifierList?
 	LBrace contractBodyElement* RBrace;
 /**
- * Top-level definition of an interface.
+ * Definisi Top-level sebuah interface.
  */
 interfaceDefinition:
 	Interface name=identifier
 	inheritanceSpecifierList?
 	LBrace contractBodyElement* RBrace;
 /**
- * Top-level definition of a library.
+ * Definisi Top-level sebuah library.
  */
 libraryDefinition: Library name=identifier LBrace contractBodyElement* RBrace;
 
@@ -71,16 +71,16 @@ inheritanceSpecifierList:
 	Is inheritanceSpecifiers+=inheritanceSpecifier
 	(Comma inheritanceSpecifiers+=inheritanceSpecifier)*?;
 /**
- * Inheritance specifier for contracts and interfaces.
- * Can optionally supply base constructor arguments.
+ * Penentu Inheritance untuk kontrak dan interface.
+ * Secara opsional dapat menyediakan argumen basis konstruktor.
  */
 inheritanceSpecifier: name=identifierPath arguments=callArgumentList?;
 
 /**
- * Declarations that can be used in contracts, interfaces and libraries.
+ * Deklarasi yang dapat digunakan dalam kontrak, interface, dan library.
  *
- * Note that interfaces and libraries may not contain constructors, interfaces may not contain state variables
- * and libraries may not contain fallback, receive functions nor non-constant state variables.
+ * Perhatikan bahwa interfaces dan library mungkin tidak berisi konstruktor, interfaces mungkin tidak berisi variabel state
+ * dan library tidak boleh berisi fallback, menerima fungsi atau variabel state non-konstan.
  */
 contractBodyElement:
 	constructorDefinition
@@ -98,34 +98,34 @@ contractBodyElement:
 //@doc:inline
 namedArgument: name=identifier Colon value=expression;
 /**
- * Arguments when calling a function or a similar callable object.
- * The arguments are either given as comma separated list or as map of named arguments.
+ * Argumen saat memanggil fungsi atau objek callable serupa.
+ * Argumen diberikan sebagai daftar yang dipisahkan koma atau sebagai peta argumen bernama.
  */
 callArgumentList: LParen ((expression (Comma expression)*)? | LBrace (namedArgument (Comma namedArgument)*)? RBrace) RParen;
 /**
- * Qualified name.
+ * Nama yang memenuhi syarat.
  */
 identifierPath: identifier (Period identifier)*;
 
 /**
- * Call to a modifier. If the modifier takes no arguments, the argument list can be skipped entirely
- * (including opening and closing parentheses).
+ * Panggilan ke modifikator. Jika pengubah tidak mengambil argumen, daftar argumen dapat dilewati seluruhnya
+ * (termasuk tanda kurung buka dan tutup).
  */
 modifierInvocation: identifierPath callArgumentList?;
 /**
- * Visibility for functions and function types.
+ * Visibilitas untuk fungsi dan tipe fungsi.
  */
 visibility: Internal | External | Private | Public;
 /**
- * A list of parameters, such as function arguments or return values.
+ * Daftar parameter, seperti argumen fungsi atau nilai return.
  */
 parameterList: parameters+=parameterDeclaration (Comma parameters+=parameterDeclaration)*;
 //@doc:inline
 parameterDeclaration: type=typeName location=dataLocation? name=identifier?;
 /**
- * Definition of a constructor.
- * Must always supply an implementation.
- * Note that specifying internal or public visibility is deprecated.
+ * Definisi konstruktor.
+ * Harus selalu menyediakan implementasi.
+ * Perhatikan bahwa menentukan visibilitas internal atau publik tidak lagi digunakan.
  */
 constructorDefinition
 locals[boolean payableSet = false, boolean visibilitySet = false]
@@ -140,20 +140,20 @@ locals[boolean payableSet = false, boolean visibilitySet = false]
 	body=block;
 
 /**
- * State mutability for function types.
- * The default mutability 'non-payable' is assumed if no mutability is specified.
+ * State mutabilitas untuk tipe fungsi.
+ * Mutabilitas default 'non-payable' diasumsikan jika tidak ada mutabilitas yang ditentukan.
  */
 stateMutability: Pure | View | Payable;
 /**
- * An override specifier used for functions, modifiers or state variables.
- * In cases where there are ambiguous declarations in several base contracts being overridden,
- * a complete list of base contracts has to be given.
+ * Sebuah specifier override digunakan untuk fungsi, modifier atau variabel state.
+ * Dalam kasus di mana ada pernyataan ambigu dalam beberapa basis kontrak yang diganti,
+ * daftar lengkap basis kontrak harus diberikan.
  */
 overrideSpecifier: Override (LParen overrides+=identifierPath (Comma overrides+=identifierPath)* RParen)?;
 /**
- * The definition of contract, library and interface functions.
- * Depending on the context in which the function is defined, further restrictions may apply,
- * e.g. functions in interfaces have to be unimplemented, i.e. may not contain a body block.
+ * Definisi kontrak, library and fungsi interface.
+ * Tergantung pada konteks di mana fungsi didefinisikan, pembatasan lebih lanjut mungkin berlaku,
+ * misalnya fungsi dalam interface harus tidak diimplementasikan, yaitu tidak boleh berisi tubuh blok.
  */
 functionDefinition
 locals[
@@ -175,9 +175,9 @@ locals[
 	(Returns LParen returnParameters=parameterList RParen)?
 	(Semicolon | body=block);
 /**
- * The definition of a modifier.
- * Note that within the body block of a modifier, the underscore cannot be used as identifier,
- * but is used as placeholder statement for the body of a function to which the modifier is applied.
+ * Definisi modifier.
+ * Perhatikan bahwa di dalam tubuh blok modifier, garis bawah tidak dapat digunakan sebagai pengenal,
+ * tetapi digunakan sebagai pernyataan pengganti untuk isi fungsi yang modifier-nya diterapkan.
  */
 modifierDefinition
 locals[
@@ -194,7 +194,7 @@ locals[
 	(Semicolon | body=block);
 
 /**
- * Definition of the special fallback function.
+ * Definisi fungsi fallback khusus.
  */
 fallbackFunctionDefinition
 locals[
@@ -217,7 +217,7 @@ locals[
 	(Semicolon | body=block);
 
 /**
- * Definition of the special receive function.
+ * Definisi fungsi receive khusus.
  */
 receiveFunctionDefinition
 locals[
@@ -238,7 +238,7 @@ locals[
 	(Semicolon | body=block);
 
 /**
- * Definition of a struct. Can occur at top-level within a source unit or within a contract, library or interface.
+ * Definisi dari sebuah struct. Dapat terjadi di tingkat atas dalam unit sumber atau dalam kontrak, library, atau interface.
  */
 structDefinition: Struct name=identifier LBrace members=structMember+ RBrace;
 /**
@@ -246,17 +246,17 @@ structDefinition: Struct name=identifier LBrace members=structMember+ RBrace;
  */
 structMember: type=typeName name=identifier Semicolon;
 /**
- * Definition of an enum. Can occur at top-level within a source unit or within a contract, library or interface.
+ * Definisi dari sebuah enum. Dapat terjadi di tingkat atas dalam unit sumber atau dalam kontrak, library, atau interface.
  */
 enumDefinition:	Enum name=identifier LBrace enumValues+=identifier (Comma enumValues+=identifier)* RBrace;
 /**
- * Definition of a user defined value type. Can occur at top-level within a source unit or within a contract, library or interface.
+ * Definisi dari sebuah tipe user defined value. Dapat terjadi di tingkat atas dalam unit sumber atau dalam kontrak, library, atau interface.
  */
 userDefinedValueTypeDefinition:
 	Type name=identifier Is elementaryTypeName[true] Semicolon;
 
 /**
- * The declaration of a state variable.
+ * Deklarasi variabel state.
  */
 stateVariableDeclaration
 locals [boolean constantnessSet = false, boolean visibilitySet = false, boolean overrideSpecifierSet = false]
@@ -275,7 +275,7 @@ locals [boolean constantnessSet = false, boolean visibilitySet = false, boolean 
 	Semicolon;
 
 /**
- * The declaration of a constant variable.
+ * Deklarasi variabel konstan.
  */
 constantVariableDeclaration
 :
@@ -286,11 +286,11 @@ constantVariableDeclaration
 	Semicolon;
 
 /**
- * Parameter of an event.
+ * Parameter suatu event.
  */
 eventParameter: type=typeName Indexed? name=identifier?;
 /**
- * Definition of an event. Can occur in contracts, libraries or interfaces.
+ * Definisi dari suatu event. Dapat terjadi di kontrak, library atau interface.
  */
 eventDefinition:
 	Event name=identifier
@@ -299,11 +299,11 @@ eventDefinition:
 	Semicolon;
 
 /**
- * Parameter of an error.
+ * Parameter kesalahan.
  */
 errorParameter: type=typeName name=identifier?;
 /**
- * Definition of an error.
+ * Definisi kesalahan.
  */
 errorDefinition:
 	Error name=identifier
@@ -311,13 +311,13 @@ errorDefinition:
 	Semicolon;
 
 /**
- * Using directive to bind library functions to types.
- * Can occur within contracts and libraries.
+ * Menggunakan direktif untuk mengikat fungsi library ke tipe.
+ * Dapat terjadi dalam kontrak dan library.
  */
 usingDirective: Using identifierPath For (Mul | typeName) Semicolon;
 /**
- * A type name can be an elementary type, a function type, a mapping type, a user-defined type
- * (e.g. a contract or struct) or an array type.
+ * Nama tipe dapat berupa tipe dasar, tipe fungsi, tipe mapping, tipe user-defined
+ * (misalnya kontrak atau struct) atau tipe array.
  */
 typeName: elementaryTypeName[true] | functionTypeName | mappingType | identifierPath | typeName LBrack expression? RBrack;
 elementaryTypeName[boolean allowAddressPayable]: Address | {$allowAddressPayable}? Address Payable | Bool | String | Bytes | SignedIntegerType | UnsignedIntegerType | FixedBytes | Fixed | Ufixed;
@@ -332,17 +332,17 @@ locals [boolean visibilitySet = false, boolean mutabilitySet = false]
 	(Returns LParen returnParameters=parameterList RParen)?;
 
 /**
- * The declaration of a single variable.
+ * Deklarasi variabel tunggal.
  */
 variableDeclaration: type=typeName location=dataLocation? name=identifier;
 dataLocation: Memory | Storage | Calldata;
 
 /**
- * Complex expression.
- * Can be an index access, an index range access, a member access, a function call (with optional function call options),
- * a type conversion, an unary or binary expression, a comparison or assignment, a ternary expression,
- * a new-expression (i.e. a contract creation or the allocation of a dynamic memory array),
- * a tuple, an inline array or a primary expression (i.e. an identifier, literal or type name).
+ * Ekspresi kompleks.
+ * Dapat berupa akses indeks, akses rentang indeks, akses anggota, panggilan fungsi (dengan opsi panggilan fungsi opsional),
+ * konversi tipe, ekspresi unary atau biner, perbandingan atau penetapan, ekspresi ternary,
+ * ekspresi baru (yaitu pembuatan kontrak atau alokasi array memori dinamis),
+ * Tuple, inline array, atau ekspresi utama (yaitu pengidentifikasi, literal, atau nama tipe).
  */
 expression:
 	expression LBrack index=expression? RBrack # IndexAccess
@@ -381,36 +381,36 @@ expression:
 assignOp: Assign | AssignBitOr | AssignBitXor | AssignBitAnd | AssignShl | AssignSar | AssignShr | AssignAdd | AssignSub | AssignMul | AssignDiv | AssignMod;
 tupleExpression: LParen (expression? ( Comma expression?)* ) RParen;
 /**
- * An inline array expression denotes a statically sized array of the common type of the contained expressions.
+ * Ekspresi inline array menunjukkan array berukuran statis dari tipe umum dari ekspresi yang terkandung.
  */
 inlineArrayExpression: LBrack (expression ( Comma expression)* ) RBrack;
 
 /**
- * Besides regular non-keyword Identifiers, some keywords like 'from' and 'error' can also be used as identifiers.
+ * Selain identifier non-kata kunci biasa, beberapa kata kunci seperti 'from' dan 'error' juga dapat digunakan sebagai identifier.
  */
 identifier: Identifier | From | Error | Revert;
 
 literal: stringLiteral | numberLiteral | booleanLiteral | hexStringLiteral | unicodeStringLiteral;
 booleanLiteral: True | False;
 /**
- * A full string literal consists of either one or several consecutive quoted strings.
+ * Literal string penuh terdiri dari satu atau beberapa string yang dikutip secara berurutan.
  */
 stringLiteral: (NonEmptyStringLiteral | EmptyStringLiteral)+;
 /**
- * A full hex string literal that consists of either one or several consecutive hex strings.
+ * Sebuah literal string hex penuh yang terdiri dari satu atau beberapa string hex berturut-turut.
  */
 hexStringLiteral: HexString+;
 /**
- * A full unicode string literal that consists of either one or several consecutive unicode strings.
+ * Literal string unicode penuh yang terdiri dari satu atau beberapa string unicode berurutan.
  */
 unicodeStringLiteral: UnicodeStringLiteral+;
 
 /**
- * Number literals can be decimal or hexadecimal numbers with an optional unit.
+ * Angka literal dapat berupa angka desimal atau heksadesimal dengan unit opsional.
  */
 numberLiteral: (DecimalNumber | HexNumber) NumberUnit?;
 /**
- * A curly-braced block of statements. Opens its own scope.
+ * Blok pernyataan dengan kurung kurawal. Membuka ruang lingkupnya sendiri.
  */
 block:
 	LBrace ( statement | uncheckedBlock )* RBrace;
@@ -436,53 +436,53 @@ statement:
 //@doc:inline
 simpleStatement: variableDeclarationStatement | expressionStatement;
 /**
- * If statement with optional else part.
+ * Pernyataan if dengan bagian else opsional.
  */
 ifStatement: If LParen expression RParen statement (Else statement)?;
 /**
- * For statement with optional init, condition and post-loop part.
+ * Untuk pernyataan dengan init opsional, kondisi dan bagian post-loop.
  */
 forStatement: For LParen (simpleStatement | Semicolon) (expressionStatement | Semicolon) expression? RParen statement;
 whileStatement: While LParen expression RParen statement;
 doWhileStatement: Do statement While LParen expression RParen Semicolon;
 /**
- * A continue statement. Only allowed inside for, while or do-while loops.
+ * Pernyataan lanjutan. Hanya diperbolehkan di dalam loop for, while atau do-while.
  */
 continueStatement: Continue Semicolon;
 /**
- * A break statement. Only allowed inside for, while or do-while loops.
+ * Pernyataan break. Hanya diperbolehkan di dalam loop for, while atau do-while.
  */
 breakStatement: Break Semicolon;
 /**
- * A try statement. The contained expression needs to be an external function call or a contract creation.
+ * Pernyataan try. Ekspresi yang terkandung harus berupa panggilan fungsi eksternal atau pembuatan kontrak.
  */
 tryStatement: Try expression (Returns LParen returnParameters=parameterList RParen)? block catchClause+;
 /**
- * The catch clause of a try statement.
+ * Klausa catch dari pernyataan try.
  */
 catchClause: Catch (identifier? LParen (arguments=parameterList) RParen)? block;
 
 returnStatement: Return expression? Semicolon;
 /**
- * An emit statement. The contained expression needs to refer to an event.
+ * Pernyataan emit. Ekspresi yang terkandung perlu merujuk ke suatu event.
  */
 emitStatement: Emit expression callArgumentList Semicolon;
 /**
- * A revert statement. The contained expression needs to refer to an error.
+ * Pernyataan refert. Ekspresi yang terkandung perlu merujuk ke kesalahan.
  */
 revertStatement: Revert expression callArgumentList Semicolon;
 /**
- * An inline assembly block.
- * The contents of an inline assembly block use a separate scanner/lexer, i.e. the set of keywords and
- * allowed identifiers is different inside an inline assembly block.
+ * Blok inline assembly.
+ * Isi blok inline assembly menggunakan pemindai/lexer terpisah, yaitu kumpulan kata kunci dan
+ * identifier yang diizinkan berbeda di dalam blok inline assembly.
  */
 assemblyStatement: Assembly AssemblyDialect? AssemblyLBrace yulStatement* YulRBrace;
 
 //@doc:inline
 variableDeclarationList: variableDeclarations+=variableDeclaration (Comma variableDeclarations+=variableDeclaration)*;
 /**
- * A tuple of variable names to be used in variable declarations.
- * May contain empty fields.
+ * Tuple nama variabel yang akan digunakan dalam deklarasi variabel.
+ * Dapat berisi bidang kosong.
  */
 variableDeclarationTuple:
 	LParen
@@ -490,23 +490,23 @@ variableDeclarationTuple:
 		(Comma (variableDeclarations+=variableDeclaration)?)*
 	RParen;
 /**
- * A variable declaration statement.
- * A single variable may be declared without initial value, whereas a tuple of variables can only be
- * declared with initial value.
+ * Pernyataan deklarasi variabel.
+ * Sebuah variabel tunggal dapat dideklarasikan tanpa nilai awal, sedangkan sebuah tupel variabel hanya dapat
+ * dideklarasikan dengan nilai awal.
  */
 variableDeclarationStatement: ((variableDeclaration (Assign expression)?) | (variableDeclarationTuple Assign expression)) Semicolon;
 expressionStatement: expression Semicolon;
 
 mappingType: Mapping LParen key=mappingKeyType DoubleArrow value=typeName RParen;
 /**
- * Only elementary types or user defined types are viable as mapping keys.
+ * Hanya tipe dasar atau tipe yang ditentukan pengguna yang layak sebagai kunci mapping.
  */
 mappingKeyType: elementaryTypeName[false] | identifierPath;
 
 /**
- * A Yul statement within an inline assembly block.
- * continue and break statements are only valid within for loops.
- * leave statements are only valid within function bodies.
+ * Pernyataan Yul dalam blok inline assembly.
+ * pernyataan continue dan break hanya valid dalam perulangan for.
+ * Pernyataan leave hanya valid di dalam badan fungsi.
  */
 yulStatement:
 	yulBlock
@@ -524,16 +524,16 @@ yulStatement:
 yulBlock: YulLBrace yulStatement* YulRBrace;
 
 /**
- * The declaration of one or more Yul variables with optional initial value.
- * If multiple variables are declared, only a function call is a valid initial value.
+ * Deklarasi satu atau lebih variabel Yul dengan nilai awal opsional.
+ * Jika beberapa variabel dideklarasikan, hanya pemanggilan fungsi yang merupakan nilai awal yang valid.
  */
 yulVariableDeclaration:
 	(YulLet variables+=YulIdentifier (YulAssign yulExpression)?)
 	| (YulLet variables+=YulIdentifier (YulComma variables+=YulIdentifier)* (YulAssign yulFunctionCall)?);
 
 /**
- * Any expression can be assigned to a single Yul variable, whereas
- * multi-assignments require a function call on the right-hand side.
+ * Ekspresi apa pun dapat ditetapkan ke satu variabel Yul, sedangkan
+ * multi-assignment memerlukan panggilan fungsi di sisi kanan.
  */
 yulAssignment: yulPath YulAssign yulExpression | (yulPath (YulComma yulPath)+) YulAssign yulFunctionCall;
 
@@ -544,8 +544,8 @@ yulForStatement: YulFor init=yulBlock cond=yulExpression post=yulBlock body=yulB
 //@doc:inline
 yulSwitchCase: YulCase yulLiteral yulBlock;
 /**
- * A Yul switch statement can consist of only a default-case (deprecated) or
- * one or more non-default cases optionally followed by a default-case.
+ * Pernyataan Yul switch hanya dapat terdiri dari huruf besar-default (tidak digunakan lagi) atau
+ * satu atau lebih kasus non-default secara opsional diikuti oleh kasus default.
  */
 yulSwitchStatement:
 	YulSwitch yulExpression
@@ -561,13 +561,13 @@ yulFunctionDefinition:
 	body=yulBlock;
 
 /**
- * While only identifiers without dots can be declared within inline assembly,
- * paths containing dots can refer to declarations outside the inline assembly block.
+ * Meskipun hanya pengidentifikasi tanpa titik yang dapat dideklarasikan dalam inline assembly,,
+ * jalur yang berisi titik dapat merujuk ke deklarasi di luar blok inline assembly,.
  */
 yulPath: YulIdentifier (YulPeriod YulIdentifier)*;
 /**
- * A call to a function with return values can only occur as right-hand side of an assignment or
- * a variable declaration.
+ * Panggilan ke fungsi dengan nilai return hanya dapat terjadi sebagai sisi kanan tugas atau
+ * deklarasi variabel.
  */
 yulFunctionCall: (YulIdentifier | YulEVMBuiltin) YulLParen (yulExpression (YulComma yulExpression)*)? YulRParen;
 yulBoolean: YulTrue | YulFalse;

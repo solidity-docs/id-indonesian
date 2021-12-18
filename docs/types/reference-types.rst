@@ -2,67 +2,66 @@
 
 .. _reference-types:
 
-Reference Types
-===============
+Reference Types (Tipe Referensi)
+================================
 
-Values of reference type can be modified through multiple different names.
-Contrast this with value types where you get an independent copy whenever
-a variable of value type is used. Because of that, reference types have to be handled
-more carefully than value types. Currently, reference types comprise structs,
-arrays and mappings. If you use a reference type, you always have to explicitly
-provide the data area where the type is stored: ``memory`` (whose lifetime is limited
-to an external function call), ``storage`` (the location where the state variables
-are stored, where the lifetime is limited to the lifetime of a contract)
-or ``calldata`` (special data location that contains the function arguments).
+Nilai tipe referensi dapat dimodifikasi melalui beberapa nama yang berbeda.
+Bandingkan ini dengan tipe nilai di mana Anda mendapatkan salinan independen setiap kali
+variabel tipe nilai digunakan. Karena itu, tipe referensi harus ditangani
+lebih hati-hati daripada tipe nilai. Saat ini, tipe referensi terdiri dari struct,
+array dan mapping. Jika Anda menggunakan tipe referensi, Anda harus selalu secara eksplisit
+menyediakan area data tempat tipe disimpan: ``memory`` (yang masa hidupnya terbatas
+ke panggilan fungsi eksternal), ``storage`` (lokasi di mana variabel state
+disimpan, di mana masa pakai terbatas pada masa sebuah kontrak)
+atau ``calldata`` (lokasi data khusus yang berisi argumen fungsi).
 
-An assignment or type conversion that changes the data location will always incur an automatic copy operation,
-while assignments inside the same data location only copy in some cases for storage types.
+Sebuah assignment atau tipe konversi yang mengubah lokasi data akan selalu menimbulkan operasi penyalinan otomatis,
+sementara tugas di dalam lokasi data yang sama hanya disalin dalam beberapa kasus untuk jenis penyimpanan.
 
 .. _data-location:
 
-Data location
+Lokasi data
 -------------
 
-Every reference type has an additional
-annotation, the "data location", about where it is stored. There are three data locations:
-``memory``, ``storage`` and ``calldata``. Calldata is a non-modifiable,
-non-persistent area where function arguments are stored, and behaves mostly like memory.
+Setiap jenis referensi memiliki tambahan
+anotasi, "lokasi data", tentang dimana ia disimpan. Ada tiga lokasi data:
+``memory``, ``storage`` dan ``calldata``. Calldata adalah non-modifable,
+area non-persisten tempat argumen fungsi disimpan, dan sebagian besar berperilaku seperti memory.
 
 .. note::
-    If you can, try to use ``calldata`` as data location because it will avoid copies and
-    also makes sure that the data cannot be modified. Arrays and structs with ``calldata``
-    data location can also be returned from functions, but it is not possible to
-    allocate such types.
+    Jika bisa, coba gunakan ``calldata`` sebagai lokasi data karena akan menghindari penyalinan dan
+    juga memastikan bahwa data tidak dapat diubah. Array dan struct dengan lokasi data ``calldata``
+    juga dapat dikembalikan dari fungsi, tetapi tidak mungkin untuk mengalokasikan tipe tersebut.
 
 .. note::
-    Prior to version 0.6.9 data location for reference-type arguments was limited to
-    ``calldata`` in external functions, ``memory`` in public functions and either
-    ``memory`` or ``storage`` in internal and private ones.
-    Now ``memory`` and ``calldata`` are allowed in all functions regardless of their visibility.
+    Sebelum versi 0.6.9 lokasi data untuk argumen tipe referensi terbatas pada ``calldata``
+    di fungsi eksternal, ``memory`` di fungsi publik dan ``memory`` atau ``storage``
+    di internal dan pribadi. Sekarang ``memori`` dan ``calldata`` diizinkan di semua fungsi
+    terlepas dari visibilitasnya.
 
 .. note::
-    Prior to version 0.5.0 the data location could be omitted, and would default to different locations
-    depending on the kind of variable, function type, etc., but all complex types must now give an explicit
-    data location.
+    Sebelum versi 0.5.0 lokasi data dapat dihilangkan, dan akan default ke lokasi yang berbeda
+    tergantung pada jenis variabel, tipe fungsi, dll., tetapi semua tipe kompleks
+    sekarang harus memberikan lokasi data yang eksplisit.
 
 .. _data-location-assignment:
 
-Data location and assignment behaviour
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Lokasi data dan perilaku assignment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Data locations are not only relevant for persistency of data, but also for the semantics of assignments:
+Lokasi data tidak hanya relevan untuk persistensi data, tetapi juga untuk semantics assignments:
 
-* Assignments between ``storage`` and ``memory`` (or from ``calldata``)
-  always create an independent copy.
-* Assignments from ``memory`` to ``memory`` only create references. This means
-  that changes to one memory variable are also visible in all other memory
-  variables that refer to the same data.
-* Assignments from ``storage`` to a **local** storage variable also only
-  assign a reference.
-* All other assignments to ``storage`` always copy. Examples for this
-  case are assignments to state variables or to members of local
-  variables of storage struct type, even if the local variable
-  itself is just a reference.
+* Assignments antara ``storage`` dan ``memory`` (atau dari ``calldata``)
+  selalu membuat salinan independen.
+* Assignments dari ``memory`` ke ``memory`` hanya membuat referensi. Ini berarti
+  bahwa perubahan ke satu variabel memori juga terlihat di semua variabel memori
+  lain yang merujuk ke data yang sama.
+* Assignments dari ``storage`` ke sebuah **local** storage variable juga hanya
+  membuat referensi.
+* Semua assignments lain ke ``storage`` selalu menyalin. Contoh untuk kasus ini adalah
+  assignments ke variabel state atau ke anggota variabel lokal
+  tipe storage struct, meskipun variabel lokal itu sendiri
+  hanya sebuah referensi.
 
 .. code-block:: solidity
 
@@ -100,39 +99,38 @@ Data locations are not only relevant for persistency of data, but also for the s
 
 .. _arrays:
 
-Arrays
-------
+Array
+-----
 
-Arrays can have a compile-time fixed size, or they can have a dynamic size.
+Array dapat memiliki ukuran tetap compile-time, atau mereka dapat memiliki ukuran yang dinamis.
 
-The type of an array of fixed size ``k`` and element type ``T`` is written as ``T[k]``,
-and an array of dynamic size as ``T[]``.
+Tipe array dengan ukuran tetap ``k`` dan tipe elemen ``T`` ditulis sebagai ``T[k]``,
+dan array berukuran dinamis sebagai ``T[]``.
 
-For example, an array of 5 dynamic arrays of ``uint`` is written as
-``uint[][5]``. The notation is reversed compared to some other languages. In
-Solidity, ``X[3]`` is always an array containing three elements of type ``X``,
-even if ``X`` is itself an array. This is not the case in other languages such
-as C.
+Misalnya, array dari 5 array dinamis ``uint`` ditulis sebagai
+``uint[][5]``. Notasinya dibalik dibandingkan dengan beberapa
+bahasa lain. Dalam Solidity, ``X[3]`` selalu berupa array yang
+berisi tiga elemen bertipe ``X``, meskipun ``X`` itu sendiri
+adalah array. Ini tidak terjadi dalam bahasa lain seperti C
 
-Indices are zero-based, and access is in the opposite direction of the
-declaration.
+Indeks berbasis nol, dan akses berlawanan arah dengan deklarasi.
 
-For example, if you have a variable ``uint[][5] memory x``, you access the
-seventh ``uint`` in the third dynamic array using ``x[2][6]``, and to access the
-third dynamic array, use ``x[2]``. Again,
-if you have an array ``T[5] a`` for a type ``T`` that can also be an array,
-then ``a[2]`` always has type ``T``.
+Misalnya, jika Anda memiliki variabel ``uint[][5] memori x``, Anda mengakses ``uint``
+ketujuh dalam array dinamis ketiga menggunakan ``x[2][6]``, dan untuk mengakses
+array dinamis ketiga, gunakan ``x[2]``. Lagi,
+jika Anda memiliki array ``T[5] a`` untuk tipe ``T`` yang juga bisa berupa array,
+maka ``a[2]`` selalu memiliki tipe ``T``.
 
-Array elements can be of any type, including mapping or struct. The general
-restrictions for types apply, in that mappings can only be stored in the
-``storage`` data location and publicly-visible functions need parameters that are :ref:`ABI types <ABI>`.
+Elemen array dapat berupa jenis apa pun, termasuk mapping atau struct.
+Pembatasan umum untuk jenis berlaku, karena mapping hanya dapat disimpan di lokasi data ``storage``
+dan fungsi yang dapat dilihat publik memerlukan parameter yaitu :ref:`tipe ABI <ABI>`.
 
-It is possible to mark state variable arrays ``public`` and have Solidity create a :ref:`getter <visibility-and-getters>`.
-The numeric index becomes a required parameter for the getter.
+Dimungkinkan untuk menandai array variabel state ``public`` dan Solidity membuat :ref:`getter <visibility-and-getter>`.
+Indeks numerik menjadi parameter yang diperlukan untuk getter.
 
-Accessing an array past its end causes a failing assertion. Methods ``.push()`` and ``.push(value)`` can be used
-to append a new element at the end of the array, where ``.push()`` appends a zero-initialized element and returns
-a reference to it.
+Mengakses array yang melewati ujungnya menyebabkan pernyataan yang gagal. Metode ``.push()`` dan ``.push(value)``
+dapat digunakan untuk menambahkan elemen baru di akhir array, di mana ``.push()`` menambahkan elemen *zero-initialized* dan
+mengembalikan referensi ke sana.
 
 .. index:: ! string, ! bytes
 
@@ -140,40 +138,40 @@ a reference to it.
 
 .. _bytes:
 
-``bytes`` and ``string`` as Arrays
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``bytes`` dan ``string`` sebagai Arrays
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Variables of type ``bytes`` and ``string`` are special arrays. The ``bytes`` type is similar to ``bytes1[]``,
-but it is packed tightly in calldata and memory. ``string`` is equal to ``bytes`` but does not allow
-length or index access.
+Variabel bertipe ``byte`` dan ``string`` adalah array khusus. Tipe ``bytes`` mirip dengan ``bytes1[]``,
+tetapi dikemas erat dalam calldata dan memori. ``string`` sama dengan ``byte`` tetapi tidak mengizinkan
+akses panjang atau indeks.
 
-Solidity does not have string manipulation functions, but there are
-third-party string libraries. You can also compare two strings by their keccak256-hash using
-``keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2))`` and
-concatenate two strings using ``bytes.concat(bytes(s1), bytes(s2))``.
+Solidity tidak memiliki fungsi manipulasi string, tetapi ada
+di string library  pihak ketiga. Anda juga dapat membandingkan dua string dengan keccak256-hash menggunakan
+``keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2))`` dan
+menggabungkan dua string menggunakan ``bytes.concat(bytes(s1), bytes(s2))``.
 
-You should use ``bytes`` over ``bytes1[]`` because it is cheaper,
-since ``bytes1[]`` adds 31 padding bytes between the elements. As a general rule,
-use ``bytes`` for arbitrary-length raw byte data and ``string`` for arbitrary-length
-string (UTF-8) data. If you can limit the length to a certain number of bytes,
-always use one of the value types ``bytes1`` to ``bytes32`` because they are much cheaper.
+Anda harus menggunakan ``bytes`` daripada ``bytes1[]`` karena lebih murah,
+karena ``bytes1[]`` menambahkan 31 byte padding antar elemen. Sebagai aturan umum,
+gunakan ``bytes`` untuk arbitrary-length raw byte data dan ``string`` untuk arbitrary-length
+string (UTF-8) data. Jika Anda dapat membatasi panjangnya hingga sejumlah byte tertentu,
+selalu gunakan salah satu jenis nilai ``bytes1`` hingga ``bytes32`` karena harganya jauh lebih murah.
 
 .. note::
-    If you want to access the byte-representation of a string ``s``, use
-    ``bytes(s).length`` / ``bytes(s)[7] = 'x';``. Keep in mind
-    that you are accessing the low-level bytes of the UTF-8 representation,
-    and not the individual characters.
+    Jika Anda ingin mengakses representasi byte dari string ``s``, gunakan
+    ``bytes(s).length`` / ``bytes(s)[7] = 'x';``. Ingatlah bahwa Anda
+    mengakses low-level byte  dari representasi UTF-8,
+    bukan karakter individu.
 
 .. index:: ! bytes-concat
 
 .. _bytes-concat:
 
-``bytes.concat`` function
+fungsi ``bytes.concat``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can concatenate a variable number of ``bytes`` or ``bytes1 ... bytes32`` using ``bytes.concat``.
-The function returns a single ``bytes memory`` array that contains the contents of the arguments without padding.
-If you want to use string parameters or other types, you need to convert them to ``bytes`` or ``bytes1``/.../``bytes32`` first.
+Anda dapat menggabungkan sejumlah variabel dari ``bytes`` atau ``bytes1 ... bytes32`` menggunakan ``bytes.concat``.
+fungsi ini menghasilkan ``bytes memory`` array yang berisi isi argumen tanpa padding.
+Jika Anda ingin menggunakan parameter string atau tipe lainnya, Anda harus mengonversinya ke ``bytes`` atau ``bytes1``/.../``bytes32`` terlebih dahulu.
 
 .. code-block:: solidity
 
@@ -188,21 +186,21 @@ If you want to use string parameters or other types, you need to convert them to
         }
     }
 
-If you call ``bytes.concat`` without arguments it will return an empty ``bytes`` array.
+Jika Anda memanggil ``bytes.concat`` tanpa argumen, ia akan menghasilkan array ``byte`` kosong.
 
 .. index:: ! array;allocating, new
 
-Allocating Memory Arrays
-^^^^^^^^^^^^^^^^^^^^^^^^
+Mengalokasikan Memory Array
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Memory arrays with dynamic length can be created using the ``new`` operator.
-As opposed to storage arrays, it is **not** possible to resize memory arrays (e.g.
-the ``.push`` member functions are not available).
-You either have to calculate the required size in advance
-or create a new memory array and copy every element.
+Memory arrays dengan panjang dinamis dapat dibuat menggunakan operator ``new``.
+Berbeda dengan storage array, **tidak** mungkin untuk mengubah ukuran Memory arrays (mis.
+fungsi anggota ``.push`` tidak tersedia).
+Anda juga harus menghitung ukuran yang dibutuhkan terlebih dahulu
+atau buat Memory arraysi baru dan salin setiap elemen.
 
-As all variables in Solidity, the elements of newly allocated arrays are always initialized
-with the :ref:`default value<default-value>`.
+Karena semua variabel dalam Solidity, elemen array yang baru dialokasikan selalu diinisialisasi
+dengan :ref:`nilai default<default-value>`.
 
 .. code-block:: solidity
 
@@ -224,24 +222,24 @@ with the :ref:`default value<default-value>`.
 Array Literals
 ^^^^^^^^^^^^^^
 
-An array literal is a comma-separated list of one or more expressions, enclosed
-in square brackets (``[...]``). For example ``[1, a, f(3)]``. The type of the
-array literal is determined as follows:
+Literal array adalah daftar yang dipisahkan koma dari satu atau lebih ekspresi, diapit
+dalam tanda kurung siku (``[...]``). Misalnya ``[1, a, f(3)]``. Jenis literal array
+ditentukan sebagai berikut:
 
-It is always a statically-sized memory array whose length is the
-number of expressions.
+Selalu merupakan array memori berukuran statis yang panjangnya
+adalah jumlah ekspresi.
 
-The base type of the array is the type of the first expression on the list such that all
-other expressions can be implicitly converted to it. It is a type error
-if this is not possible.
+Tipe dasar array adalah tipe ekspresi pertama pada daftar sehingga semua
+ekspresi lain dapat secara implisit dikonversi ke dalamnya.
+adalah kesalahan tipe jika ini tidak secara implisit dikonversi.
 
-It is not enough that there is a type all the elements can be converted to. One of the elements
-has to be of that type.
+Tidaklah cukup bahwa hanya ada tipe yang dapat dikonversi ke semua elemen. Salah satu
+elemennya harus dari tipenya.
 
-In the example below, the type of ``[1, 2, 3]`` is
-``uint8[3] memory``, because the type of each of these constants is ``uint8``. If
-you want the result to be a ``uint[3] memory`` type, you need to convert
-the first element to ``uint``.
+Pada contoh di bawah, tipe ``[1, 2, 3]`` adalah
+``uint8[3] memory``, karena tipe dari masing-masing konstanta ini adalah ``uint8``. Jika
+Anda ingin hasilnya menjadi tipe ``uint[3] memory``, Anda perlu mengonversi
+elemen pertama ke ``uint``.
 
 .. code-block:: solidity
 
@@ -257,13 +255,13 @@ the first element to ``uint``.
         }
     }
 
-The array literal ``[1, -1]`` is invalid because the type of the first expression
-is ``uint8`` while the type of the second is ``int8`` and they cannot be implicitly
-converted to each other. To make it work, you can use ``[int8(1), -1]``, for example.
+Array literal ``[1, -1]`` tidak valid karena tipe ekspresi pertama
+adalah ``uint8`` sedangkan tipe yang kedua adalah ``int8`` dan tidak dapat secara implisit
+dikonversikan satu sama lain. Untuk membuatnya berfungsi, Misalnya, Anda dapat menggunakan ``[int8(1), -1]``.
 
-Since fixed-size memory arrays of different type cannot be converted into each other
-(even if the base types can), you always have to specify a common base type explicitly
-if you want to use two-dimensional array literals:
+Karena fixed-size memory arrays dari tipe yang berbeda tidak dapat dikonversikan satu sama lain
+(bahkan jika tipe dasarnya bisa), Anda selalu harus menentukan tipe dasar umum secara eksplisit
+jika Anda ingin menggunakan literal array dua dimensi:
 
 .. code-block:: solidity
 
@@ -279,8 +277,8 @@ if you want to use two-dimensional array literals:
         }
     }
 
-Fixed size memory arrays cannot be assigned to dynamically-sized
-memory arrays, i.e. the following is not possible:
+Fixed size memory arrays tidak dapat ditetapkan ke ukuran dinamis
+Fixed size memory arrays, yang seperti berikut ini tidak mungkinkan:
 
 .. code-block:: solidity
 
@@ -296,11 +294,11 @@ memory arrays, i.e. the following is not possible:
         }
     }
 
-It is planned to remove this restriction in the future, but it creates some
-complications because of how arrays are passed in the ABI.
+Direncanakan untuk menghapus pembatasan ini di masa mendatang, tetapi hal itu menciptakan beberapa
+komplikasi karena bagaimana cara array dilewatkan di ABI.
 
-If you want to initialize dynamically-sized arrays, you have to assign the
-individual elements:
+Jika Anda ingin menginisialisasi array berukuran dinamis, Anda harus menetapkan
+elemen individu:
 
 .. code-block:: solidity
 
@@ -320,45 +318,45 @@ individual elements:
 
 .. _array-members:
 
-Array Members
-^^^^^^^^^^^^^
+Array Members (Anggota Array)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **length**:
-    Arrays have a ``length`` member that contains their number of elements.
-    The length of memory arrays is fixed (but dynamic, i.e. it can depend on
-    runtime parameters) once they are created.
+    Array memiliki anggota ``length`` yang berisi jumlah elemennya.
+    Panjang memory arrays adalah tetap (tetapi dinamis, yaitu dapat bergantung pada
+    parameter runtime) setelah dibuat.
 **push()**:
-     Dynamic storage arrays and ``bytes`` (not ``string``) have a member function
-     called ``push()`` that you can use to append a zero-initialised element at the end of the array.
-     It returns a reference to the element, so that it can be used like
-     ``x.push().t = 2`` or ``x.push() = b``.
+     Dynamic storage arrays dan ``bytes`` (bukan ``string``) memiliki fungsi anggota yang
+     disebut ``Push()`` yang dapat Anda gunakan untuk menambahkan elemen zero-initialised di akhir array.
+     Ini menghasilkan referensi ke elemen, sehingga dapat digunakan seperti
+     `x.push().t = 2`` atau ``x.push() = b``.
 **push(x)**:
-     Dynamic storage arrays and ``bytes`` (not ``string``) have a member function
-     called ``push(x)`` that you can use to append a given element at the end of the array.
-     The function returns nothing.
+     Dynamic storage arrays dan ``bytes`` (bukan ``string``) memiliki fungsi anggota yang
+     disebut ``push(x)`` yang dapat Anda gunakan untuk menambahkan elemen tertentu di akhir array.
+     Fungsi tidak menghasilkan apa pun.
 **pop**:
-     Dynamic storage arrays and ``bytes`` (not ``string``) have a member
-     function called ``pop`` that you can use to remove an element from the
-     end of the array. This also implicitly calls :ref:`delete<delete>` on the removed element.
+     Dynamic storage arrays dan ``bytes`` (bukan ``string``) memiliki fungsi anggota yang
+     disebut ``pop`` yang dapat Anda gunakan untuk menghapus elemen
+     akhir dari array. Ini juga secara implisit memanggil :ref:`delete<delete>` pada elemen yang dihapus.
 
 .. note::
-    Increasing the length of a storage array by calling ``push()``
-    has constant gas costs because storage is zero-initialised,
-    while decreasing the length by calling ``pop()`` has a
-    cost that depends on the "size" of the element being removed.
-    If that element is an array, it can be very costly, because
-    it includes explicitly clearing the removed
-    elements similar to calling :ref:`delete<delete>` on them.
+    Menambah panjang storage array dengan memanggil ``push()``
+    memiliki biaya gas yang konstan karena penyimpanannya merupakan zero-initialised,
+    sedangkan mengurangi panjang dengan memanggil ``pop()`` memiliki
+    biaya yang bergantung pada "ukuran" dari elemen yang dihapus.
+    Jika elemen itu adalah array, itu bisa sangat mahal, karena
+    termasuk menghapus elemen yang dihapus secara eksplisit mirip dengan
+    memanggil fungsi :ref:`delete<delete>` pada mereka.
 
 .. note::
-    To use arrays of arrays in external (instead of public) functions, you need to
-    activate ABI coder v2.
+    Untuk menggunakan array dari array dalam fungsi eksternal (bukan publik), Anda perlu
+    mengaktifkan ABI coder v2.
 
 .. note::
-    In EVM versions before Byzantium, it was not possible to access
-    dynamic arrays return from function calls. If you call functions
-    that return dynamic arrays, make sure to use an EVM that is set to
-    Byzantium mode.
+    Dalam versi EVM sebelum Byzantium, tidak mungkin mengakses
+    array dinamis yang dihasilkan dari panggilan fungsi. Jika Anda
+    memanggil fungsi yang menghasilkan array dinamis, pastikan
+    untuk menggunakan EVM yang diatur ke mode Byzantium.
 
 .. code-block:: solidity
 
@@ -466,32 +464,32 @@ Array Slices
 ------------
 
 
-Array slices are a view on a contiguous portion of an array.
-They are written as ``x[start:end]``, where ``start`` and
-``end`` are expressions resulting in a uint256 type (or
-implicitly convertible to it). The first element of the
-slice is ``x[start]`` and the last element is ``x[end - 1]``.
+Array slices adalah tampilan pada bagian array yang berdekatan.
+Mereka ditulis sebagai ``x[start:end]``, di mana ``start`` dan
+``end`` adalah ekspresi yang menghasilkan tipe uint256 (atau
+secara implisit dapat dikonversi ke dalamnya). Elemen pertama dari
+slice adalah ``x[start]`` dan elemen terakhir adalah ``x[end - 1]``.
 
-If ``start`` is greater than ``end`` or if ``end`` is greater
-than the length of the array, an exception is thrown.
+Jika ``start`` lebih besar dari ``end`` atau jika ``end`` lebih besar
+dari panjang array, sebuah pengecualian diberikan.
 
-Both ``start`` and ``end`` are optional: ``start`` defaults
-to ``0`` and ``end`` defaults to the length of the array.
+Keduanya ``start`` dan ``end`` adalah opsional: ``start`` defaults
+ke ``0`` dan ``end`` defaults ke panjang array.
 
-Array slices do not have any members. They are implicitly
-convertible to arrays of their underlying type
-and support index access. Index access is not absolute
-in the underlying array, but relative to the start of
-the slice.
+Array slices tidak memiliki members. Mereka secara implisit
+dapat dikonversi ke array dari tipe underlying
+dan mendukung akses indeks. Akses indeks tidak mutlak
+dalam underlying array, tetapi relatif terhadap awal
+slice.
 
-Array slices do not have a type name which means
-no variable can have an array slices as type,
-they only exist in intermediate expressions.
+Array slices tidak memiliki nama tipe yang artinya
+tidak ada variabel yang dapat memiliki array slices sebagai tipe,
+mereka hanya ada dalam ekspresi perantara.
 
 .. note::
-    As of now, array slices are only implemented for calldata arrays.
+    Sampai sekarang, array slices hanya diimplementasikan untuk array calldata.
 
-Array slices are useful to ABI-decode secondary data passed in function parameters:
+Array slices berguna untuk ABI-decode data sekunder yang diteruskan dalam parameter fungsi:
 
 .. code-block:: solidity
 
@@ -529,8 +527,8 @@ Array slices are useful to ABI-decode secondary data passed in function paramete
 Structs
 -------
 
-Solidity provides a way to define new types in the form of structs, which is
-shown in the following example:
+Solidity menyediakan cara untuk mendefinisikan tipe baru dalam bentuk struct, yang
+ditunjukkan dalam contoh berikut:
 
 .. code-block:: solidity
 
@@ -589,26 +587,26 @@ shown in the following example:
         }
     }
 
-The contract does not provide the full functionality of a crowdfunding
-contract, but it contains the basic concepts necessary to understand structs.
-Struct types can be used inside mappings and arrays and they can themselves
-contain mappings and arrays.
+Kontrak tersebut tidak menyediakan fungsionalitas penuh dari kontrak
+crowdfunding, tetapi berisi konsep dasar yang diperlukan untuk memahami struct.
+Tipe struct dapat digunakan di dalam mapping dan array dan mereka sendiri dapat
+berisi mapping dan array.
 
-It is not possible for a struct to contain a member of its own type,
-although the struct itself can be the value type of a mapping member
-or it can contain a dynamically-sized array of its type.
-This restriction is necessary, as the size of the struct has to be finite.
+Tidak mungkin sebuah struct berisi anggota dari tipenya sendiri,
+meskipun struct itu sendiri bisa menjadi tipe nilai dari anggota mapping
+atau dapat berisi array berukuran dinamis dari jenisnya.
+Pembatasan ini diperlukan, karena ukuran struct harus terbatas.
 
-Note how in all the functions, a struct type is assigned to a local variable
-with data location ``storage``.
-This does not copy the struct but only stores a reference so that assignments to
-members of the local variable actually write to the state.
+Perhatikan bagaimana di semua fungsi, tipe struct ditetapkan
+ke variabel lokal dengan lokasi data ``storage``.
+Ini tidak menyalin struct tetapi hanya menyimpan referensi sehingga assignments  ke
+anggota variabel lokal benar-benar menulis ke state.
 
-Of course, you can also directly access the members of the struct without
-assigning it to a local variable, as in
+Tentu saja, Anda juga dapat langsung mengakses anggota struct tanpa
+menugaskannya ke variabel lokal, seperti dalam
 ``campaigns[campaignID].amount = 0``.
 
 .. note::
-    Until Solidity 0.7.0, memory-structs containing members of storage-only types (e.g. mappings)
-    were allowed and assignments like ``campaigns[campaignID] = Campaign(beneficiary, goal, 0, 0)``
-    in the example above would work and just silently skip those members.
+    Hingga Solidity 0.7.0, memory-structs yang berisi anggota tipe storage-only (mis. mappings)
+    diizinkan dan tugas seperti ``campaigns[campaignID] = Campaign(beneficiary, goal, 0, 0)``
+    pada contoh di atas, akan berfungsi dan *just silently skip those members*.

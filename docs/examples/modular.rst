@@ -1,21 +1,21 @@
 .. index:: contract;modular, modular contract
 
 *****************
-Modular Contracts
+Kontrak Modular
 *****************
 
-A modular approach to building your contracts helps you reduce the complexity
-and improve the readability which will help to identify bugs and vulnerabilities
-during development and code review.
-If you specify and control the behaviour or each module in isolation, the
-interactions you have to consider are only those between the module specifications
-and not every other moving part of the contract.
-In the example below, the contract uses the ``move`` method
-of the ``Balances`` :ref:`library <libraries>` to check that balances sent between
-addresses match what you expect. In this way, the ``Balances`` library
-provides an isolated component that properly tracks balances of accounts.
-It is easy to verify that the ``Balances`` library never produces negative balances or overflows
-and the sum of all balances is an invariant across the lifetime of the contract.
+Pendekatan secara modular untuk membangun kontrak membantu Anda mengurangi kerumitan
+dan meningkatkan keterbacaan yang akan membantu mengidentifikasi bug serta kerentanan
+selama pengembangan dan peninjauan kode.
+Jika Anda menentukan dan mengontrol perilaku setiap modul secara terpisah, interaksi
+yang harus Anda pertimbangkan hanyalah interaksi antara spesifikasi modul bukan setiap
+bagian kontrak yang bergerak lainnya.
+Pada contoh di bawah, kontrak menggunakan metode ``move``
+dari `Balances`` :ref:`library <libraries>` untuk memeriksa apakah saldo yang dikirim
+antar alamat sesuai dengan yang Anda harapkan. Dengan cara ini, Library ``Balances``
+menyediakan komponen terisolasi yang melacak saldo akun dengan benar.
+Sangat mudah untuk memverifikasi bahwa Library ``Balances`` tidak pernah menghasilkan
+saldo negatif atau Overflow dan jumlah semua saldo adalah invarian sepanjang masa kontrak.
 
 .. code-block:: solidity
 

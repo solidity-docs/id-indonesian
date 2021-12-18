@@ -2,132 +2,131 @@
 Solidity v0.7.0 Breaking Changes
 ********************************
 
-This section highlights the main breaking changes introduced in Solidity
-version 0.7.0, along with the reasoning behind the changes and how to update
-affected code.
-For the full list check
-`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.7.0>`_.
+Bagian ini menyoroti perubahan utama yang diperkenalkan di Solidity
+versi 0.7.0, beserta alasan di balik perubahan dan cara memperbarui
+kode yang terpengaruh.
+Untuk daftar lengkap cek
+`release changelog <https://github.com/ethereum/solidity/releases/tag/v0.7.0>`_.
 
 
-Silent Changes of the Semantics
+Perubahan Senyap dari Semantics
 ===============================
 
-* Exponentiation and shifts of literals by non-literals (e.g. ``1 << x`` or ``2 ** x``)
-  will always use either the type ``uint256`` (for non-negative literals) or
-  ``int256`` (for negative literals) to perform the operation.
-  Previously, the operation was performed in the type of the shift amount / the
-  exponent which can be misleading.
+* Eksponen dan pergeseran literal dengan non-literal (misalnya ``1 << x`` atau ``2 ** x``)
+  akan selalu menggunakan tipe ``uint256`` (untuk literal non-negatif) atau `` int256``
+  (untuk literal negatif) untuk melakukan operasi. Sebelumnya, operasi dilakukan dalam jenis
+  jumlah pergeseran / eksponen yang dapat menyesatkan.
 
 
-Changes to the Syntax
+Perubahan pada Syntax
 =====================
 
-* In external function and contract creation calls, Ether and gas is now specified using a new syntax:
+* Dalam external function dan contract creation calls, Ether dan gas sekarang ditentukan menggunakan sintaks baru:
   ``x.f{gas: 10000, value: 2 ether}(arg1, arg2)``.
-  The old syntax -- ``x.f.gas(10000).value(2 ether)(arg1, arg2)`` -- will cause an error.
+  Syntax lama -- ``x.f.gas(10000).value(2 ether)(arg1, arg2)`` -- akan memyebabkan error.
 
-* The global variable ``now`` is deprecated, ``block.timestamp`` should be used instead.
-  The single identifier ``now`` is too generic for a global variable and could give the impression
-  that it changes during transaction processing, whereas ``block.timestamp`` correctly
-  reflects the fact that it is just a property of the block.
+* Variabel global ``now`` tidak digunakan lagi, ``block.timestamp`` harus digunakan sebagai gantinya.
+  Pengenal tunggal ``now`` terlalu umum untuk variabel global dan dapat memberi kesan bahwa
+  itu berubah selama pemrosesan transaksi, sedangkan ``block.timestamp`` dengan
+  benar mencerminkan fakta bahwa itu hanyalah properti dari blok.
 
-* NatSpec comments on variables are only allowed for public state variables and not
-  for local or internal variables.
+* Komentar NatSpec pada variabel hanya diperbolehkan untuk variabel status publik dan tidak
+  untuk variabel lokal atau internal.
 
-* The token ``gwei`` is a keyword now (used to specify, e.g. ``2 gwei`` as a number)
-  and cannot be used as an identifier.
+* TToken ``gwei`` sekarang menjadi kata kunci (digunakan untuk menentukan, misalnya ``2 gwei`` sebagai angka)
+  dan tidak dapat digunakan sebagai pengenal.
 
-* String literals now can only contain printable ASCII characters and this also includes a variety of
-  escape sequences, such as hexadecimal (``\xff``) and unicode escapes (``\u20ac``).
+* Literal string sekarang hanya dapat berisi karakter ASCII yang dapat dicetak dan ini juga mencakup berbagai
+  urutan escape, seperti heksadesimal (``\xff``) dan escape unicode (``\u20ac``).
 
-* Unicode string literals are supported now to accommodate valid UTF-8 sequences. They are identified
-  with the ``unicode`` prefix: ``unicode"Hello 😃"``.
+* Literal string Unicode sekarang didukung untuk mengakomodasi urutan UTF-8 yang valid. Mereka diidentifikasi
+  dengan awalan: ``unicode"Hello 😃"``.
 
-* State Mutability: The state mutability of functions can now be restricted during inheritance:
-  Functions with default state mutability can be overridden by ``pure`` and ``view`` functions
-  while ``view`` functions can be overridden by ``pure`` functions.
-  At the same time, public state variables are considered ``view`` and even ``pure``
-  if they are constants.
+* State Mutability: Perubahan status fungsi sekarang dapat dibatasi selama pewarisan:
+  Fungsi dengan mutabilitas status default dapat ditimpa oleh fungsi ``pure`` dan ``view``
+  sementara fungsi ``view`` dapat ditimpa oleh fungsi ``pure``.
+  Pada saat yang sama, variabel state publik dianggap ``view`` dan bahkan ``pure``
+  jika mereka adalah konstanta.
 
 
 
 Inline Assembly
 ---------------
 
-* Disallow ``.`` in user-defined function and variable names in inline assembly.
-  It is still valid if you use Solidity in Yul-only mode.
+* Larang ``.`` dalam fungsi yang ditentukan pengguna dan nama variabel dalam inline assembly.
+  Itu masih berlaku jika Anda menggunakan Solidity dalam mode Yul-only.
 
-* Slot and offset of storage pointer variable ``x`` are accessed via ``x.slot``
-  and ``x.offset`` instead of ``x_slot`` and ``x_offset``.
+* Slot dan offset variabel penunjuk penyimpanan ``x`` diakses melalui ``x.slot``
+  dan ``x.offset`` sebagai ganti ``x_slot`` dan ``x_offset``.
 
-Removal of Unused or Unsafe Features
-====================================
+Penghapusan Fitur yang Tidak Digunakan atau Tidak Aman
+======================================================
 
-Mappings outside Storage
-------------------------
+Mappings diluar Storage
+-----------------------
 
-* If a struct or array contains a mapping, it can only be used in storage.
-  Previously, mapping members were silently skipped in memory, which
-  is confusing and error-prone.
+* Jika sebuah struct atau array berisi mapping, itu hanya bisa digunakan dalam storage.
+  Sebelumnya, mapping members diam-diam dilewati dalam memori, yang
+  membingungkan dan rawan kesalahan.
 
-* Assignments to structs or arrays in storage does not work if they contain
+* Assignmen ke structs atau arrays di storage tidak akan bekerja jika mereka mengandung
   mappings.
-  Previously, mappings were silently skipped during the copy operation, which
-  is misleading and error-prone.
+  Sebelumnya, mappings diam-diam dilewati selama operasi penyalinan, yang
+  membingungkan dan rawan kesalahan.
 
-Functions and Events
+Functions dan Events
 --------------------
 
-* Visibility (``public`` / ``internal``) is not needed for constructors anymore:
-  To prevent a contract from being created, it can be marked ``abstract``.
-  This makes the visibility concept for constructors obsolete.
+* Visibility (``public`` / ``internal``) tidak diperlukan lagi untuk konstruktor:
+  Untuk mencegah kontrak dibuat, kontrak dapat ditandai ``abstract``.
+  Ini membuat konsep visibilitas untuk konstruktor menjadi usang.
 
-* Type Checker: Disallow ``virtual`` for library functions:
-  Since libraries cannot be inherited from, library functions should not be virtual.
+* Type Checker: Melarang ``virtual`` untuk fungsi library:
+  Karena library tidak dapat diwarisi, fungsi perpustakaan tidak boleh virtual.
 
-* Multiple events with the same name and parameter types in the same
-  inheritance hierarchy are disallowed.
+* Multiple events dengan nama yang sama dan tipe parameter dalam
+  inheritance hierarchy yang sama, dilarang.
 
-* ``using A for B`` only affects the contract it is mentioned in.
-  Previously, the effect was inherited. Now, you have to repeat the ``using``
-  statement in all derived contracts that make use of the feature.
+* ``using A for B`` hanya mempengaruhi kontrak yang disebutkan di dalamnya.
+  Sebelumnya, efeknya diwariskan. Sekarang, Anda harus mengulangi ``menggunakan``
+  pernyataan di semua kontrak turunan yang menggunakan fitur tersebut.
 
 Expressions
 -----------
 
-* Shifts by signed types are disallowed.
-  Previously, shifts by negative amounts were allowed, but reverted at runtime.
+* Shifts dengan tipe signed dilarang.
+  Sebelumnya, pergeseran dengan jumlah negatif diizinkan, tetapi dikembalikan saat runtime.
 
-* The ``finney`` and ``szabo`` denominations are removed.
-  They are rarely used and do not make the actual amount readily visible. Instead, explicit
-  values like ``1e20`` or the very common ``gwei`` can be used.
+* Denominasi ``finney`` dan ``szabo``telah dihilangkan.
+  Mereka jarang digunakan dan tidak membuat jumlah sebenarnya mudah terlihat. Sebagai gantinya,
+  nilai eksplisit seperti ``1e20`` atau ``gwei`` yang sangat umum dapat digunakan.
 
 Declarations
 ------------
 
-* The keyword ``var`` cannot be used anymore.
-  Previously, this keyword would parse but result in a type error and
-  a suggestion about which type to use. Now, it results in a parser error.
+* Keyword ``var`` tidak dapat digunakan lagi.
+  Sebelumnya, Keyword ini Previously, this keyword akan mengurai tetapi menghasilkan kesalahan tipe dan
+  saran tentang jenis yang akan digunakan. Sekarang, ini menghasilkan kesalahan parser.
 
-Interface Changes
-=================
+Perubahan Interface
+===================
 
-* JSON AST: Mark hex string literals with ``kind: "hexString"``.
-* JSON AST: Members with value ``null`` are removed from JSON output.
-* NatSpec: Constructors and functions have consistent userdoc output.
+* JSON AST: Tandai literal string hex dengan ``kind: "hexString"``.
+* JSON AST: Member dengan nilai ``null`` telah dihilangkan dari JSON output.
+* NatSpec: Constructors adan functions mempunyai userdoc output yang konsisten.
 
 
-How to update your code
-=======================
+Bagaimana cara memperbarui kode Anda?
+=====================================
 
-This section gives detailed instructions on how to update prior code for every breaking change.
+Bagian ini memberikan petunjuk terperinci tentang cara memperbarui kode sebelumnya untuk setiap breaking changes.
 
-* Change ``x.f.value(...)()`` to ``x.f{value: ...}()``. Similarly ``(new C).value(...)()`` to
-  ``new C{value: ...}()`` and ``x.f.gas(...).value(...)()`` to ``x.f{gas: ..., value: ...}()``.
-* Change ``now`` to ``block.timestamp``.
-* Change types of right operand in shift operators to unsigned types. For example change ``x >> (256 - y)`` to
+* Ubah ``x.f.value(...)()`` menjadi ``x.f{value: ...}()``. Serupa dengan ``(new C).value(...)()`` menjadi
+  ``new C{value: ...}()`` dan ``x.f.gas(...).value(...)()`` menjadi ``x.f{gas: ..., value: ...}()``.
+* Ubah ``now`` menjadi ``block.timestamp``.
+* Ubah tipe dari operand kanan dalam operator sihft untuk tipe unsigned. Sebagai contoh ubah ``x >> (256 - y)`` menjadi
   ``x >> uint(256 - y)``.
-* Repeat the ``using A for B`` statements in all derived contracts if needed.
-* Remove the ``public`` keyword from every constructor.
-* Remove the ``internal`` keyword from every constructor and add ``abstract`` to the contract (if not already present).
-* Change ``_slot`` and ``_offset`` suffixes in inline assembly to ``.slot`` and ``.offset``, respectively.
+* Ulangi pernyataan ``using A for B`` dalam semua *derived* kontrak jika dibutuhkan.
+* Hilangkan Keyword ``public`` dari setiap constructor.
+* Hilangkan Keyword ``internal`` dari setiap constructor dan tambahkan ``abstract`` ke kontrak (jika belum ditampilkan).
+* Ubah suffixes ``_slot`` dan ``_offset`` dalam inline assembly menjadi ``.slot`` dan ``.offset``, berturutan.

@@ -3,52 +3,50 @@
 .. _visibility-and-getters:
 
 **********************
-Visibility and Getters
+Visibility dan Getters
 **********************
 
-Solidity knows two kinds of function calls: internal
-ones that do not create an actual EVM call (also called
-a "message call") and external
-ones that do. Because of that, there are four types of visibility for
-functions and state variables.
+Solidity mengetahui dua jenis panggilan fungsi: panggilan internal yang
+tidak membuat panggilan EVM aktual (juga disebut "pesan panggilan") dan
+panggilan eksternal yang dapat melakukannya. Karena itu, ada empat jenis
+visibilitas untuk fungsi dan variabel state.
 
-Functions have to be specified as being ``external``,
-``public``, ``internal`` or ``private``.
-For state variables, ``external`` is not possible.
+Fungsi harus ditentukan sebagai ``external``,
+``public``, ``internal`` atau ``private``.
+Untuk variabel state, ``external`` tidak dimungkinkan.
 
 ``external``
-    External functions are part of the contract interface,
-    which means they can be called from other contracts and
-    via transactions. An external function ``f`` cannot be called
-    internally (i.e. ``f()`` does not work, but ``this.f()`` works).
+    Fungsi eksternal adalah bagian dari antarmuka kontrak, yang berarti mereka
+    dapat dipanggil dari kontrak lain dan melalui transaksi. Fungsi eksternal
+    ``f`` tidak dapat dipanggil secara internal (yaitu ``f()`` tidak berfungsi,
+    tetapi ``this.f()`` akan berfungsi).
 
 ``public``
-    Public functions are part of the contract interface
-    and can be either called internally or via
-    messages. For public state variables, an automatic getter
-    function (see below) is generated.
+    Fungsi publik adalah bagian dari antarmuka kontrak dan dapat dipanggil secara
+    internal atau melalui pesan. Untuk variabel state publik, fungsi getter otomatis
+    (lihat di bawah) dihasilkan.
 
 ``internal``
-    Those functions and state variables can only be
-    accessed internally (i.e. from within the current contract
-    or contracts deriving from it), without using ``this``.
-    This is the default visibility level for state variables.
+    Fungsi dan variabel state tersebut hanya dapat diakses secara internal
+    (yaitu dari dalam kontrak saat ini atau kontrak yang berasal darinya),
+    tanpa menggunakan ``this``. Ini adalah tingkat visibilitas default untuk
+    variabel state.
 
 ``private``
-    Private functions and state variables are only
-    visible for the contract they are defined in and not in
-    derived contracts.
+    Fungsi pribadi dan variabel state hanya terlihat untuk
+    kontrak yangdidefinisikan di dalamnya dan bukan dalam
+    kontrak turunan.
 
 .. note::
-    Everything that is inside a contract is visible to
-    all observers external to the blockchain. Making something ``private``
-    only prevents other contracts from reading or modifying
-    the information, but it will still be visible to the
-    whole world outside of the blockchain.
+    Segala sesuatu yang ada di dalam kontrak dapat dilihat oleh
+    semua pengamat di luar blockchain. Membuat sesuatu ``pribadi``
+    hanya mencegah kontrak lain membaca atau mengubah informasi,
+    tetapi informasi itu masih akan terlihat oleh seluruh dunia
+    di luar blockchain.
 
-The visibility specifier is given after the type for
-state variables and between parameter list and
-return parameter list for functions.
+Penentu visibilitas diberikan setelah jenis untuk
+variabel state dan antara daftar parameter dan daftar
+parameter kembali untuk fungsi.
 
 .. code-block:: solidity
 
@@ -61,9 +59,8 @@ return parameter list for functions.
         uint public data;
     }
 
-In the following example, ``D``, can call ``c.getData()`` to retrieve the value of
-``data`` in state storage, but is not able to call ``f``. Contract ``E`` is derived from
-``C`` and, thus, can call ``compute``.
+Dalam contoh berikut, ``D``, dapat memanggil ``c.getData()`` untuk mengambil nilai ``data`` dalam state storage,
+tetapi tidak dapat memanggil ``f``. Kontrak ``E`` diturunkan dari ``C`` dan, dengan demikian, dapat memanggil ``compute``.
 
 .. code-block:: solidity
 
@@ -100,15 +97,13 @@ In the following example, ``D``, can call ``c.getData()`` to retrieve the value 
 .. index:: ! getter;function, ! function;getter
 .. _getter-functions:
 
-Getter Functions
+Fungsi Getter
 ================
 
-The compiler automatically creates getter functions for
-all **public** state variables. For the contract given below, the compiler will
-generate a function called ``data`` that does not take any
-arguments and returns a ``uint``, the value of the state
-variable ``data``. State variables can be initialized
-when they are declared.
+Kompiler secara otomatis membuat fungsi getter untuk semua variabel state **public**.
+Untuk kontrak yang diberikan di bawah ini, kompiler akan menghasilkan fungsi yang
+disebut ``data`` yang tidak mengambil argumen apa pun dan menghasilkan ``uint``, nilai
+variabel state ``data``. Variabel state dapat diinisialisasi saat dideklarasikan.
 
 .. code-block:: solidity
 
@@ -126,10 +121,10 @@ when they are declared.
         }
     }
 
-The getter functions have external visibility. If the
-symbol is accessed internally (i.e. without ``this.``),
-it evaluates to a state variable.  If it is accessed externally
-(i.e. with ``this.``), it evaluates to a function.
+Fungsi getter memiliki visibilitas eksternal.
+Jika simbol diakses secara internal (mis. tanpa ``this.``),
+itu mengevaluasi ke variabel state.
+Jika diakses secara eksternal (mis. dengan ``this.``), ia mengevaluasi ke suatu fungsi.
 
 .. code-block:: solidity
 
@@ -144,12 +139,12 @@ it evaluates to a state variable.  If it is accessed externally
         }
     }
 
-If you have a ``public`` state variable of array type, then you can only retrieve
-single elements of the array via the generated getter function. This mechanism
-exists to avoid high gas costs when returning an entire array. You can use
-arguments to specify which individual element to return, for example
-``myArray(0)``. If you want to return an entire array in one call, then you need
-to write a function, for example:
+Jika Anda memiliki variabel state ``public`` dari tipe array, maka Anda hanya dapat mengambil
+elemen tunggal dari array melalui fungsi getter yang dihasilkan. Mekanisme ini ada
+untuk menghindari biaya gas yang tinggi saat mengembalikan seluruh array. Anda dapat menggunakan
+argumen untuk menentukan elemen individual mana yang akan dikembalikan, misalnya ``myArray(0)``.
+Jika Anda ingin mengembalikan seluruh array dalam satu panggilan, maka Anda perlu menulis
+sebuah fungsi, misalnya:
 
 .. code-block:: solidity
 
@@ -173,10 +168,10 @@ to write a function, for example:
         }
     }
 
-Now you can use ``getArray()`` to retrieve the entire array, instead of
-``myArray(i)``, which returns a single element per call.
+Sekarang Anda dapat menggunakan ``getArray()`` untuk mengambil seluruh array, alih-alih ``myArray(i)``,
+yang mengembalikan satu elemen per panggilan.
 
-The next example is more complex:
+Contoh berikutnya lebih kompleks:
 
 .. code-block:: solidity
 
@@ -195,9 +190,9 @@ The next example is more complex:
         mapping (uint => mapping(bool => Data[])) public data;
     }
 
-It generates a function of the following form. The mapping and arrays (with the
-exception of byte arrays) in the struct are omitted because there is no good way
-to select individual struct members or provide a key for the mapping:
+Ini menghasilkan fungsi dari bentuk berikut. Mapping dan array (dengan
+pengecualian array byte) dalam struct dihilangkan karena tidak ada cara yang
+baik untuk memilih anggota struct individu atau memberikan kunci untuk mapping:
 
 .. code-block:: solidity
 

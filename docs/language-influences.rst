@@ -1,25 +1,25 @@
 ###################
-Language Influences
+Pengaruh Bahasa
 ###################
 
-Solidity is a `curly-bracket language <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_
-that has been influenced and inspired by several well-known programming languages.
+Solidity adalah sebuah `bahasa curly-bracket <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_
+yang telah dipengaruhi dan terinspirasi oleh beberapa bahasa pemrograman terkenal.
 
-Solidity is most profoundly influenced by C++, but also borrowed concepts from languages like
-Python, JavaScript, and others.
+Solidity sangat dipengaruhi oleh C++, tetapi juga meminjam konsep dari bahasa seperti
+Python, JavaScript, dan lainnya.
 
-The influence from C++ can be seen in the syntax for variable declarations, for loops, the concept
-of overloading functions, implicit and explicit type conversions and many other details.
+Pengaruh dari C++ dapat dilihat pada sintaks untuk deklarasi variabel, untuk loop, konsep
+fungsi overloading, konversi tipe implisit dan eksplisit dan banyak detail lainnya.
 
-In the early days of the language, Solidity used to be partly influenced by JavaScript.
-This was due to function-level scoping of variables and the use of the keyword ``var``.
-The JavaScript influence was reduced starting from version 0.4.0.
-Now, the main remaining similarity to JavaScript is that functions are defined using the keyword
-``function``. Solidity also supports import syntax and semantics that
-are similar to those available in JavaScript. Besides those points, Solidity looks like
-most other curly-bracket languages and has no major JavaScript influence anymore.
+Pada hari-hari awal bahasa, dulu Solidity sebagian dipengaruhi oleh JavaScript.
+Ini karena pelingkupan tingkat fungsi variabel dan penggunaan kata kunci ``var``.
+Pengaruh JavaScript berkurang mulai dari versi 0.4.0.
+Sekarang, kesamaan utama yang tersisa dengan JavaScript adalah bahwa fungsi didefinisikan menggunakan kata kunci
+``function``. Solidity juga mendukung sintaks impor dan semantik yang
+mirip dengan yang tersedia di JavaScript. Selain poin-poin itu, Solidity terlihat seperti
+sebagian besar bahasa kurung kurawal lainnya dan tidak lagi memiliki pengaruh JavaScript yang besar.
 
-Another influence to Solidity was Python. Solidity's modifiers were added trying to model
-Python's decorators with a much more restricted functionality. Furthermore, multiple inheritance, C3 linearization,
-and the ``super`` keyword are taken from Python as well as the general assignment and copy semantics of value
-and reference types.
+Pengaruh lain terhadap Solidity adalah Python. Pengubah Solidity ditambahkan untuk mencoba memodelkan
+Dekorator Python dengan fungsionalitas yang jauh lebih terbatas. Selanjutnya, pewarisan berganda, linearisasi C3,
+dan kata kunci ``super`` diambil dari Python serta penugasan umum dan salin semantik nilai
+dan jenis referensi.

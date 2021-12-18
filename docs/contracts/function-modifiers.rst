@@ -2,18 +2,18 @@
 
 .. _modifiers:
 
-******************
-Function Modifiers
-******************
+****************
+Fungsi Modifier
+****************
 
-Modifiers can be used to change the behaviour of functions in a declarative way.
-For example,
-you can use a modifier to automatically check a condition prior to executing the function.
+Modifier dapat digunakan untuk mengubah perilaku fungsi dengan cara deklaratif.
+Misalnya,
+Anda dapat menggunakan Modifier untuk memeriksa kondisi secara otomatis sebelum menjalankan fungsi.
 
-Modifiers are
-inheritable properties of contracts and may be overridden by derived contracts, but only
-if they are marked ``virtual``. For details, please see
-:ref:`Modifier Overriding <modifier-overriding>`.
+Modifier adalah
+properti kontrak *inheritable* dan dapat ditimpa oleh kontrak turunan,
+tetapi hanya jika ditandai sebagai ``virtual``.
+Untuk detailnya, silakan lihat :ref:`Modifier Overriding <modifier-overriding>`.
 
 .. code-block:: solidity
 
@@ -100,34 +100,34 @@ if they are marked ``virtual``. For details, please see
         }
     }
 
-If you want to access a modifier ``m`` defined in a contract ``C``, you can use ``C.m`` to
-reference it without virtual lookup. It is only possible to use modifiers defined in the current
-contract or its base contracts. Modifiers can also be defined in libraries but their use is
-limited to functions of the same library.
+Jika Anda ingin mengakses modifier ``m`` yang ditentukan dalam kontrak ``C``,
+Anda dapat menggunakan ``C.m`` untuk mereferensikannya tanpa pencarian virtual.
+Hanya dimungkinkan untuk menggunakan modifier yang ditentukan dalam kontrak saat
+ini atau kontrak dasarnya. Modifier juga dapat didefinisikan di library tetapi
+penggunaannya terbatas pada fungsi library yang sama.
 
-Multiple modifiers are applied to a function by specifying them in a
-whitespace-separated list and are evaluated in the order presented.
+Beberapa modifier diterapkan ke suatu fungsi dengan menentukannya dalam daftar yang
+dipisahkan spasi dan dievaluasi dalam urutan yang disajikan
 
-Modifiers cannot implicitly access or change the arguments and return values of functions they modify.
-Their values can only be passed to them explicitly at the point of invocation.
+Modifier tidak dapat secara implisit mengakses atau mengubah argumen dan mengembalikan nilai fungsi yang mereka modifikasi.
+Nilai-nilai mereka hanya dapat diberikan kepada mereka secara eksplisit pada saat permintaan.
 
-Explicit returns from a modifier or function body only leave the current
-modifier or function body. Return variables are assigned and
-control flow continues after the ``_`` in the preceding modifier.
+Pengembalian eksplisit dari modifier atau badan fungsi hanya meninggalkan modifier
+atau badan fungsi saat ini. Variabel return ditetapkan dan aliran kontrol berlanjut
+setelah ``_`` di modifier sebelumnya.
 
 .. warning::
-    In an earlier version of Solidity, ``return`` statements in functions
-    having modifiers behaved differently.
+    Dalam versi Solidity sebelumnya, pernyataan ``return`` dalam fungsi yang
+    memiliki modifier berperilaku berbeda.
 
-An explicit return from a modifier with ``return;`` does not affect the values returned by the function.
-The modifier can, however, choose not to execute the function body at all and in that case the return
-variables are set to their :ref:`default values<default-value>` just as if the function had an empty
-body.
+Pengembalian eksplisit dari modifier dengan ``return;`` tidak memengaruhi nilai yang dikembalikan oleh fungsi.
+Akan tetapi, modifier dapat memilih untuk tidak menjalankan isi fungsi sama sekali dan dalam hal ini variabel
+yang dikembalikan disetel ke :ref:`default values<default-value>` sama seperti jika fungsi memiliki isi kosong.
 
-The ``_`` symbol can appear in the modifier multiple times. Each occurrence is replaced with
-the function body.
+Simbol ``_`` dapat muncul di modifier beberapa kali. Setiap kemunculan diganti
+dengan fungsi body.
 
-Arbitrary expressions are allowed for modifier arguments and in this context,
-all symbols visible from the function are visible in the modifier. Symbols
-introduced in the modifier are not visible in the function (as they might
-change by overriding).
+Ekspresi Arbitrary diperbolehkan untuk argumen modifier dan dalam konteks ini,
+semua simbol yang terlihat dari fungsi terlihat di modifier.
+Simbol yang diperkenalkan di modifier tidak terlihat dalam fungsi
+(karena mungkin berubah dengan menimpa).

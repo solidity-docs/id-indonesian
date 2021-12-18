@@ -6,39 +6,38 @@
 Events
 ******
 
-Solidity events give an abstraction on top of the EVM's logging functionality.
-Applications can subscribe and listen to these events through the RPC interface of an Ethereum client.
+Solidity events memberikan abstraksi di atas fungsi logging EVM.
+Aplikasi dapat berlangganan dan mendengarkan event ini melalui antarmuka RPC dari klien Ethereum.
 
-Events are inheritable members of contracts. When you call them, they cause the
-arguments to be stored in the transaction's log - a special data structure
-in the blockchain. These logs are associated with the address of the contract,
-are incorporated into the blockchain, and stay there as long as a block is
-accessible (forever as of now, but this might
-change with Serenity). The Log and its event data is not accessible from within
-contracts (not even from the contract that created them).
+Event adalah anggota kontrak yang dapat diwariskan. Saat Anda memanggil mereka, mereka menyebabkan
+argumen disimpan di log transaksi - sebuah struktur data khusus di blockchain.
+Log ini dikaitkan dengan alamat kontrak, dimasukkan ke dalam blockchain, dan tetap
+di sana selama blok dapat diakses (selamanya sampai sekarang, tetapi ini mungkin
+berubah dengan Serenity). Log dan data peristiwanya tidak dapat diakses dari dalam
+kontrak (bahkan dari kontrak yang membuatnya).
 
-It is possible to request a Merkle proof for logs, so if
-an external entity supplies a contract with such a proof, it can check
-that the log actually exists inside the blockchain. You have to supply block headers
-because the contract can only see the last 256 block hashes.
+Dimungkinkan untuk meminta bukti Merkle untuk log, jadi jika entitas eksternal
+memberikan kontrak dengan bukti seperti itu, ia dapat memeriksa apakah log tersebut
+benar-benar ada di dalam blockchain. Anda harus menyediakan header blok karena
+kontrak hanya dapat melihat 256 blok hash terakhir.
 
-You can add the attribute ``indexed`` to up to three parameters which adds them
-to a special data structure known as :ref:`"topics" <abi_events>` instead of
-the data part of the log.
-A topic can only hold a single word (32 bytes) so if you use a :ref:`reference type
-<reference-types>` for an indexed argument, the Keccak-256 hash of the value is stored
-as a topic instead.
+Anda dapat menambahkan atribut ``indexed`` ke hingga tiga parameter yang menambahkannya
+ke struktur data khusus yang dikenal sebagai :ref:`"topics" <abi_events>` alih-alih
+bagian data dari log.
+Sebuah topik hanya dapat menampung satu kata (32 byte) jadi jika Anda menggunakan
+:ref:`reference type <reference-types>` untuk argumen yang diindeks, hash nilai
+Keccak-256 disimpan sebagai topik.
 
-All parameters without the ``indexed`` attribute are :ref:`ABI-encoded <ABI>`
-into the data part of the log.
+Semua parameter tanpa atribut ``indexed`` adalah :ref:`ABI-encoded <ABI>`
+ke dalam bagian data log.
 
-Topics allow you to search for events, for example when filtering a sequence of
-blocks for certain events. You can also filter events by the address of the
-contract that emitted the event.
+Topik memungkinkan Anda mencari event, misalnya saat memfilter urutan blok untuk
+event tertentu. Anda juga dapat memfilter event berdasarkan alamat kontrak yang
+mengeluarkan event tersebut.
 
-For example, the code below uses the web3.js ``subscribe("logs")``
-`method <https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs>`_ to filter
-logs that match a topic with a certain address value:
+Misalnya, kode di bawah ini menggunakan metode ``subscribe("logs")``
+`web3.js <https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs> `_ untuk menyaring
+log yang cocok dengan topik dengan nilai alamat tertentu:
 
 .. code-block:: javascript
 
@@ -58,20 +57,16 @@ logs that match a topic with a certain address value:
     });
 
 
-The hash of the signature of the event is one of the topics, except if you
-declared the event with the ``anonymous`` specifier. This means that it is
-not possible to filter for specific anonymous events by name, you can
-only filter by the contract address. The advantage of anonymous events
-is that they are cheaper to deploy and call. It also allows you to declare
-four indexed arguments rather than three.
+Hash dari signature event adalah salah satu topik, kecuali jika Anda mendeklarasikan event dengan specifier ``anonymous``.
+Ini berarti bahwa tidak mungkin untuk memfilter peristiwa anonim tertentu berdasarkan nama, Anda hanya dapat memfilter menurut alamat kontrak.
+Keuntungan dari peristiwa anonim adalah bahwa mereka lebih murah untuk digunakan dan dipanggil.
+Ini juga memungkinkan Anda untuk mendeklarasikan empat argumen yang diindeks daripada tiga.
 
 .. note::
-    Since the transaction log only stores the event data and not the type,
-    you have to know the type of the event, including which parameter is
-    indexed and if the event is anonymous in order to correctly interpret
-    the data.
-    In particular, it is possible to "fake" the signature of another event
-    using an anonymous event.
+    Karena log transaksi hanya menyimpan event data dan bukan jenisnya, Anda harus mengetahui
+    jenis event, termasuk parameter mana yang diindeks dan apakah event itu anonim untuk menafsirkan
+    data dengan benar.
+    Secara khusus, dimungkinkan untuk "memalsukan" tanda tangan event lain menggunakan event anonim.
 
 .. code-block:: solidity
 
@@ -95,7 +90,7 @@ four indexed arguments rather than three.
         }
     }
 
-The use in the JavaScript API is as follows:
+Penggunaan dalam JavaScript API adalah sebagai berikut:
 
 .. code-block:: javascript
 
@@ -120,7 +115,7 @@ The use in the JavaScript API is as follows:
             console.log(result);
     });
 
-The output of the above looks like the following (trimmed):
+Output di atas terlihat seperti berikut (trimmed):
 
 .. code-block:: json
 
@@ -136,9 +131,9 @@ The output of the above looks like the following (trimmed):
        }
     }
 
-Additional Resources for Understanding Events
-==============================================
+Sumber Daya Tambahan untuk Memahami Event
+=========================================
 
-- `Javascript documentation <https://github.com/ethereum/web3.js/blob/1.x/docs/web3-eth-contract.rst#events>`_
-- `Example usage of events <https://github.com/ethchange/smart-exchange/blob/master/lib/contracts/SmartExchange.sol>`_
-- `How to access them in js <https://github.com/ethchange/smart-exchange/blob/master/lib/exchange_transactions.js>`_
+- `Dokumentasi Javascript <https://github.com/ethereum/web3.js/blob/1.x/docs/web3-eth-contract.rst#events>`_
+- `Contoh penggunaan events <https://github.com/ethchange/smart-exchange/blob/master/lib/contracts/SmartExchange.sol>`_
+- `Cara mengaksesnya di js <https://github.com/ethchange/smart-exchange/blob/master/lib/exchange_transactions.js>`_

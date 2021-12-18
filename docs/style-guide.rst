@@ -1,59 +1,59 @@
 .. index:: style, coding style
 
 #############
-Style Guide
+Panduan Gaya
 #############
 
 ************
-Introduction
+pengantar
 ************
 
-This guide is intended to provide coding conventions for writing solidity code.
-This guide should be thought of as an evolving document that will change over
-time as useful conventions are found and old conventions are rendered obsolete.
+Panduan ini dimaksudkan untuk memberikan konvensi pengkodean untuk menulis kode solidity.
+Panduan ini harus dianggap sebagai dokumen yang berkembang yang akan berubah seiring waktu
+karena konvensi yang berguna ditemukan dan konvensi lama dianggap usang.
 
-Many projects will implement their own style guides.  In the event of
-conflicts, project specific style guides take precedence.
+Banyak proyek akan menerapkan panduan gaya mereka sendiri. Jika terjadi konflik,
+panduan gaya proyek tertentu diutamakan.
 
-The structure and many of the recommendations within this style guide were
-taken from python's
+Struktur dan banyak rekomendasi dalam panduan gaya ini
+diambil dari python
 `pep8 style guide <https://www.python.org/dev/peps/pep-0008/>`_.
 
-The goal of this guide is *not* to be the right way or the best way to write
-solidity code.  The goal of this guide is *consistency*.  A quote from python's
+Tujuan dari panduan ini adalah *bukan* menjadi cara yang benar atau cara terbaik untuk menulis
+kode solidity. Tujuan dari panduan ini adalah *konsistensi*. Kutipan dari python's
 `pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_
-captures this concept well.
+menangkap konsep ini dengan baik.
 
 .. note::
 
-    A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important.
+    Panduan gaya adalah tentang konsistensi. Konsistensi dengan panduan gaya ini penting. Konsistensi dalam sebuah proyek lebih penting. Konsistensi dalam satu modul atau fungsi adalah yang paling penting.
 
-    But most importantly: **know when to be inconsistent** -- sometimes the style guide just doesn't apply. When in doubt, use your best judgement. Look at other examples and decide what looks best. And don't hesitate to ask!
+    Namun yang terpenting: **tahu kapan harus tidak konsisten** -- terkadang panduan gaya tidak berlaku. Jika ragu, gunakan penilaian terbaik Anda. Lihat contoh lain dan putuskan apa yang terlihat terbaik. Dan jangan ragu untuk bertanya!
 
 
 ***********
-Code Layout
+Layout kode
 ***********
 
 
-Indentation
+Indentasi
 ===========
 
-Use 4 spaces per indentation level.
+Gunakan 4 spasi per level indentasi.
 
-Tabs or Spaces
+Tab atau Spasi
 ==============
 
-Spaces are the preferred indentation method.
+Spasi adalah metode indentasi yang disarankan.
 
-Mixing tabs and spaces should be avoided.
+Pencampuran tab dan spasi harus dihindari.
 
-Blank Lines
-===========
+Garis Kosong
+============
 
-Surround top level declarations in solidity source with two blank lines.
+Mengelilingi deklarasi tingkat atas di sumber solidity dengan dua baris kosong.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -74,7 +74,7 @@ Yes:
         // ...
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -92,11 +92,11 @@ No:
         // ...
     }
 
-Within a contract surround function declarations with a single blank line.
+Dalam deklarasi fungsi surround kontrak dengan satu baris kosong.
 
-Blank lines may be omitted between groups of related one-liners (such as stub functions for an abstract contract)
+Baris kosong dapat dihilangkan di antara grup satu baris terkait (seperti fungsi rintisan untuk kontrak abstrak)
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -119,7 +119,7 @@ Yes:
         }
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -143,22 +143,22 @@ No:
 
 .. _maximum_line_length:
 
-Maximum Line Length
-===================
+Panjang Garis Maksimum
+======================
 
-Keeping lines under the `PEP 8 recommendation <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ to a maximum of 79 (or 99)
-characters helps readers easily parse the code.
+Menjaga garis di bawah `rekomendasi PEP 8 <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ hingga maksimum 79 (atau 99)
+karakter membantu pembaca dengan mudah mengurai kode.
 
-Wrapped lines should conform to the following guidelines.
+Garis yang dibungkus harus sesuai dengan pedoman berikut.
 
-1. The first argument should not be attached to the opening parenthesis.
-2. One, and only one, indent should be used.
-3. Each argument should fall on its own line.
-4. The terminating element, :code:`);`, should be placed on the final line by itself.
+1. Argumen pertama tidak boleh dilampirkan pada kurung buka.
+2. Satu, dan hanya satu, indentasi harus digunakan.
+3. Setiap argumen harus berada pada jalurnya sendiri.
+4. Elemen pengakhiran, :code:`);`, harus ditempatkan pada baris terakhir dengan sendirinya.
 
-Function Calls
+Fungsi Call
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -168,7 +168,7 @@ Yes:
         longArgument3
     );
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -198,9 +198,9 @@ No:
         longArgument2,
         longArgument3);
 
-Assignment Statements
+Pernyataan Assignment
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -211,7 +211,7 @@ Yes:
         argument4
     );
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -220,9 +220,9 @@ No:
                                                                        argument3,
                                                                        argument4);
 
-Event Definitions and Event Emitters
+Event Definitions dan Event Emitters
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -242,7 +242,7 @@ Yes:
         options
     );
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -261,14 +261,14 @@ No:
 Source File Encoding
 ====================
 
-UTF-8 or ASCII encoding is preferred.
+UTF-8 atau ASCII encoding diutamakan.
 
 Imports
 =======
 
-Import statements should always be placed at the top of the file.
+Pernyataan Import harus selalu ditempatkan di bagian atas file.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -285,7 +285,7 @@ Yes:
         // ...
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -304,24 +304,24 @@ No:
         // ...
     }
 
-Order of Functions
-==================
+Urutan Fungsi
+=============
 
-Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.
+Pengurutan membantu pembaca mengidentifikasi fungsi mana yang dapat mereka panggil dan untuk menemukan definisi konstruktor dan fallback dengan lebih mudah.
 
-Functions should be grouped according to their visibility and ordered:
+Fungsi harus dikelompokkan menurut visibilitas dan urutannya:
 
 - constructor
-- receive function (if exists)
-- fallback function (if exists)
+- receive function (jika ada)
+- fallback function (jika ada)
 - external
 - public
 - internal
 - private
 
-Within a grouping, place the ``view`` and ``pure`` functions last.
+Dalam pengelompokan, tempatkan fungsi ``view`` dan ``pure`` terakhir.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -359,7 +359,7 @@ Yes:
         // ...
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -391,48 +391,48 @@ No:
         // ...
     }
 
-Whitespace in Expressions
-=========================
+Whitespace di Expressi
+======================
 
-Avoid extraneous whitespace in the following  situations:
+Hindari spasi kosong dalam situasi berikut:
 
-Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.
+Langsung di dalam kurung, kurung atau kurung kurawal, dengan pengecualian deklarasi fungsi baris tunggal.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
     spam(ham[1], Coin({name: "ham"}));
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
     spam( ham[ 1 ], Coin( { name: "ham" } ) );
 
-Exception:
+Eksepsi:
 
 .. code-block:: solidity
 
     function singleLine() public { spam(); }
 
-Immediately before a comma, semicolon:
+Tepat sebelum koma, titik koma:
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
     function spam(uint i, Coin coin) public;
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
     function spam(uint i , Coin coin) public ;
 
-More than one space around an assignment or other operator to align with another:
+Lebih dari satu ruang di sekitar assignment atau operator lain untuk disejajarkan dengan yang lain:
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -440,7 +440,7 @@ Yes:
     y = 2;
     long_variable = 3;
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -448,9 +448,9 @@ No:
     y             = 2;
     long_variable = 3;
 
-Don't include a whitespace in the receive and fallback functions:
+Jangan sertakan whitespace dalam fungsi receive dan fallback:
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -462,7 +462,7 @@ Yes:
         ...
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -475,18 +475,18 @@ No:
     }
 
 
-Control Structures
+Struktur Kontrol
 ==================
 
-The braces denoting the body of a contract, library, functions and structs
-should:
+Tanda kurung yang menunjukkan isi kontrak, library, fungsi, dan struct
+Sebaiknya:
 
-* open on the same line as the declaration
-* close on their own line at the same indentation level as the beginning of the
-  declaration.
-* The opening brace should be preceded by a single space.
+* buka di baris yang sama dengan deklarasi
+* tutup pada baris mereka sendiri pada tingkat lekukan yang sama dengan awal
+   pernyataan.
+* Tanda kurung kurawal harus didahului dengan satu spasi.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -500,7 +500,7 @@ Yes:
         }
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -515,15 +515,15 @@ No:
         }
     }
 
-The same recommendations apply to the control structures ``if``, ``else``, ``while``,
-and ``for``.
+Rekomendasi yang sama berlaku untuk struktur kontrol ``if``, ``else``, `` while``,
+dan ``for``.
 
-Additionally there should be a single space between the control structures
-``if``, ``while``, and ``for`` and the parenthetic block representing the
-conditional, as well as a single space between the conditional parenthetic
-block and the opening brace.
+Selain itu, harus ada spasi tunggal antara struktur kontrol
+``if``, `` while``, dan ``untuk`` dan blok kurung yang mewakili kondisi,
+serta satu spasi antara blok kurung kondisional dan blok kurung
+bersyarat. penjepit pembuka.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -535,7 +535,7 @@ Yes:
         ...
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -550,17 +550,17 @@ No:
     for (...) {
         ...;}
 
-For control structures whose body contains a single statement, omitting the
-braces is ok *if* the statement is contained on a single line.
+Untuk struktur kontrol yang tubuhnya berisi satu pernyataan, menghilangkan
+kurung kurawal tidak masalah *jika* pernyataan dimuat dalam satu baris.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
     if (x < 10)
         x += 1;
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -570,11 +570,11 @@ No:
             value: 42
         }));
 
-For ``if`` blocks which have an ``else`` or ``else if`` clause, the ``else`` should be
-placed on the same line as the ``if``'s closing brace. This is an exception compared
-to the rules of other block-like structures.
+Untuk blok ``if`` yang memiliki klausa ``else`` atau ``else if``, ``else`` harus
+ditempatkan pada baris yang sama dengan kurung kurawal penutup ``if``. Ini adalah pengecualian dibandingkan
+dengan aturan struktur seperti blok lainnya.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -592,7 +592,7 @@ Yes:
     else
         x -= 1;
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -606,15 +606,15 @@ No:
 Function Declaration
 ====================
 
-For short function declarations, it is recommended for the opening brace of the
-function body to be kept on the same line as the function declaration.
+Untuk deklarasi fungsi pendek, direkomendasikan untuk kurung kurawal pembuka dari
+badan fungsi untuk disimpan pada baris yang sama dengan deklarasi fungsi.
 
-The closing brace should be at the same indentation level as the function
-declaration.
+Tanda kurung kurawal harus berada pada tingkat lekukan yang sama dengan
+deklarasi fungsi.
 
-The opening brace should be preceded by a single space.
+Tanda kurung buka harus didahului dengan satu spasi.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -626,7 +626,7 @@ Yes:
         return x + 1;
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -646,7 +646,7 @@ No:
     function increment(uint x) public pure returns (uint) {
         return x + 1;}
 
-The modifier order for a function should be:
+Urutan modifier untuk suatu fungsi harus:
 
 1. Visibility
 2. Mutability
@@ -654,7 +654,7 @@ The modifier order for a function should be:
 4. Override
 5. Custom modifiers
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -666,7 +666,7 @@ Yes:
         selfdestruct(owner);
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -678,12 +678,12 @@ No:
         selfdestruct(owner);
     }
 
-For long function declarations, it is recommended to drop each argument onto
-it's own line at the same indentation level as the function body.  The closing
-parenthesis and opening bracket should be placed on their own line as well at
-the same indentation level as the function declaration.
+Untuk deklarasi fungsi yang panjang, disarankan untuk menjatuhkan setiap argumen
+ke barisnya sendiri pada tingkat lekukan yang sama dengan badan fungsi. Tanda kurung
+tutup dan kurung buka harus ditempatkan pada barisnya masing-masing serta pada tingkat
+lekukan yang sama dengan deklarasi fungsi.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -700,7 +700,7 @@ Yes:
         doSomething();
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -728,10 +728,10 @@ No:
         doSomething();
     }
 
-If a long function declaration has modifiers, then each modifier should be
-dropped to its own line.
+Jika deklarasi fungsi yang panjang memiliki modifier, maka setiap pengubah harus
+jatuh ke jalurnya sendiri.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -757,7 +757,7 @@ Yes:
         doSomething();
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -783,9 +783,9 @@ No:
         doSomething();
     }
 
-Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the :ref:`Maximum Line Length <maximum_line_length>` section.
+Parameter output multiline dan pernyataan return harus mengikuti gaya yang sama yang direkomendasikan untuk membungkus garis panjang yang ditemukan di bagian :ref:`Maximum Line Length <maximum_line_length>`.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -810,7 +810,7 @@ Yes:
         );
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -831,11 +831,11 @@ No:
                 veryLongReturnArg1);
     }
 
-For constructor functions on inherited contracts whose bases require arguments,
-it is recommended to drop the base constructors onto new lines in the same
-manner as modifiers if the function declaration is long or hard to read.
+Untuk fungsi konstruktor pada kontrak yang diwarisi yang basisnya memerlukan argumen,
+direkomendasikan untuk meletakkan konstruktor dasar ke baris baru dengan cara yang
+sama seperti modifier jika deklarasi fungsi panjang atau sulit dibaca.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -868,7 +868,7 @@ Yes:
         }
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -918,7 +918,7 @@ No:
     }
 
 
-When declaring short functions with a single statement, it is permissible to do it on a single line.
+Saat mendeklarasikan fungsi pendek dengan satu pernyataan, diizinkan untuk melakukannya pada satu baris.
 
 Permissible:
 
@@ -926,18 +926,18 @@ Permissible:
 
     function shortFunction() public { doSomething(); }
 
-These guidelines for function declarations are intended to improve readability.
-Authors should use their best judgement as this guide does not try to cover all
-possible permutations for function declarations.
+Panduan untuk deklarasi fungsi ini dimaksudkan untuk meningkatkan keterbacaan.
+Penulis harus menggunakan penilaian terbaik mereka karena panduan ini tidak mencoba untuk mencakup semua
+kemungkinan permutasi untuk deklarasi fungsi.
 
-Mappings
-========
+Mapping
+=======
 
-In variable declarations, do not separate the keyword ``mapping`` from its
-type by a space. Do not separate any nested ``mapping`` keyword from its type by
-whitespace.
+Dalam deklarasi variabel, jangan pisahkan kata kunci ``mapping`` dari jenisnya
+dengan spasi. Jangan pisahkan kata kunci nested ``mapping`` dari jenisnya berdasarkan
+spasi.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -946,7 +946,7 @@ Yes:
     mapping(uint => mapping(bool => Data[])) public data;
     mapping(uint => mapping(uint => s)) data;
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -955,47 +955,47 @@ No:
     mapping (uint => mapping (bool => Data[])) public data;
     mapping(uint => mapping (uint => s)) data;
 
-Variable Declarations
+Deklarasi Variabel
 =====================
 
-Declarations of array variables should not have a space between the type and
-the brackets.
+Deklarasi variabel array tidak boleh memiliki spasi antara tipe
+dan tanda kurung.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
     uint[] x;
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
     uint [] x;
 
 
-Other Recommendations
+Rekomendasi lainnya
 =====================
 
-* Strings should be quoted with double-quotes instead of single-quotes.
+* String harus dikutip dengan tanda kutip ganda, bukan tanda kutip tunggal.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
     str = "foo";
     str = "Hamlet says, 'To be or not to be...'";
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
     str = 'bar';
     str = '"Be yourself; everyone else is already taken." -Oscar Wilde';
 
-* Surround operators with a single space on either side.
+* Mengelilingi operator dengan satu ruang di kedua sisi.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
     :force:
@@ -1005,7 +1005,7 @@ Yes:
     x += 3 + 4;
     x |= y && z;
 
-No:
+Tidak:
 
 .. code-block:: solidity
     :force:
@@ -1015,12 +1015,12 @@ No:
     x += 3+4;
     x |= y&&z;
 
-* Operators with a higher priority than others can exclude surrounding
-  whitespace in order to denote precedence.  This is meant to allow for
-  improved readability for complex statement. You should always use the same
-  amount of whitespace on either side of an operator:
+* Operator dengan prioritas lebih tinggi daripada yang lain dapat mengecualikan whitespace
+  di sekitarnya untuk menunjukkan prioritas. Ini dimaksudkan untuk memungkinkan peningkatan
+  keterbacaan untuk pernyataan yang kompleks. Anda harus selalu menggunakan jumlah spasi
+  yang sama di kedua sisi operator:
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -1028,7 +1028,7 @@ Yes:
     x = 2*y + 3*z;
     x = (a+b) * (a-b);
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -1036,11 +1036,11 @@ No:
     x = y+z;
     x +=1;
 
-***************
-Order of Layout
-***************
+******************
+Urutan Tata Letak
+******************
 
-Layout contract elements in the following order:
+Tata letak elemen kontrak dalam urutan berikut:
 
 1. Pragma statements
 2. Import statements
@@ -1048,7 +1048,7 @@ Layout contract elements in the following order:
 4. Libraries
 5. Contracts
 
-Inside each contract, library or interface, use the following order:
+Di dalam setiap kontrak, library, atau interface, gunakan urutan berikut:
 
 1. Type declarations
 2. State variables
@@ -1057,65 +1057,65 @@ Inside each contract, library or interface, use the following order:
 
 .. note::
 
-    It might be clearer to declare types close to their use in events or state
-    variables.
+    Mungkin lebih jelas untuk mendeklarasikan tipe yang dekat dengan penggunaannya dalam
+    event atau variabel state.
 
 ******************
-Naming Conventions
+Konvensi Penamaan
 ******************
 
-Naming conventions are powerful when adopted and used broadly.  The use of
-different conventions can convey significant *meta* information that would
-otherwise not be immediately available.
+Konvensi penamaan sangat kuat ketika diadopsi dan digunakan secara luas. penggunaan dari
+konvensi yang berbeda dapat menyampaikan informasi *meta* signifikan yang jika tidak,
+tidak akan segera tersedia.
 
-The naming recommendations given here are intended to improve the readability,
-and thus they are not rules, but rather guidelines to try and help convey the
-most information through the names of things.
+Rekomendasi penamaan yang diberikan di sini dimaksudkan untuk meningkatkan keterbacaan,
+dan dengan demikian itu bukan aturan, melainkan pedoman untuk mencoba dan membantu menyampaikan
+sebagian besar informasi melalui nama-nama.
 
-Lastly, consistency within a codebase should always supersede any conventions
-outlined in this document.
+Terakhir, konsistensi dalam basis kode harus selalu menggantikan konvensi apa pun yang
+diuraikan dalam dokumen ini.
 
 
-Naming Styles
+Gaya Penamaan
 =============
 
-To avoid confusion, the following names will be used to refer to different
-naming styles.
+Untuk menghindari kebingungan, nama-nama berikut akan digunakan untuk merujuk ke gaya
+penamaan yang berbeda.
 
-* ``b`` (single lowercase letter)
-* ``B`` (single uppercase letter)
-* ``lowercase``
+* ``b`` (huruf kecil tunggal)
+* ``B`` (huruf besar tunggal)
+* ``lowercasel``
 * ``lower_case_with_underscores``
 * ``UPPERCASE``
 * ``UPPER_CASE_WITH_UNDERSCORES``
-* ``CapitalizedWords`` (or CapWords)
-* ``mixedCase`` (differs from CapitalizedWords by initial lowercase character!)
+* ``CapitalizedWords`` (atau CapWords)
+* ``mixedCase`` (berbeda dari CapitalizedWords dengan karakter huruf kecil awal!)
 * ``Capitalized_Words_With_Underscores``
 
-.. note:: When using initialisms in CapWords, capitalize all the letters of the initialisms. Thus HTTPServerError is better than HttpServerError. When using initialisms in mixedCase, capitalize all the letters of the initialisms, except keep the first one lower case if it is the beginning of the name. Thus xmlHTTPRequest is better than XMLHTTPRequest.
+.. note:: Saat menggunakan inisial di CapWords, gunakan huruf kapital untuk semua huruf inisial. Jadi HTTPServerError lebih baik daripada HttpServerError. Saat menggunakan inisialisme dalam mixedCase, gunakan huruf besar untuk semua huruf inisial, kecuali pertahankan huruf kecil pertama jika itu adalah awal dari nama. Jadi xmlHTTPRequest lebih baik daripada XMLHTTPRequest.
 
 
-Names to Avoid
-==============
+Nama yang Harus Dihindari
+=========================
 
-* ``l`` - Lowercase letter el
-* ``O`` - Uppercase letter oh
-* ``I`` - Uppercase letter eye
+* ``l`` - Huruf kecil el
+* ``O`` - Huruf besar oh
+* ``I`` - Huruf besar i
 
-Never use any of these for single letter variable names.  They are often
-indistinguishable from the numerals one and zero.
+Jangan pernah menggunakan salah satu dari ini untuk nama variabel satu huruf. Mereka sering
+dibedakan dari angka satu dan nol.
 
 
-Contract and Library Names
-==========================
+Kontrak dan Nama Library
+========================
 
-* Contracts and libraries should be named using the CapWords style. Examples: ``SimpleToken``, ``SmartBank``, ``CertificateHashRepository``, ``Player``, ``Congress``, ``Owned``.
-* Contract and library names should also match their filenames.
-* If a contract file includes multiple contracts and/or libraries, then the filename should match the *core contract*. This is not recommended however if it can be avoided.
+* Kontrak dan library harus diberi nama menggunakan gaya CapWords. Contoh: ``SimpleToken``, ``SmartBank``, ``CertificateHashRepository``, ``Player``, ``Congress``, ``Owned``.
+* Nama kontrak dan library juga harus sesuai dengan nama filenya.
+* Jika file kontrak menyertakan beberapa kontrak dan/atau library, maka nama file harus cocok dengan *kontrak inti*. Namun hal ini tidak dianjurkan jika dapat dihindari.
 
-As shown in the example below, if the contract name is ``Congress`` and the library name is ``Owned``, then their associated filenames should be ``Congress.sol`` and ``Owned.sol``.
+Seperti yang ditunjukkan pada contoh di bawah ini, jika nama kontraknya adalah ``Congress`` dan nama library adalah ``Owned``, maka nama file terkaitnya harus ``Congress.sol`` dan ``Owned.sol``.
 
-Yes:
+Ya:
 
 .. code-block:: solidity
 
@@ -1140,7 +1140,7 @@ Yes:
         }
     }
 
-and in ``Congress.sol``:
+dan di ``Congress.sol``:
 
 .. code-block:: solidity
 
@@ -1154,7 +1154,7 @@ and in ``Congress.sol``:
         //...
     }
 
-No:
+Tidak:
 
 .. code-block:: solidity
 
@@ -1179,7 +1179,7 @@ No:
         }
     }
 
-and in ``Congress.sol``:
+dan di ``Congress.sol``:
 
 .. code-block:: solidity
 
@@ -1194,65 +1194,65 @@ and in ``Congress.sol``:
         //...
     }
 
-Struct Names
+Nama Struct
 ==========================
 
-Structs should be named using the CapWords style. Examples: ``MyCoin``, ``Position``, ``PositionXY``.
+Struct harus diberi nama menggunakan gaya CapWords. Contoh: ``MyCoin``, ``Position``, ``PositionXY``.
 
 
-Event Names
+Nama Event
 ===========
 
-Events should be named using the CapWords style. Examples: ``Deposit``, ``Transfer``, ``Approval``, ``BeforeTransfer``, ``AfterTransfer``.
+Event harus diberi nama menggunakan gaya CapWords. Contoh: ``Deposit``, ``Transfer``, ``Approval``, ``BeforeTransfer``, ``AfterTransfer``.
 
 
-Function Names
-==============
+Nama Fungsi
+============
 
-Functions should use mixedCase. Examples: ``getBalance``, ``transfer``, ``verifyOwner``, ``addMember``, ``changeOwner``.
+Fungsi harus menggunakan mixedCase. Contoh: ``getBalance``, ``transfer``, ``verifyOwner``, ``addMember``, ``changeOwner``.
 
 
-Function Argument Names
+Nama Argumen Fungsi
 =======================
 
-Function arguments should use mixedCase. Examples: ``initialSupply``, ``account``, ``recipientAddress``, ``senderAddress``, ``newOwner``.
+Argumen fungsi harus menggunakan mixedCase. Contoh: ``initialSupply``, ``account``, ``recipientAddress``, ``senderAddress``, ``newOwner``.
 
-When writing library functions that operate on a custom struct, the struct
-should be the first argument and should always be named ``self``.
+Saat menulis fungsi library yang beroperasi pada struct kustom, struct
+harus menjadi argumen pertama dan harus selalu diberi nama ``self``.
 
 
-Local and State Variable Names
-==============================
+Nama Lokal dan Variabel State
+=============================
 
-Use mixedCase. Examples: ``totalSupply``, ``remainingSupply``, ``balancesOf``, ``creatorAddress``, ``isPreSale``, ``tokenExchangeRate``.
+Gunakan mixedCase. Contoh: ``totalSupply``, ``remainingSupply``, ``balancesOf``, ``creatorAddress``, ``isPreSale``, ``tokenExchangeRate``.
 
 
 Constants
 =========
 
-Constants should be named with all capital letters with underscores separating
-words. Examples: ``MAX_BLOCKS``, ``TOKEN_NAME``, ``TOKEN_TICKER``, ``CONTRACT_VERSION``.
+Konstanta harus diberi nama dengan semua huruf kapital dengan garis bawah memisahkan
+kata-kata. Contoh: ``MAX_BLOCKS``, ``TOKEN_NAME``, ``TOKEN_TICKER``, ``CONTRACT_VERSION``.
 
 
-Modifier Names
+Nama Modifier
 ==============
 
-Use mixedCase. Examples: ``onlyBy``, ``onlyAfter``, ``onlyDuringThePreSale``.
+Gunakan mixedCase. Contoh: ``onlyBy``, ``onlyAfter``, ``onlyDuringThePreSale``.
 
 
 Enums
 =====
 
-Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: ``TokenGroup``, ``Frame``, ``HashStyle``, ``CharacterLocation``.
+Enums, dalam gaya deklarasi tipe sederhana, harus diberi nama menggunakan gaya CapWords. Contoh: ``TokenGroup``, ``Frame``, ``HashStyle``, ``CharacterLocation``.
 
 
-Avoiding Naming Collisions
-==========================
+Menghindari Tabrakan Penamaan
+=============================
 
 * ``single_trailing_underscore_``
 
-This convention is suggested when the desired name collides with that of a
-built-in or otherwise reserved name.
+Konvensi ini disarankan ketika nama yang diinginkan bertabrakan dengan
+nama bawaan atau nama yang dicadangkan.
 
 .. _style_guide_natspec:
 
@@ -1260,12 +1260,12 @@ built-in or otherwise reserved name.
 NatSpec
 *******
 
-Solidity contracts can also contain NatSpec comments. They are written with a
-triple slash (``///``) or a double asterisk block (``/** ... */``) and
-they should be used directly above function declarations or statements.
+Kontrak solidity juga dapat berisi komentar NatSpec. Mereka ditulis dengan
+garis miring tiga (``///``) atau blok asterisk ganda (``/** ... */``) dan
+mereka harus digunakan langsung di atas deklarasi atau pernyataan fungsi.
 
-For example, the contract from :ref:`a simple smart contract <simple-smart-contract>` with the comments
-added looks like the one below:
+Misalnya, kontrak dari :ref:`a simple smart contract <simple-smart-contract>` dengan komentar
+ditambahkan terlihat seperti di bawah ini:
 
 .. code-block:: solidity
 
@@ -1292,6 +1292,6 @@ added looks like the one below:
         }
     }
 
-It is recommended that Solidity contracts are fully annotated using :ref:`NatSpec <natspec>` for all public interfaces (everything in the ABI).
+Direkomendasikan agar kontrak Solidity diberi penjelasan lengkap menggunakan :ref:`NatSpec <natspec>` untuk semua antarmuka publik (semua yang ada di ABI).
 
-Please see the section about :ref:`NatSpec <natspec>` for a detailed explanation.
+Silakan lihat bagian tentang :ref:`NatSpec <natspec>` untuk penjelasan rinci.
