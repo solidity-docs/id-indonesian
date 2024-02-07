@@ -4,9 +4,14 @@
 Value Types (Nilai Types)
 =========================
 
+<<<<<<< HEAD
 Tipe berikut ini juga disebut tipe nilai karena variabel dari tipe ini akan
 selalu diteruskan dengan nilai, yaitu selalu disalin ketika digunakan sebagai
 argumen fungsi atau dalam penugasan.
+=======
+The following are called value types because their variables will always be passed by value, i.e. they are always copied when they
+are used as function arguments or in assignments.
+>>>>>>> english/develop
 
 .. index:: ! bool, ! true, ! false
 
@@ -45,11 +50,19 @@ mengakses nilai minimum dan maksimum yang dapat diwakili oleh tipenya.
 
 .. warning::
 
+<<<<<<< HEAD
   Integers di Solidity terbatas pada kisaran tertentu. Sebagai contoh, dengan ``uint32``, ini adalah ``0`` hingga ``2**32 - 1``.
   Ada dua mode di mana aritmatika dilakukan pada tipe-tipe ini: Mode "wrapping" atau "unchecked" dan mode "checked".
   Secara default, aritmatika selalu "checked", yang berarti bahwa jika hasil operasi berada di luar rentang nilai
   dari jenisnya, panggilan dikembalikan melalui :ref:`pernyataan gagal<assert-and-require>`. Anda dapat beralih ke mode "unchecked"
   menggunakan ``unchecked { ... }``. Detail lebih lanjut dapat ditemukan di bagian :ref:`unchecked <unchecked>`.
+=======
+  Integers in Solidity are restricted to a certain range. For example, with ``uint32``, this is ``0`` up to ``2**32 - 1``.
+  There are two modes in which arithmetic is performed on these types: The "wrapping" or "unchecked" mode and the "checked" mode.
+  By default, arithmetic is always "checked", meaning that if an operation's result falls outside the value range
+  of the type, the call is reverted through a :ref:`failing assertion<assert-and-require>`. You can switch to "unchecked" mode
+  using ``unchecked { ... }``. More details can be found in the section about :ref:`unchecked <unchecked>`.
+>>>>>>> english/develop
 
 Comparisons (Perbandingan)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -139,10 +152,16 @@ menghasilkan tanda yang sama dengan operand kiri (atau nol) dan ``a % n == -(-a 
 Exponentiation
 ^^^^^^^^^^^^^^
 
+<<<<<<< HEAD
 Exponentiation hanya tersedia untuk tipe yang tidak ditandatangani dalam eksponen.
 Jenis exponentiation yang dihasilkan selalu sama dengan tipe dasarnya.
 Harap berhati-hati bahwa itu cukup besar untuk menampung hasil dan bersiap untuk
 kemungkinan kegagalan pernyataan atau *wrapping behaviour*.
+=======
+Exponentiation is only available for unsigned types in the exponent. The resulting type
+of an exponentiation is always equal to the type of the base. Please take care that it is
+large enough to hold the result and prepare for potential assertion failures or wrapping behavior.
+>>>>>>> english/develop
 
 .. note::
   Di mode checked, exponentiation hanya menggunakan opcode ``exp`` yang relatif murah untuk basis kecil.
@@ -183,13 +202,23 @@ Operators:
 Address (alamat)
 ----------------
 
+<<<<<<< HEAD
 Tipe Address terdiri dari dua jenis, yang sebagian besar identik:
+=======
+The address type comes in two largely identical flavors:
+>>>>>>> english/develop
 
 - ``address``: Memegang nilai 20 byte (ukuran alamat Ethereum).
 - ``address payable``: Sama seperti ``address``, tetapi dengan anggota tambahan ``transfer`` dan ``send``.
 
+<<<<<<< HEAD
 Gagasan di balik perbedaan ini adalah bahwa ``address payable`` adalah alamat yang dapat Anda kirimi Ether,
 sementara ``address`` biasa tidak dapat menerima Ether.
+=======
+The idea behind this distinction is that ``address payable`` is an address you can send Ether to,
+while you are not supposed to send Ether to a plain ``address``, for example because it might be a smart contract
+that was not built to accept Ether.
+>>>>>>> english/develop
 
 Tipe konversi:
 
@@ -210,22 +239,37 @@ pengecualian untuk aturan ini.
     mendeklarasikan jenisnya sebagai ``address payable`` untuk membuat persyaratan ini terlihat. Juga,
     cobalah untuk membuat perbedaan atau konversi ini sedini mungkin.
 
+    The distinction between ``address`` and ``address payable`` was introduced with version 0.5.0.
+    Also starting from that version, contracts are not implicitly convertible to the ``address`` type, but can still be explicitly converted to
+    ``address`` or to ``address payable``, if they have a receive or payable fallback function.
+
+
 Operators:
 
 * ``<=``, ``<``, ``==``, ``!=``, ``>=`` dan ``>``
 
 .. warning::
+<<<<<<< HEAD
     Jika Anda mengonversi tipe yang menggunakan ukuran byte yang lebih besar ke ``address``, misalnya ``bytes32``, maka ``address`` akan terpotong.
     Untuk mengurangi ambiguitas konversi versi 0.4.24 dan lebih tinggi dari kekuatan kompiler, Anda membuat pemotongan eksplisit dalam konversi.
     Ambil contoh nilai 32-byte ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``.
+=======
+    If you convert a type that uses a larger byte size to an ``address``, for example ``bytes32``, then the ``address`` is truncated.
+    To reduce conversion ambiguity, starting with version 0.4.24, the compiler will force you to make the truncation explicit in the conversion.
+    Take for example the 32-byte value ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``.
+>>>>>>> english/develop
 
     Anda dapat menggunakan ``address(uint160(bytes20(b)))``, yang akan menghasilkan ``0x111122223333444455556666777788889999aAaa``,
     atau anda dapat menggunakan ``address(uint160(uint256(b)))``, yang akan menghasilkan ``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc``.
 
 .. note::
+<<<<<<< HEAD
     Perbedaan antara ``address`` dan ``address payable`` diperkenalkan di versi 0.5.0.
     Juga mulai dari versi itu, kontrak tidak diturunkan dari tipe alamat, tetapi masih dapat secara eksplisit dikonversi ke
     ``address`` atau ke ``address payable``, jika mereka memiliki fungsi fallback terima atau *payable*.
+=======
+    Mixed-case hexadecimal numbers conforming to `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_ are automatically treated as literals of the ``address`` type. See :ref:`Address Literals<address_literals>`.
+>>>>>>> english/develop
 
 .. _members-of-addresses:
 
@@ -254,6 +298,7 @@ atau jika transfer Ether ditolak oleh akun penerima. Fungsi ``transfer`` reverts
 
 * ``send``
 
+<<<<<<< HEAD
 Send adalah mitra tingkat rendah dari ``transfer``. Jika eksekusi gagal, kontrak saat ini tidak akan berhenti dengan pengecualian, tetapi ``send`` akan kembali ``false``.
 
 .. warning::
@@ -261,6 +306,15 @@ Send adalah mitra tingkat rendah dari ``transfer``. Jika eksekusi gagal, kontrak
     (ini selalu dapat dipaksakan oleh penelepon) dan juga gagal jika penerima kehabisan bensin. Jadi untuk melakukan
     transfer Ether yang aman, selalu periksa nilai pengembalian ``send``, gunakan ``transfer`` atau lebih baik lagi:
     gunakan pola di mana penerima menarik uangnya.
+=======
+``send`` is the low-level counterpart of ``transfer``. If the execution fails, the current contract will not stop with an exception, but ``send`` will return ``false``.
+
+.. warning::
+    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
+    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
+    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
+    use a pattern where the recipient withdraws the Ether.
+>>>>>>> english/develop
 
 * ``call``, ``delegatecall`` dan``staticcall``
 
@@ -327,6 +381,12 @@ pada ``call``.
     Yang terbaik adalah menghindari mengandalkan nilai gas yang dikodekan dalam kode smart kontrak Anda,
     terlepas dari apakah state dibaca atau ditulis, karena ini dapat memiliki banyak jebakan.
     Juga, akses ke gas mungkin berubah di masa depan.
+
+* ``code`` and ``codehash``
+
+You can query the deployed code for any smart contract. Use ``.code`` to get the EVM bytecode as a
+``bytes memory``, which might be empty. Use ``.codehash`` to get the Keccak-256 hash of that code
+(as a ``bytes32``). Note that ``addr.codehash`` is cheaper than using ``keccak256(addr.code)``.
 
 .. note::
     Semua kontrak dapat dikonversi ke tipe ``address``, sehingga memungkinkan untuk menanyakan saldo kontrak
@@ -410,7 +470,7 @@ Dynamically-sized byte array
 ``string``:
     Dynamically-sized UTF-8-encoded string, lihat :ref:`arrays`. Bukan sebuah value-type!
 
-.. index:: address, literal;address
+.. index:: address, ! literal;address
 
 .. _address_literals:
 
@@ -426,13 +486,14 @@ sebuah kesalahan. Anda dapat menambahkan (untuk tipe integer) atau menambahkan (
 .. note::
     Format mixed-case address checksum didefinisikan dalam `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_.
 
-.. index:: literal, literal;rational
+.. index:: integer, rational number, ! literal;rational
 
 .. _rational_literals:
 
 Rational dan Integer Literal
 ----------------------------
 
+<<<<<<< HEAD
 Literal integer dibentuk dari urutan angka dalam rentang 0-9.
 Mereka ditafsirkan sebagai desimal. Misalnya, ``69`` berarti enam puluh sembilan.
 Literal oktal tidak ada dalam Solidity dan angka nol di depan tidak valid.
@@ -442,6 +503,19 @@ Contohnya termasuk ``1.``, ``.1`` dan ``1.3``.
 
 Notasi ilmiah juga didukung, di mana basis dapat memiliki pecahan dan eksponen tidak bisa.
 Contohnya termasuk ``2e10``, ``-2e10``, ``2e-10``, ``2.5e1``.
+=======
+Integer literals are formed from a sequence of digits in the range 0-9.
+They are interpreted as decimals. For example, ``69`` means sixty nine.
+Octal literals do not exist in Solidity and leading zeros are invalid.
+
+Decimal fractional literals are formed by a ``.`` with at least one number after the decimal point.
+Examples include ``.1`` and ``1.3`` (but not ``1.``).
+
+Scientific notation in the form of ``2e10`` is also supported, where the
+mantissa can be fractional but the exponent has to be an integer.
+The literal ``MeE`` is equivalent to ``M * 10**E``.
+Examples include ``2e10``, ``-2e10``, ``2e-10``, ``2.5e1``.
+>>>>>>> english/develop
 
 Garis bawah dapat digunakan untuk memisahkan digit literal numerik agar mudah dibaca.
 Misalnya, desimal ``123_000``, heksadesimal ``0x2eff_abde``, notasi desimal ilmiah ``1_2e345_678`` semuanya valid.
@@ -449,19 +523,42 @@ Garis bawah hanya diperbolehkan antara dua digit dan hanya satu garis bawah beru
 Tidak ada makna semantik tambahan yang ditambahkan ke angka literal yang mengandung garis bawah,
 garis bawah diabaikan.
 
+<<<<<<< HEAD
 mempertahankan presisi arbitrer hingga dikonversi ke tipe non-literal (yaitu dengan
 menggunakannya bersama dengan ekspresi non-literal atau dengan konversi eksplisit).
 Ini berarti bahwa komputasi tidak overflow dan pembagian tidak terpotong
 dalam number literal expressions.
+=======
+Number literal expressions retain arbitrary precision until they are converted to a non-literal type (i.e. by
+using them together with anything other than a number literal expression (like boolean literals) or by explicit conversion).
+This means that computations do not overflow and divisions do not truncate
+in number literal expressions.
+>>>>>>> english/develop
 
 Sebagai contoh, ``(2**800 + 1) - 2**800`` menghasilkan konstanta ``1`` (dari tipe ``uint8``)
 ameskipun hasilnya antara atau bahkan tidak sesuai dengan ukuran *machine word*. Selanjutnya, hasil ``.5 * 8``
 dalam integer ``4`` (walaupun non-integer bulat digunakan di antaranya).
 
+<<<<<<< HEAD
 Operator apa pun yang dapat diterapkan ke integer juga dapat diterapkan ke number literal expressions
 selama operand adalah integer. Jika salah satu dari keduanya adalah pecahan, operasi bit tidak diizinkan
 dan eksponensial tidak diizinkan jika eksponennya pecahan (karena itu mungkin menghasilkan
 bilangan non-rasional)
+=======
+.. warning::
+    While most operators produce a literal expression when applied to literals, there are certain operators that do not follow this pattern:
+
+    - Ternary operator (``... ? ... : ...``),
+    - Array subscript (``<array>[<index>]``).
+
+    You might expect expressions like ``255 + (true ? 1 : 0)`` or ``255 + [1, 2, 3][0]`` to be equivalent to using the literal 256
+    directly, but in fact they are computed within the type ``uint8`` and can overflow.
+
+Any operator that can be applied to integers can also be applied to number literal expressions as
+long as the operands are integers. If any of the two is fractional, bit operations are disallowed
+and exponentiation is disallowed if the exponent is fractional (because that might result in
+a non-rational number).
+>>>>>>> english/develop
 
 Shifts dan exponentiation dengan angka literal sebagai operand kiri (atau basis) dan tipe integer
 sebagai operand kanan (eksponen) selalu dilakukan
@@ -493,7 +590,7 @@ terlepas dari jenis operand kanan (eksponen).
     uint128 a = 1;
     uint128 b = 2.5 + a + 0.5;
 
-.. index:: literal, literal;string, string
+.. index:: ! literal;string, string
 .. _string_literals:
 
 String Literals dan Tipe
@@ -503,7 +600,11 @@ String literals ditulis dengan double atau single-quotes (``"foo"`` atau ``'bar'
 
 Misalnya, dengan ``bytes32 samevar = "stringliteral"``, literal string diinterpretasikan dalam bentuk byte mentahnya saat ditetapkan ke tipe ``bytes32``.
 
+<<<<<<< HEAD
 Literal string hanya dapat berisi karakter ASCII yang dapat dicetak, yang berarti karakter antara dan termasuk 0x1F .. 0x7E.
+=======
+String literals can only contain printable ASCII characters, which means the characters between and including 0x20 .. 0x7E.
+>>>>>>> english/develop
 
 Selain itu, literal string juga mendukung karakter escape berikut:
 
@@ -540,8 +641,15 @@ urutan karakter ``abcdef``.
 Setiap terminator baris Unicode yang bukan merupakan baris baru (yaitu LF, VF, FF, CR, NEL, LS, PS) dianggap
 mengakhiri string literal. Baris baru hanya mengakhiri literal string jika tidak didahului oleh ``\``.
 
+<<<<<<< HEAD
 Literal Unicode
 ---------------
+=======
+.. index:: ! literal;unicode
+
+Unicode Literals
+----------------
+>>>>>>> english/develop
 
 Sementara literal string biasa hanya dapat berisi ASCII, literal Unicode – diawali dengan kata kunci ``unicode`` – dapat berisi urutan UTF-8 yang valid.
 Mereka juga mendukung urutan escape yang sama seperti literal string biasa.
@@ -550,7 +658,7 @@ Mereka juga mendukung urutan escape yang sama seperti literal string biasa.
 
     string memory a = unicode"Hello 😃";
 
-.. index:: literal, bytes
+.. index:: ! literal;hexadecimal, bytes
 
 Literal Hexadecimal
 -------------------
@@ -564,7 +672,12 @@ dari barisan heksadesimal.
 Beberapa literal heksadesimal yang dipisahkan oleh spasi digabung menjadi satu literal:
 ``hex"00112233" hex"44556677"`` setara dengan ``hex"0011223344556677"``
 
+<<<<<<< HEAD
 Literal heksadesimal berperilaku seperti :ref:`string literal <string_literals>` dan memiliki batasan konvertibilitas yang sama.
+=======
+Hexadecimal literals in some ways behave like :ref:`string literals <string_literals>` but are not
+implicitly convertible to the ``string`` type.
+>>>>>>> english/develop
 
 .. index:: enum
 
@@ -626,6 +739,7 @@ terkecil dan terbesar dari enum yang diberikan.
 
 .. _user-defined-value-types:
 
+<<<<<<< HEAD
 Tipe Nilai *user defined* (Ditentukan oleh pengguna)
 -----------------------------------------------------
 
@@ -640,6 +754,22 @@ Demikian pula, fungsi ``C.unwrap`` digunakan untuk mengonversi dari tipe kustom 
 Tipe ``C`` tidak memiliki operator atau fungsi anggota terikat.
 Secara khusus, bahkan operator ``==`` tidak didefinisikan.
 Konversi eksplisit dan implisit ke dan dari jenis lain tidak diizinkan.
+=======
+User-defined Value Types
+------------------------
+
+A user-defined value type allows creating a zero cost abstraction over an elementary value type.
+This is similar to an alias, but with stricter type requirements.
+
+A user-defined value type is defined using ``type C is V``, where ``C`` is the name of the newly
+introduced type and ``V`` has to be a built-in value type (the "underlying type"). The function
+``C.wrap`` is used to convert from the underlying type to the custom type. Similarly, the
+function ``C.unwrap`` is used to convert from the custom type to the underlying type.
+
+The type ``C`` does not have any operators or attached member functions. In particular, even the
+operator ``==`` is not defined. Explicit and implicit conversions to and from other types are
+disallowed.
+>>>>>>> english/develop
 
 Representasi data dari nilai tipe tersebut diwarisi dari tipe underlying
 dan tipe underlying juga digunakan dalam ABI.
@@ -653,7 +783,7 @@ dan sebuah library minimal untuk melakukan operasi aritmatika pada tipe tersebut
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity ^0.8.8;
 
-    // Represent a 18 decimal, 256 bit wide fixed point type using a user defined value type.
+    // Represent a 18 decimal, 256 bit wide fixed point type using a user-defined value type.
     type UFixed256x18 is uint256;
 
     /// A minimal library to do fixed point operations on UFixed256x18.
@@ -736,11 +866,29 @@ status mutabilitas `` A`` lebih restriktif daripada mutabilitas status ``B``. Se
 
 Tidak ada konversi lain antara function types yang mungkinkan.
 
+<<<<<<< HEAD
 Aturan tentang ``payable`` dan ``non-payable`` mungkin sedikit
 membingungkan, tetapi pada intinya, jika suatu fungsi adalah ``payable``, ini berarti bahwa itu
 juga dapat menerima pembayaran nol Ether, jadi ini juga ``non-payable``.
 Di sisi lain, fungsi ``non-payable`` akan menolak Ether yang dikirim ke sana,
 jadi fungsi ``non-payable`` tidak dapat dikonversi ke fungsi ``payable``.
+=======
+The rule about ``payable`` and ``non-payable`` might be a little
+confusing, but in essence, if a function is ``payable``, this means that it
+also accepts a payment of zero Ether, so it also is ``non-payable``.
+On the other hand, a ``non-payable`` function will reject Ether sent to it,
+so ``non-payable`` functions cannot be converted to ``payable`` functions.
+To clarify, rejecting ether is more restrictive than not rejecting ether.
+This means you can override a payable function with a non-payable but not the
+other way around.
+
+Additionally, When you define a ``non-payable`` function pointer,
+the compiler does not enforce that the pointed function will actually reject ether.
+Instead, it enforces that the function pointer is never used to send ether.
+Which makes it possible to assign a ``payable`` function pointer to a ``non-payable``
+function pointer ensuring both types behave the same way, i.e, both cannot be used
+to send ether.
+>>>>>>> english/develop
 
 Jika variabel sebuah function type tidak diinialisasi, memanggilnya akan mengasilkan
 :ref:`Panic error<assert-and-require>`. Hal yang sama terjadi jika Anda memanggil fungsi setelah menggunakan ``delete``
@@ -754,12 +902,42 @@ Perhatikan bahwa fungsi publik dari kontrak saat ini dapat digunakan baik sebaga
 internal maupun sebagai fungsi eksternal. Untuk menggunakan ``f`` sebagai fungsi internal,
 cukup gunakan ``f``, jika Anda ingin menggunakan bentuk eksternal, gunakan ``this.f``.
 
+<<<<<<< HEAD
 Fungsi dari tipe internal dapat ditetapkan ke variabel function type internal terlepas dari mana itu didefinisikan.
 Ini termasuk fungsi pribadi, internal dan publik dari kontrak dan  liblary serta fungsi bebas.
 function types eksternal, di sisi lain, hanya kompatibel dengan fungsi kontrak publik dan eksternal.
 Library dikecualikan karena memerlukan ``delegatecall`` dan menggunakan :ref:`konvensi ABI yang berbeda
 untuk pemilihnya <library-selectors>`.
 Fungsi yang dideklarasikan dalam antarmuka tidak memiliki definisi sehingga menunjuknya juga tidak masuk akal.
+=======
+A function of an internal type can be assigned to a variable of an internal function type regardless
+of where it is defined.
+This includes private, internal and public functions of both contracts and libraries as well as free
+functions.
+External function types, on the other hand, are only compatible with public and external contract
+functions.
+
+.. note::
+    External functions with ``calldata`` parameters are incompatible with external function types with ``calldata`` parameters.
+    They are compatible with the corresponding types with ``memory`` parameters instead.
+    For example, there is no function that can be pointed at by a value of type ``function (string calldata) external`` while
+    ``function (string memory) external`` can point at both ``function f(string memory) external {}`` and
+    ``function g(string calldata) external {}``.
+    This is because for both locations the arguments are passed to the function in the same way.
+    The caller cannot pass its calldata directly to an external function and always ABI-encodes the arguments into memory.
+    Marking the parameters as ``calldata`` only affects the implementation of the external function and is
+    meaningless in a function pointer on the caller's side.
+
+.. warning::
+    Comparison of internal function pointers can have unexpected results in the legacy pipeline with the optimizer enabled,
+    as it can collapse identical functions into one, which will then lead to said function pointers comparing as equal instead of not.
+    Such comparisons are not advised, and will lead to the compiler issuing a warning, until the next breaking release (0.9.0),
+    when the warning will be upgraded to an error, thereby making such comparisons disallowed.
+
+Libraries are excluded because they require a ``delegatecall`` and use :ref:`a different ABI
+convention for their selectors <library-selectors>`.
+Functions declared in interfaces do not have definitions so pointing at them does not make sense either.
+>>>>>>> english/develop
 
 Members (Anggota):
 
