@@ -1,5 +1,4 @@
-.. index:: ! error, revert
-
+.. index:: ! error, revert, ! selector; of an error
 .. _errors:
 
 ***************************
@@ -74,7 +73,21 @@ Demikian pula, ``assert`` yang gagal atau kondisi serupa akan dikembalikan denga
 tipe bawaan ``Panic(uint256)``.
 
 .. note::
+<<<<<<< HEAD
     Data kesalahan seharusnya hanya digunakan untuk memberikan indikasi kegagalan, tetapi bukan
     sebagai sarana untuk control-flow. Alasannya adalah bahwa data pengembalian panggilan inner
     disebarkan kembali melalui rantai panggilan eksternal secara default. Ini berarti bahwa panggilan
     inner dapat "menempa" mengembalikan data yang sepertinya berasal dari kontrak yang memanggilnya.
+=======
+    Error data should only be used to give an indication of failure, but
+    not as a means for control-flow. The reason is that the revert data
+    of inner calls is propagated back through the chain of external calls
+    by default. This means that an inner call
+    can "forge" revert data that looks like it could have come from the
+    contract that called it.
+
+Members of Errors
+=================
+
+- ``error.selector``: A ``bytes4`` value containing the error selector.
+>>>>>>> english/develop
