@@ -42,11 +42,19 @@ dilakukan setelah penambahan.
 Konversi Eksplisit
 ------------------
 
+<<<<<<< HEAD
 Jika kompiler tidak mengizinkan konversi implisit tetapi Anda yakin konversi akan berhasil,
 konversi tipe eksplisit terkadang dimungkinkan. Ini mungkin
 menghasilkan perilaku yang tidak terduga dan memungkinkan Anda untuk melewati beberapa keamanan
 fitur kompiler, jadi pastikan untuk menguji bahwa
 hasilnya adalah apa yang Anda inginkan dan harapkan!
+=======
+If the compiler does not allow implicit conversion but you are confident a conversion will work,
+an explicit type conversion is sometimes possible. This may
+result in unexpected behavior and allows you to bypass some security
+features of the compiler, so be sure to test that the
+result is what you want and expect!
+>>>>>>> english/develop
 
 Take the following example that converts a negative ``int`` to a ``uint``:
 
@@ -130,6 +138,7 @@ Jika array lebih pendek dari tipe target, array akan diisi dengan nol di akhir.
         }
     }
 
+.. index:: ! literal;conversion, literal;rational, literal;hexadecimal number
 .. _types-conversion-literals:
 
 Konversi antara Tipe Literal dan Elementary
@@ -151,6 +160,8 @@ cukup besar untuk mewakilinya tanpa pemotongan:
     Sebelum versi 0.8.0, literal angka desimal atau heksadesimal apa pun dapat secara eksplisit
     dikonversi ke tipe integer. Dari 0.8.0, konversi eksplisit seperti itu sama ketatnya dengan konversi implisit,
     yaitu, konversi hanya diperbolehkan jika literal cocok dengan rentang yang dihasilkan.
+
+.. index:: literal;string, literal;hexadecimal
 
 Fixed-Size Byte Arrays
 ----------------------
@@ -182,12 +193,24 @@ jika jumlah karakternya cocok dengan ukuran tipe byte:
     bytes2 e = "x"; // not allowed
     bytes2 f = "xyz"; // not allowed
 
+.. index:: literal;address
+
 Addresses
 ---------
 
 Seperti yang dijelaskan dalam :ref:`address_literals`, literal heksadesimal dengan ukuran yang benar yang
 lulus uji checksum bertipe ``address``. Tidak ada literal lain yang dapat secara implisit dikonversi ke tipe ``address``.
 
+<<<<<<< HEAD
 Konversi eksplisit dari ``bytes20`` atau tipe integer apa pun ke ``address`` menghasilkan ``address payable``.
 
 ``address a`` dapat dikonversi menjadi ``address payable`` melalui ``payable(a)``.
+=======
+Explicit conversions to ``address`` are allowed only from ``bytes20`` and ``uint160``.
+
+An ``address a`` can be converted explicitly to ``address payable`` via ``payable(a)``.
+
+.. note::
+    Prior to version 0.8.0, it was possible to explicitly convert from any integer type (of any size, signed or unsigned) to  ``address`` or ``address payable``.
+    Starting with in 0.8.0 only conversion from ``uint160`` is allowed.
+>>>>>>> english/develop

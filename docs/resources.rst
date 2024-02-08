@@ -14,7 +14,7 @@ Sumber Daya Umum
 * `Solidity Compiler Developers Chat <https://matrix.to/#/#ethereum_solidity-dev:gitter.im>`_
 * `Awesome Solidity <https://github.com/bkrem/awesome-solidity>`_
 * `Solidity by Example <https://solidity-by-example.org/>`_
-
+* `Solidity Documentation Community Translations <https://github.com/solidity-docs>`_
 
 Lingkungan Pengembangan Terintegrasi (Ethereum)
 ===============================================
@@ -23,10 +23,17 @@ Lingkungan Pengembangan Terintegrasi (Ethereum)
         Kerangka kerja pengembangan dan pengujian berbasis Python untuk kontrak pintar yang menargetkan Mesin Virtual Ethereum.
 
     * `Dapp <https://dapp.tools/>`_
+<<<<<<< HEAD
         Alat untuk membangun, menguji, dan menerapkan kontrak pintar dari baris perintah.
 
     * `Embark <https://framework.embarklabs.io/>`_
         Platform pengembang untuk membangun dan menerapkan aplikasi terdesentralisasi.
+=======
+        Tool for building, testing and deploying smart contracts from the command-line.
+
+    * `Foundry <https://github.com/foundry-rs/foundry>`_
+        Fast, portable and modular toolkit for Ethereum application development written in Rust.
+>>>>>>> english/develop
 
     * `Hardhat <https://hardhat.org/>`_
         Lingkungan pengembangan Ethereum dengan jaringan Ethereum lokal, fitur debugging dan ekosistem plugin.
@@ -34,15 +41,21 @@ Lingkungan Pengembangan Terintegrasi (Ethereum)
     * `Remix <https://remix.ethereum.org/>`_
         IDE berbasis browser dengan compiler terintegrasi dan lingkungan runtime Solidity tanpa komponen sisi server.
 
+<<<<<<< HEAD
     * `Scaffold-ETH <https://github.com/austintgriffith/scaffold-eth>`_
         Tumpukan pengembangan Ethereum berfokus pada iterasi produk yang cepat.
 
     * `Truffle <https://www.trufflesuite.com/truffle>`_
         Kerangka pengembangan Ethereum.
+=======
+    * `Truffle <https://trufflesuite.com/truffle/>`_
+        Ethereum development framework.
+>>>>>>> english/develop
 
 Integrasi Editor
 ================
 
+<<<<<<< HEAD
 * Atom
 
     * `Etheratom <https://github.com/0mkara/etheratom>`_
@@ -54,6 +67,8 @@ Integrasi Editor
     * `Atom Solium Linter <https://atom.io/packages/linter-solium>`_
         Linter Solidity yang Dapat Dikonfigurasi untuk Atom menggunakan Solium (sekarang Ethlint) sebagai basis.
 
+=======
+>>>>>>> english/develop
 * Emacs
 
     * `Emacs Solidity <https://github.com/ethereum/emacs-solidity/>`_
@@ -61,26 +76,56 @@ Integrasi Editor
 
 * IntelliJ
 
+<<<<<<< HEAD
     * `IntelliJ IDEA plugin <https://plugins.jetbrains.com/plugin/9475-intellij-solidity>`_
         Plugin solidity untuk IntelliJ IDEA (dan semua IDE JetBrains lainnya)
+=======
+    * `IntelliJ IDEA plugin <https://plugins.jetbrains.com/plugin/9475-solidity/>`_
+        Solidity plugin for IntelliJ IDEA (and all other JetBrains IDEs).
+>>>>>>> english/develop
 
-* Sublime
+* Sublime Text
 
     * `Package for SublimeText - Solidity language syntax <https://packagecontrol.io/packages/Ethereum/>`_
         Penyorotan sintaks soliditas untuk editor SublimeText.
 
 * Vim
 
+<<<<<<< HEAD
     * `Vim Solidity <https://github.com/tomlion/vim-solidity/>`_
         Plugin untuk editor Vim menyediakan penyorotan sintaks.
+=======
+    * `Vim Solidity by Thesis <https://github.com/thesis/vim-solidity/>`_
+        Syntax highlighting for Solidity in Vim.
+
+    * `Vim Solidity by TovarishFin <https://github.com/TovarishFin/vim-solidity>`_
+        Vim syntax file for Solidity.
+>>>>>>> english/develop
 
     * `Vim Syntastic <https://github.com/vim-syntastic/syntastic>`_
         Plugin untuk editor Vim yang menyediakan pemeriksaan kompilasi.
 
-* Visual Studio Code
+* Visual Studio Code (VS Code)
 
+<<<<<<< HEAD
     * `Visual Studio Code extension <https://juan.blanco.ws/solidity-contracts-in-visual-studio-code/>`_
         Plugin Solidity untuk Microsoft Visual Studio Code yang menyertakan penyorotan sintaks dan compiler Solidity.
+=======
+    * `Ethereum Remix Visual Studio Code extension <https://github.com/ethereum/remix-vscode>`_
+        Ethereum Remix extension pack for VS Code
+
+    * `Solidity Visual Studio Code extension, by Juan Blanco <https://juan.blanco.ws/solidity-contracts-in-visual-studio-code/>`_
+        Solidity plugin for Microsoft Visual Studio Code that includes syntax highlighting and the Solidity compiler.
+>>>>>>> english/develop
+
+    * `Solidity Visual Studio Code extension, by Nomic Foundation <https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity>`_
+        Solidity and Hardhat support by the Hardhat team, including: syntax highlighting, jump to definition, renames, quick fixes and inline solc warnings and errors.
+
+    * `Solidity Visual Auditor extension <https://marketplace.visualstudio.com/items?itemName=tintinweb.solidity-visual-auditor>`_
+        Adds security centric syntax and semantic highlighting to Visual Studio Code.
+
+    * `Truffle for VS Code <https://marketplace.visualstudio.com/items?itemName=trufflesuite-csi.truffle-vscode>`_
+        Build, debug and deploy smart contracts on Ethereum and EVM-compatible blockchains.
 
 Solidity Tools
 ==============
@@ -109,8 +154,13 @@ Solidity Tools
 * `leafleth <https://github.com/clemlak/leafleth>`_
     Generator dokumentasi untuk kontrak pintar Solidity.
 
+<<<<<<< HEAD
 * `PIET <https://piet.slock.it/>`_
     Alat untuk mengembangkan, mengaudit, dan menggunakan kontrak pintar Solidity melalui antarmuka grafis sederhana.
+=======
+* `Scaffold-ETH <https://github.com/scaffold-eth/scaffold-eth>`_
+    Forkable Ethereum development stack focused on fast product iterations.
+>>>>>>> english/develop
 
 * `sol2uml <https://www.npmjs.com/package/sol2uml>`_
     Generator diagram kelas Unified Modeling Language (UML) untuk kontrak Solidity.
@@ -129,6 +179,9 @@ Solidity Tools
 
 * `Solhint <https://github.com/protofire/solhint>`_
     Linter solidity yang menyediakan keamanan, panduan gaya, dan aturan praktik terbaik untuk validasi kontrak pintar.
+
+* `Sourcify <https://sourcify.dev/>`_
+    Decentralized automated contract verification service and public repository of contract metadata.
 
 * `Sūrya <https://github.com/ConsenSys/surya/>`_
     Alat utilitas untuk sistem kontrak pintar, menawarkan sejumlah keluaran visual dan informasi tentang struktur kontrak. Juga mendukung kueri grafik panggilan fungsi.
