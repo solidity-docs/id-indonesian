@@ -8,9 +8,15 @@ Kontrak dapat dibuat "dari luar" melalui transaksi Ethereum atau dari dalam kont
 
 IDEs, seperti `Remix <https://remix.ethereum.org/>`_, membuat proses pembuatan lebih mulus dengan menggunakan elemen UI.
 
+<<<<<<< HEAD
 Salah satu cara untuk membuat kontrak secara terprogram di Ethereum adalah melalui JavaScript API `web3.js <https://github.com/ethereum/web3.js>`_.
 Ini memiliki fungsi yang disebut `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_
 untuk memfasilitasi pembuatan kontrak.
+=======
+One way to create contracts programmatically on Ethereum is via the JavaScript API `web3.js <https://github.com/web3/web3.js>`_.
+It has a function called `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_
+to facilitate contract creation.
+>>>>>>> english/develop
 
 Saat kontrak dibuat, :ref:`constructor <constructor>` (fungsi yang dideklarasikan dengan
 kata kunci ``constructor``) dijalankan satu kali.
@@ -47,7 +53,7 @@ Ini berarti bahwa *cyclic creation dependencies* tidak mungkin.
 
         // This is the constructor which registers the
         // creator and the assigned name.
-        constructor(bytes32 _name) {
+        constructor(bytes32 name_) {
             // State variables are accessed via their name
             // and not via e.g. `this.owner`. Functions can
             // be accessed directly or through `this.f`,
@@ -64,7 +70,7 @@ Ini berarti bahwa *cyclic creation dependencies* tidak mungkin.
             // no real way to verify that.
             // This does not create a new contract.
             creator = TokenCreator(msg.sender);
-            name = _name;
+            name = name_;
         }
 
         function changeName(bytes32 newName) public {
