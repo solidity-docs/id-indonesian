@@ -1,4 +1,4 @@
-.. index:: ! event
+.. index:: ! event, ! event; anonymous, ! event; indexed, ! event; topic
 
 .. _events:
 
@@ -9,12 +9,23 @@ Events
 Solidity events memberikan abstraksi di atas fungsi logging EVM.
 Aplikasi dapat berlangganan dan mendengarkan event ini melalui antarmuka RPC dari klien Ethereum.
 
+<<<<<<< HEAD
 Event adalah anggota kontrak yang dapat diwariskan. Saat Anda memanggil mereka, mereka menyebabkan
 argumen disimpan di log transaksi - sebuah struktur data khusus di blockchain.
 Log ini dikaitkan dengan alamat kontrak, dimasukkan ke dalam blockchain, dan tetap
 di sana selama blok dapat diakses (selamanya sampai sekarang, tetapi ini mungkin
 berubah dengan Serenity). Log dan data peristiwanya tidak dapat diakses dari dalam
 kontrak (bahkan dari kontrak yang membuatnya).
+=======
+Events can be defined at file level or as inheritable members of contracts (including interfaces and libraries).
+When you call them, they cause the
+arguments to be stored in the transaction's log - a special data structure
+in the blockchain. These logs are associated with the address of the contract that emitted them,
+are incorporated into the blockchain, and stay there as long as a block is
+accessible (forever as of now, but this might
+change in the future). The Log and its event data is not accessible from within
+contracts (not even from the contract that created them).
+>>>>>>> english/develop
 
 Dimungkinkan untuk meminta bukti Merkle untuk log, jadi jika entitas eksternal
 memberikan kontrak dengan bukti seperti itu, ia dapat memeriksa apakah log tersebut
@@ -68,6 +79,18 @@ Ini juga memungkinkan Anda untuk mendeklarasikan empat argumen yang diindeks dar
     data dengan benar.
     Secara khusus, dimungkinkan untuk "memalsukan" tanda tangan event lain menggunakan event anonim.
 
+.. index:: ! selector; of an event
+
+Members of Events
+=================
+
+- ``event.selector``: For non-anonymous events, this is a ``bytes32`` value
+  containing the ``keccak256`` hash of the event signature, as used in the default topic.
+
+
+Example
+=======
+
 .. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
@@ -75,18 +98,18 @@ Ini juga memungkinkan Anda untuk mendeklarasikan empat argumen yang diindeks dar
 
     contract ClientReceipt {
         event Deposit(
-            address indexed _from,
-            bytes32 indexed _id,
-            uint _value
+            address indexed from,
+            bytes32 indexed id,
+            uint value
         );
 
-        function deposit(bytes32 _id) public payable {
+        function deposit(bytes32 id) public payable {
             // Events are emitted using `emit`, followed by
             // the name of the event and the arguments
             // (if any) in parentheses. Any such invocation
             // (even deeply nested) can be detected from
             // the JavaScript API by filtering for `Deposit`.
-            emit Deposit(msg.sender, _id, msg.value);
+            emit Deposit(msg.sender, id, msg.value);
         }
     }
 
@@ -121,9 +144,9 @@ Output di atas terlihat seperti berikut (trimmed):
 
     {
        "returnValues": {
-           "_from": "0x1111…FFFFCCCC",
-           "_id": "0x50…sd5adb20",
-           "_value": "0x420042"
+           "from": "0x1111…FFFFCCCC",
+           "id": "0x50…sd5adb20",
+           "value": "0x420042"
        },
        "raw": {
            "data": "0x7f…91385",
@@ -131,9 +154,18 @@ Output di atas terlihat seperti berikut (trimmed):
        }
     }
 
+<<<<<<< HEAD
 Sumber Daya Tambahan untuk Memahami Event
 =========================================
 
 - `Dokumentasi Javascript <https://github.com/ethereum/web3.js/blob/1.x/docs/web3-eth-contract.rst#events>`_
 - `Contoh penggunaan events <https://github.com/ethchange/smart-exchange/blob/master/lib/contracts/SmartExchange.sol>`_
 - `Cara mengaksesnya di js <https://github.com/ethchange/smart-exchange/blob/master/lib/exchange_transactions.js>`_
+=======
+Additional Resources for Understanding Events
+=============================================
+
+- `JavaScript documentation <https://github.com/web3/web3.js/blob/1.x/docs/web3-eth-contract.rst#events>`_
+- `Example usage of events <https://github.com/ethchange/smart-exchange/blob/master/lib/contracts/SmartExchange.sol>`_
+- `How to access them in js <https://github.com/ethchange/smart-exchange/blob/master/lib/exchange_transactions.js>`_
+>>>>>>> english/develop
