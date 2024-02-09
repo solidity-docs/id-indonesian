@@ -38,7 +38,7 @@ Details are given in the following example.
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
-
+    // This will report a warning due to deprecated selfdestruct
 
     contract Owned {
         constructor() { owner = payable(msg.sender); }
@@ -52,7 +52,7 @@ Details are given in the following example.
     // accessed externally via `this`, though.
     contract Destructible is Owned {
         // The keyword `virtual` means that the function can change
-        // its behaviour in derived classes ("overriding").
+        // its behavior in derived classes ("overriding").
         function destroy() virtual public {
             if (msg.sender == owner) selfdestruct(owner);
         }
@@ -74,9 +74,9 @@ Details are given in the following example.
     }
 
 
-    // Multiple inheritance is possible. Note that `owned` is
+    // Multiple inheritance is possible. Note that `Owned` is
     // also a base class of `Destructible`, yet there is only a single
-    // instance of `owned` (as for virtual inheritance in C++).
+    // instance of `Owned` (as for virtual inheritance in C++).
     contract Named is Owned, Destructible {
         constructor(bytes32 name) {
             Config config = Config(0xD5f9D8D94886E70b06E474c3fB14Fd43E2f23970);
@@ -113,7 +113,7 @@ Details are given in the following example.
 
         // Here, we only specify `override` and not `virtual`.
         // This means that contracts deriving from `PriceFeed`
-        // cannot change the behaviour of `destroy` anymore.
+        // cannot change the behavior of `destroy` anymore.
         function destroy() public override(Destructible, Named) { Named.destroy(); }
         function get() public view returns(uint r) { return info; }
 
@@ -127,6 +127,7 @@ penghancuran. Cara ini bermasalah, seperti yang terlihat pada contoh berikut:
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
 
     contract owned {
         constructor() { owner = payable(msg.sender); }
@@ -159,6 +160,7 @@ eksplisit dalam penggantian akhir, tetapi fungsi ini akan melewati
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
 
     contract owned {
         constructor() { owner = payable(msg.sender); }
@@ -276,8 +278,13 @@ Dalam pengertian ini, jalur override untuk tanda tangan adalah jalur melalui gra
 pada kontrak yang sedang dipertimbangkan dan berakhir pada kontrak yang menyebutkan fungsi dengan tanda tangan
 tersebut yang tidak menimpa.
 
+<<<<<<< HEAD
 Jika Anda tidak menandai fungsi yang diganti sebagai ``virtual``, kontrak turunan tidak dapat lagi
 mengubah perilaku fungsi tersebut.
+=======
+If you do not mark a function that overrides as ``virtual``, derived
+contracts can no longer change the behavior of that function.
+>>>>>>> english/develop
 
 .. note::
 
@@ -399,8 +406,8 @@ dengan ``constructor() {}``. Sebagai contoh:
     abstract contract A {
         uint public a;
 
-        constructor(uint _a) {
-            a = _a;
+        constructor(uint a_) {
+            a = a_;
         }
     }
 
@@ -412,6 +419,7 @@ Anda dapat menggunakan parameter internal dalam konstruktor (misalnya pointer st
 Dalam hal ini, kontrak harus ditandai sebagai :ref:`abstract <abstract-contract>`, karena
 parameter ini tidak dapat diberi nilai valid dari luar tetapi hanya melalui konstruktor kontrak turunan.
 
+<<<<<<< HEAD
 .. warning ::
     Sebelum versi 0.4.22, konstruktor didefinisikan sebagai fungsi dengan nama yang sama dengan kontrak.
     Sintaks ini tidak digunakan lagi dan tidak diizinkan lagi di versi 0.5.0.
@@ -419,9 +427,18 @@ parameter ini tidak dapat diberi nilai valid dari luar tetapi hanya melalui kons
 .. warning ::
     Sebelum versi 0.7.0, Anda harus menentukan visibilitas konstruktor sebagai
     ``internal`` atau ``publik``.
+=======
+.. warning::
+    Prior to version 0.4.22, constructors were defined as functions with the same name as the contract.
+    This syntax was deprecated and is not allowed anymore in version 0.5.0.
+
+.. warning::
+    Prior to version 0.7.0, you had to specify the visibility of constructors as either
+    ``internal`` or ``public``.
+>>>>>>> english/develop
 
 
-.. index:: ! base;constructor
+.. index:: ! base;constructor, inheritance list, contract;abstract, abstract contract
 
 Argumen untuk  Basis Konstruktor
 ================================
@@ -437,7 +454,7 @@ kontrak turunan perlu menentukan semuanya. Ini dapat dilakukan dengan dua cara:
 
     contract Base {
         uint x;
-        constructor(uint _x) { x = _x; }
+        constructor(uint x_) { x = x_; }
     }
 
     // Either directly specify in the inheritance list...
@@ -445,11 +462,21 @@ kontrak turunan perlu menentukan semuanya. Ini dapat dilakukan dengan dua cara:
         constructor() {}
     }
 
-    // or through a "modifier" of the derived constructor.
+    // or through a "modifier" of the derived constructor...
     contract Derived2 is Base {
-        constructor(uint _y) Base(_y * _y) {}
+        constructor(uint y) Base(y * y) {}
     }
 
+    // or declare abstract...
+    abstract contract Derived3 is Base {
+    }
+
+    // and have the next concrete derived contract initialize it.
+    contract DerivedFromDerived is Derived3 {
+        constructor() Base(10 + 10) {}
+    }
+
+<<<<<<< HEAD
 Salah satu caranya adalah langsung di daftar inheritance (``is Base(7)``).  Cara yang lainnya
 adalah modifier dipanggil sebagai bagian dari
 konstruktor turunan (``Base(_y * _y)``). Cara pertama untuk
@@ -461,6 +488,26 @@ Menentukan argumen di kedua tempat adalah kesalahan.
 
 Jika kontrak turunan tidak menentukan argumen untuk semua basis konstruktor
 kontraknya, itu akan menjadi abstrak.
+=======
+One way is directly in the inheritance list (``is Base(7)``).  The other is in
+the way a modifier is invoked as part of
+the derived constructor (``Base(y * y)``). The first way to
+do it is more convenient if the constructor argument is a
+constant and defines the behavior of the contract or
+describes it. The second way has to be used if the
+constructor arguments of the base depend on those of the
+derived contract. Arguments have to be given either in the
+inheritance list or in modifier-style in the derived constructor.
+Specifying arguments in both places is an error.
+
+If a derived contract does not specify the arguments to all of its base
+contracts' constructors, it must be declared abstract. In that case, when
+another contract derives from it, that other contract's inheritance list
+or constructor must provide the necessary parameters
+for all base classes that haven't had their parameters specified (otherwise,
+that other contract must be declared abstract as well). For example, in the above
+code snippet, see ``Derived3`` and ``DerivedFromDerived``.
+>>>>>>> english/develop
 
 .. index:: ! inheritance;multiple, ! linearization, ! C3 linearization
 
@@ -548,9 +595,20 @@ Satu area di mana linearisasi pewarisan sangat penting dan mungkin tidak begitu 
 Mewarisi Berbagai Jenis Anggota dengan Nama Yang Sama
 ======================================================
 
+<<<<<<< HEAD
 Ini adalah kesalahan ketika salah satu dari pasangan berikut dalam kontrak memiliki nama yang sama karena warisan:
   - sebuah fungsi dan modifier
   - sebuah fungsi dan event
   - senuah event dan modifier
 
 Sebagai pengecualian, state variabel getter dapat menimpa fungsi eksternal.
+=======
+The only situations where, due to inheritance, a contract may contain multiple definitions sharing
+the same name are:
+
+- Overloading of functions.
+- Overriding of virtual functions.
+- Overriding of external virtual functions by state variable getters.
+- Overriding of virtual modifiers.
+- Overloading of events.
+>>>>>>> english/develop
