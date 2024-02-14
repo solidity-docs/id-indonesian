@@ -1,9 +1,17 @@
 
 .. index: ir breaking changes
 
+<<<<<<< HEAD
 ***********************************
 Perubahan Solidity IR-based Codegen
 ***********************************
+=======
+.. _ir-breaking-changes:
+
+*********************************
+Solidity IR-based Codegen Changes
+*********************************
+>>>>>>> english/develop
 
 Solidity dapat menghasilkan bytecode EVM dengan dua cara berbeda:
 Baik secara langsung dari opcode Solidity ke EVM ("codegen lama") atau melalui
@@ -13,6 +21,7 @@ Pembuat kode berbasis IR diperkenalkan dengan tujuan untuk tidak
 hanya memungkinkan pembuatan kode menjadi lebih transparan dan dapat diaudit, tetapi juga
 untuk memungkinkan pengoptimalan yang lebih kuat yang menjangkau seluruh fungsi.
 
+<<<<<<< HEAD
 Saat ini, pembuat kode berbasis IR masih ditandai eksperimental,
 tetapi mendukung semua fitur bahasa dan telah menerima banyak pengujian,
 jadi kami menganggapnya hampir siap untuk penggunaan produksi.
@@ -25,6 +34,16 @@ Untuk beberapa alasan, ada perbedaan semantik kecil antara yang lama
 dan pembuat kode berbasis IR, sebagian besar di area di mana kami tidak
 mengharapkan orang untuk bergantung pada perilaku ini.
 Bagian ini menyoroti perbedaan utama antara codegen lama dan IR-based.
+=======
+You can enable it on the command-line using ``--via-ir``
+or with the option ``{"viaIR": true}`` in standard-json and we
+encourage everyone to try it out!
+
+For several reasons, there are tiny semantic differences between the old
+and the IR-based code generator, mostly in areas where we would not
+expect people to rely on this behavior anyway.
+This section highlights the main differences between the old and the IR-based codegen.
+>>>>>>> english/develop
 
 Perubahan Semantik Saja
 =======================
@@ -32,6 +51,7 @@ Perubahan Semantik Saja
 Bagian ini mencantumkan perubahan yang hanya bersifat semantik, sehingga berpotensi
 menyembunyikan perilaku baru dan berbeda dalam kode yang ada.
 
+<<<<<<< HEAD
 - Ketika struct penyimpanan dihapus, setiap slot penyimpanan yang berisi
   anggota struct disetel ke nol seluruhnya. Sebelumnya, ruang padding
   dibiarkan tak tersentuh.
@@ -39,6 +59,59 @@ menyembunyikan perilaku baru dan berbeda dalam kode yang ada.
   (misalnya dalam konteks peningkatan kontrak), Anda harus menyadari bahwa
   ``delete`` sekarang juga akan menghapus anggota yang ditambahkan (sementara itu
   tidak akan dibersihkan di masa lalu).
+=======
+.. _state-variable-initialization-order:
+
+- The order of state variable initialization has changed in case of inheritance.
+
+  The order used to be:
+
+  - All state variables are zero-initialized at the beginning.
+  - Evaluate base constructor arguments from most derived to most base contract.
+  - Initialize all state variables in the whole inheritance hierarchy from most base to most derived.
+  - Run the constructor, if present, for all contracts in the linearized hierarchy from most base to most derived.
+
+  New order:
+
+  - All state variables are zero-initialized at the beginning.
+  - Evaluate base constructor arguments from most derived to most base contract.
+  - For every contract in order from most base to most derived in the linearized hierarchy:
+
+      1. Initialize state variables.
+      2. Run the constructor (if present).
+
+  This causes differences in contracts where the initial value of a state
+  variable relies on the result of the constructor in another contract:
+
+  .. code-block:: solidity
+
+      // SPDX-License-Identifier: GPL-3.0
+      pragma solidity >=0.7.1;
+
+      contract A {
+          uint x;
+          constructor() {
+              x = 42;
+          }
+          function f() public view returns(uint256) {
+              return x;
+          }
+      }
+      contract B is A {
+          uint public y = f();
+      }
+
+  Previously, ``y`` would be set to 0. This is due to the fact that we would first initialize state variables: First, ``x`` is set to 0, and when initializing ``y``, ``f()`` would return 0 causing ``y`` to be 0 as well.
+  With the new rules, ``y`` will be set to 42. We first initialize ``x`` to 0, then call A's constructor which sets ``x`` to 42. Finally, when initializing ``y``, ``f()`` returns 42 causing ``y`` to be 42.
+
+- When storage structs are deleted, every storage slot that contains
+  a member of the struct is set to zero entirely. Formerly, padding space
+  was left untouched.
+  Consequently, if the padding space within a struct is used to store data
+  (e.g. in the context of a contract upgrade), you have to be aware that
+  ``delete`` will now also clear the added member (while it wouldn't
+  have been cleared in the past).
+>>>>>>> english/develop
 
   .. code-block:: solidity
 
@@ -76,14 +149,19 @@ menyembunyikan perilaku baru dan berbeda dalam kode yang ada.
       // SPDX-License-Identifier: GPL-3.0
       pragma solidity >=0.7.0;
       contract C {
-          function f(uint _a) public pure mod() returns (uint _r) {
-              _r = _a++;
+          function f(uint a) public pure mod() returns (uint r) {
+              r = a++;
           }
           modifier mod() { _; _; }
       }
 
+<<<<<<< HEAD
   Jika Anda menjalankan ``f(0)`` di Generator kode lama, ia akan menghasilkan ``2``, sementara
   akan menghasilkan ``1`` saat menggunakan Generator kode baru.
+=======
+  If you execute ``f(0)`` in the old code generator, it will return ``1``, while
+  it will return ``0`` when using the new code generator.
+>>>>>>> english/develop
 
   .. code-block:: solidity
 
@@ -113,6 +191,7 @@ menyembunyikan perilaku baru dan berbeda dalam kode yang ada.
     nilai pertamanya.
   - Generator kode baru: ``0`` karena semua parameter, termasuk parameter return, akan diinisialisasi ulang sebelum setiap evaluasi ``_;``.
 
+<<<<<<< HEAD
 - Urutan inisialisasi kontrak telah berubah dalam hal inheritance.
 
   Urutannya dulu:
@@ -185,6 +264,8 @@ Hal ini menyebabkan perbedaan dalam beberapa kontrak, misalnya:
   Sekarang itu kan menghasilkan ``0x6465616462656566000000000000000000000000000000000000000000000010`` (memiliki
   panjang yang benar, dan elemen yang benar, tetapi tidak mengandung data yang berlebihan).
 
+=======
+>>>>>>> english/develop
   .. index:: ! evaluation order; expression
 
 - For the old code generator, the evaluation order of expressions is unspecified.
@@ -198,15 +279,20 @@ Hal ini menyebabkan perbedaan dalam beberapa kontrak, misalnya:
       // SPDX-License-Identifier: GPL-3.0
       pragma solidity >=0.8.1;
       contract C {
-          function preincr_u8(uint8 _a) public pure returns (uint8) {
-              return ++_a + _a;
+          function preincr_u8(uint8 a) public pure returns (uint8) {
+              return ++a + a;
           }
       }
 
   Fungsi ``preincr_u8(1)`` menghasilkan nilai berikut:
 
+<<<<<<< HEAD
   - Generator kode lama: 3 (``1 + 2``) tetapi secara umum, hasil nilainya tidak ditentukan
   - Generator kode baru: 4 (``2 + 2``) tetapi hasil nilainya tidak dijamin
+=======
+  - Old code generator: ``3`` (``1 + 2``) but the return value is unspecified in general
+  - New code generator: ``4`` (``2 + 2``) but the return value is not guaranteed
+>>>>>>> english/develop
 
   .. index:: ! evaluation order; function arguments
 
@@ -219,11 +305,11 @@ Hal ini menyebabkan perbedaan dalam beberapa kontrak, misalnya:
       // SPDX-License-Identifier: GPL-3.0
       pragma solidity >=0.8.1;
       contract C {
-          function add(uint8 _a, uint8 _b) public pure returns (uint8) {
-              return _a + _b;
+          function add(uint8 a, uint8 b) public pure returns (uint8) {
+              return a + b;
           }
-          function g(uint8 _a, uint8 _b) public pure returns (uint8) {
-              return add(++_a + ++_b, _a + _b);
+          function g(uint8 a, uint8 b) public pure returns (uint8) {
+              return add(++a + ++b, a + b);
           }
       }
 
@@ -278,7 +364,11 @@ Hal ini menyebabkan perbedaan dalam beberapa kontrak, misalnya:
           }
       }
 
+<<<<<<< HEAD
   Fungsi `f()` berperilaku sebagai berikut:
+=======
+  The function ``f()`` behaves as follows:
+>>>>>>> english/develop
 
   - Generator kode lama: kehabisan gas saat mengosongkan konten array setelah alokasi memori yang besar
   - Generator kode baru: kembali karena pointer memori bebas meluap (tidak kehabisan gas)
@@ -322,13 +412,13 @@ Sebagai contoh:
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.8.1;
     contract C {
-        function f(uint8 _a) public pure returns (uint _r1, uint _r2)
+        function f(uint8 a) public pure returns (uint r1, uint r2)
         {
-            _a = ~_a;
+            a = ~a;
             assembly {
-                _r1 := _a
+                r1 := a
             }
-            _r2 = _a;
+            r2 = a;
         }
     }
 
@@ -337,6 +427,12 @@ Fungsi ``f(1)`` menghasilkan nilai berikut:
 - Generator kode lama: (``fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe``, ``00000000000000000000000000000000000000000000000000000000000000fe``)
 - Generator kode baru: (``00000000000000000000000000000000000000000000000000000000000000fe``, ``00000000000000000000000000000000000000000000000000000000000000fe``)
 
+<<<<<<< HEAD
 Perhatikan bahwa, tidak seperti generator kode baru, generator kode lama tidak melakukan pembersihan setelah bit-not assignmen (``_a = ~_a``).
 Ini menghasilkan nilai yang berbeda yang ditetapkan (dalam blok  inline assembly) untuk mengembalikan nilai ``_r1`` antara generator kode lama dan baru.
 Namun, kedua generator kode melakukan pembersihan sebelum nilai baru ``_a`` ditetapkan ke ``_r2``.
+=======
+Note that, unlike the new code generator, the old code generator does not perform a cleanup after the bit-not assignment (``a = ~a``).
+This results in different values being assigned (within the inline assembly block) to return value ``r1`` between the old and new code generators.
+However, both code generators perform a cleanup before the new value of ``a`` is assigned to ``r2``.
+>>>>>>> english/develop
