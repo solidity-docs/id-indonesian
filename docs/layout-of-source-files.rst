@@ -2,9 +2,15 @@
 Tata Letak source files Solidity
 ********************************
 
+<<<<<<< HEAD
 Source files (*kode sumber*) dapat berisi sejumlah arbitrer
 :ref:`contract definitions<contract_structure>`, import_ directives,
 :ref:`pragma directives<pragma>` and
+=======
+Source files can contain an arbitrary number of
+:ref:`contract definitions<contract_structure>`, import_ ,
+:ref:`pragma<pragma>` and :ref:`using for<using-for>` directives and
+>>>>>>> english/develop
 :ref:`struct<structs>`, :ref:`enum<enums>`, :ref:`function<functions>`, :ref:`error<errors>`
 and :ref:`constant variable<constants>` definitions.
 
@@ -13,10 +19,18 @@ and :ref:`constant variable<constants>` definitions.
 Pengidentifikasi Lisensi SPDX
 =======================++++++
 
+<<<<<<< HEAD
 Kepercayaan pada smart kontrak dapat dibangun dengan lebih baik jika kode sumbernya tersedia.
 Karena menyediakan kode sumber selalu menyentuh masalah hukum yang berkaitan dengan hak cipta,
 compiler Solidity mendorong penggunaan `SPDX license identifiers yang dapat dibaca mesin <https://spdx.org>`_.
 Setiap kode sumber harus dimulai dengan komentar yang menunjukkan lisensinya:
+=======
+Trust in smart contracts can be better established if their source code
+is available. Since making source code available always touches on legal problems
+with regards to copyright, the Solidity compiler encourages the use
+of machine-readable `SPDX license identifiers <https://spdx.org>`_.
+Every source file should start with a comment indicating its license:
+>>>>>>> english/develop
 
 ``// SPDX-License-Identifier: MIT``
 
@@ -24,8 +38,16 @@ Kompiler tidak memvalidasi bahwa lisensi adalah bagian dari
 `daftar yang diizinkan oleh SPDX <https://spdx.org/licenses/>`_, tapi
 itu menyertakan string yang disediakan dalam :ref:`bytecode metadata <metadata>`.
 
+<<<<<<< HEAD
 Jika Anda tidak ingin menentukan lisensi atau jika kode sumbernya
 bukan open-source, harap gunakan nilai khusus ``UNLICENSED``.
+=======
+If you do not want to specify a license or if the source code is
+not open-source, please use the special value ``UNLICENSED``.
+Note that ``UNLICENSED`` (no usage allowed, not present in SPDX license list)
+is different from ``UNLICENSE`` (grants all rights to everyone).
+Solidity follows `the npm recommendation <https://docs.npmjs.com/cli/v7/configuring-npm/package-json#license>`_.
+>>>>>>> english/develop
 
 Memberikan komentar ini tentu saja tidak membebaskan Anda dari kewajiban lain
 yang terkait dengan perizinan seperti harus menyebutkan
@@ -35,8 +57,13 @@ pemegang hak cipta asli.
 Komentar dikenali oleh kompiler di mana saja di bagian file,
 tetapi disarankan untuk meletakkannya di bagian atas file.
 
+<<<<<<< HEAD
 Informasi lebih lanjut tentang cara menggunakan pengidentifikasi lisensi SPDX
 dapat ditemukan di `situs web SPDX <https://spdx.org/ids-how>`_.
+=======
+More information about how to use SPDX license identifiers
+can be found at the `SPDX website <https://spdx.dev/learn/handling-license-info/#how>`_.
+>>>>>>> english/develop
 
 
 .. index:: ! pragma
@@ -53,7 +80,7 @@ Anda jika Anda ingin mengaktifkannya di seluruh proyek Anda.
 Jika Anda :ref:`import<import>` file lain, pragma dari file
 tersebut *tidak* secara otomatis diterapkan ke file yang diimpor.
 
-.. index:: ! pragma, version
+.. index:: ! pragma;version
 
 .. _version_pragma:
 
@@ -85,17 +112,29 @@ dengan menggunakan syntax yang sama yang digunakan `npm <https://docs.npmjs.com/
   cocok dengan yang dibutuhkan oleh pragma. Jika tidak cocok, akan
   terjadi kesalahan pada kompiler.
 
+.. index:: ! ABI coder, ! pragma; abicoder, pragma; ABIEncoderV2
+.. _abi_coder:
+
 ABI Coder Pragma
 ----------------
 
 Dengan menggunakan ``pragma abicoder v1`` atau ``pragma abicoder v2`` anda dapat
 memilih antara dua implementasi ABI encoder dan decoder.
 
+<<<<<<< HEAD
 ABI coder terbaru (v2) mampu untuk meng*encode* dan decode nested arrays dan structs semaunya.
 Ini mungkin menghasilkan kode yang kurang optimal  dan belum menerima pengujian sebanyak encoder lama,
 tetapi dianggap non-eksperimental pada Solidity 0.6.0. Anda masih harus mengaktifkannya secara eksplisit
 menggunakan ``pragma abicoder v2;``. Mulai dari Solidity 0.8.0 ini akan diaktifkan secara default,
 ada pilihan untuk memilih coder lama dengan menggunakan ``pragma abicoder v1;``.
+=======
+The new ABI coder (v2) is able to encode and decode arbitrarily nested
+arrays and structs. Apart from supporting more types, it involves more extensive
+validation and safety checks, which may result in higher gas costs, but also heightened
+security. It is considered
+non-experimental as of Solidity 0.6.0 and it is enabled by default starting
+with Solidity 0.8.0. The old ABI coder can still be selected using ``pragma abicoder v1;``.
+>>>>>>> english/develop
 
 Kumpulan jenis yang didukung oleh encoder baru adalah strict superset dari yang didukung oleh versi yang lama.
 Kontrak yang menggunakannya dapat berinteraksi dengan kontrak yang tidak menggunakannya tanpa batasan.
@@ -116,8 +155,7 @@ Dengan mengaktifkan ``abicoder v2`` untuk kontrak Anda sudah cukup untuk menghil
   dengan menggunakan ``pragma experimental ABIEncoderV2``, tetapi itu tidak mungkin
   untuk secara eksplisit memilih coder v1 karena itu adalah default.
 
-.. index:: ! pragma, experimental
-
+.. index:: ! pragma; experimental
 .. _experimental_pragma:
 
 Experimental Pragma
@@ -127,6 +165,7 @@ Pragma kedua adalah pragma eksperimental. Ini dapat digunakan untuk mengaktifkan
 kompiler atau bahasa yang belum diaktifkan secara default.
 Berikut Pragma experimental yang saat ini didukung:
 
+.. index:: ! pragma; ABIEncoderV2
 
 ABIEncoderV2
 ~~~~~~~~~~~~
@@ -135,6 +174,7 @@ Karena ABI coder v2 tidak dianggap eksperimental lagi,
 itu dapat dipilih melalui ``pragma abicoder v2`` (silakan lihat di atas)
 mulai dari Solidity 0.7.4.
 
+.. index:: ! pragma; SMTChecker
 .. _smt_checker:
 
 SMTChecker
@@ -164,9 +204,16 @@ Mengimpor Source Files lain
 Syntax and Semantics
 --------------------
 
+<<<<<<< HEAD
 Solidity mendukung pernyataan impor untuk membantu memodulasi kode Anda yang
 serupa dengan yang tersedia di JavaScript (mulai dari ES6).
 Namun, Solidity tidak mendukung konsep `ekspor default <https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#Description>`_.
+=======
+Solidity supports import statements to help modularise your code that
+are similar to those available in JavaScript
+(from ES6 on). However, Solidity does not support the concept of
+a `default export <https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#description>`_.
+>>>>>>> english/develop
 
 Di tingkat global, Anda dapat menggunakan pernyataan impor dengan form berikut:
 

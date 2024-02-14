@@ -13,21 +13,35 @@ Contract Application Binary Interface (ABI) adalah cara standar untuk berinterak
 dari luar blockchain maupun untuk interaksi kontrak-ke-kontrak. Data dikodekan menurut jenisnya,
 seperti yang dijelaskan dalam spesifikasi ini. Pengkodean tidak menggambarkan diri sendiri dan dengan demikian memerlukan skema untuk memecahkan kode.
 
+<<<<<<< HEAD
 Kami menganggap fungsi antarmuka kontrak diketik dengan kuat, dikenal pada waktu kompilasi dan statis.
 Kami berasumsi bahwa semua kontrak akan memiliki definisi antarmuka dari setiap kontrak yang mereka sebut tersedia pada waktu kompilasi.
+=======
+We assume that the interface functions of a contract are strongly typed, known at compilation time and static.
+We assume that all contracts will have the interface definitions of any contracts they call available at compile-time.
+>>>>>>> english/develop
 
 Spesifikasi ini tidak membahas kontrak yang antarmukanya dinamis atau hanya diketahui saat run-time.
 
 .. _abi_function_selector:
-.. index:: selector
+.. index:: ! selector; of a function
 
 Fungsi Selector
 ===============
 
+<<<<<<< HEAD
 Empat byte pertama dari data panggilan untuk panggilan fungsi menentukan fungsi yang akan dipanggil. Ini adalah
 yang pertama (kiri, orde tinggi dalam big-endian) empat byte hash Keccak-256 dari tanda tangan fungsi. Tanda tangan
 didefinisikan sebagai ekspresi kanonik dari prototipe dasar tanpa penentu lokasi data, yaitu nama fungsi dengan daftar
 tipe parameter yang dikurung. Jenis parameter dipisahkan dengan koma tunggal - tidak ada spasi yang digunakan.
+=======
+The first four bytes of the call data for a function call specifies the function to be called. It is the
+first (left, high-order in big-endian) four bytes of the Keccak-256 hash of the signature of
+the function. The signature is defined as the canonical expression of the basic prototype without data
+location specifier, i.e.
+the function name with the parenthesised list of parameter types. Parameter types are split by a single
+comma — no spaces are used.
+>>>>>>> english/develop
 
 .. note::
     Jenis kembalinya suatu fungsi bukan bagian dari tanda tangan ini. Di dalam
@@ -130,8 +144,13 @@ Encoding dirancang untuk memiliki properti berikut, yang sangat berguna jika beb
    versi ABI sebelumnya, jumlah pembacaan diskalakan secara linier dengan jumlah total parameter dinamis dalam
    kasus terburuk.
 
+<<<<<<< HEAD
 2. Data dari variabel atau elemen array tidak disisipkan dengan data lain dan itu adalah
    relocatable, yaitu hanya menggunakan "addresses" relatif.
+=======
+2. The data of a variable or an array element is not interleaved with other data and it is
+   relocatable, i.e. it only uses relative "addresses".
+>>>>>>> english/develop
 
 
 Spesifikasi Formal Encoding
@@ -188,10 +207,15 @@ pada jenis ``X``
 
 - ``T[]`` dimana ``X`` mempunyai elemen ``k`` (``k`` diasumsikan bertipe ``uint256``):
 
-  ``enc(X) = enc(k) enc([X[0], ..., X[k-1]])``
+  ``enc(X) = enc(k) enc((X[0], ..., X[k-1]))``
 
+<<<<<<< HEAD
   yaitu dikodekan seolah-olah itu adalah array ukuran statis ``k``, diawali dengan
   jumlah elemen.
+=======
+  i.e. it is encoded as if it were a tuple with ``k`` elements of the same type (resp. an array of static size ``k``), prefixed with
+  the number of elements.
+>>>>>>> english/develop
 
 - ``bytes``, panjang dari ``k`` (yang diasumsikan bertipe ``uint256``):
 
@@ -249,8 +273,27 @@ Diberikan kontrak:
     }
 
 
+<<<<<<< HEAD
 Jadi untuk contoh ``Foo`` kita jika kita ingin memanggil ``baz`` dengan parameter ``69`` dan
 ``true``, kita akan melewati total 68 byte, yang dapat dipecah menjadi:
+=======
+Thus, for our ``Foo`` example, if we wanted to call ``bar`` with the argument ``["abc", "def"]``, we would pass 68 bytes total, broken down into:
+
+- ``0xfce353f6``: the Method ID. This is derived from the signature ``bar(bytes3[2])``.
+- ``0x6162630000000000000000000000000000000000000000000000000000000000``: the first part of the first
+  parameter, a ``bytes3`` value ``"abc"`` (left-aligned).
+- ``0x6465660000000000000000000000000000000000000000000000000000000000``: the second part of the first
+  parameter, a ``bytes3`` value ``"def"`` (left-aligned).
+
+In total:
+
+.. code-block:: none
+
+    0xfce353f661626300000000000000000000000000000000000000000000000000000000006465660000000000000000000000000000000000000000000000000000000000
+
+If we wanted to call ``baz`` with the parameters ``69`` and
+``true``, we would pass 68 bytes total, which can be broken down into:
+>>>>>>> english/develop
 
 - ``0xcdcd77c0``: ID Metode. Ini diturunkan sebagai 4 byte pertama hash Keccak dari
   bentuk ASCII dari tanda tangan ``baz(uint32,bool)``.
@@ -268,6 +311,7 @@ Secara keseluruhan:
 Ini mengembalikan satu ``bool``. Jika, misalnya, mengembalikan ``false``, outputnya adalah
 array byte tunggal ``0x0000000000000000000000000000000000000000000000000000000000000000``, satu bool.
 
+<<<<<<< HEAD
 Jika kita ingin memanggil ``bar`` dengan argumen ``["abc", "def"]``, kita akan melewati total 68 byte, dipecah menjadi:
 
 - ``0xfce353f6``: ID Metode. Ini diturunkan dari tanda tangan ``bar(bytes3[2])``.
@@ -284,6 +328,10 @@ Secara keseluruhan:
 
 Jika kita ingin memanggil ``sam`` dengan argumen ``"dave"``, ``true`` dan ``[1,2,3]``, kita akan
 melewati total 292 byte, dipecah menjadi:
+=======
+If we wanted to call ``sam`` with the arguments ``"dave"``, ``true`` and ``[1,2,3]``, we would
+pass 292 bytes total, broken down into:
+>>>>>>> english/develop
 
 - ``0xa5643bf2``: ID Metode. Ini diturunkan dari tanda tangan ``sam(bytes,bool,uint256[])``. Perhatikan bahwa ``uint`` diganti dengan representasi kanoniknya ``uint256``.
 - ``0x00000000000000000000000000000000000000000000000000000000000060``: lokasi bagian data dari parameter pertama (tipe dinamis), diukur dalam byte dari awal blok argumen. Dalam hal ini, ``0x60``.
@@ -305,6 +353,7 @@ Secara keseluruhan:
 penggunaan Dynamic Types
 ========================
 
+<<<<<<< HEAD
 Panggilan ke fungsi dengan tanda tangan ``f(uint,uint32[],byte10,bytes)`` dengan nilai
 ``(0x123, [0x456, 0x789], "1234567890", "Hello, world!")`` dikodekan dengan cara berikut:
 
@@ -313,6 +362,16 @@ Kemudian kami mengkodekan bagian kepala dari keempat argumen. Untuk tipe statis 
 ini adalah nilai yang ingin kita sampaikan secara langsung, sedangkan untuk tipe dinamis ``uint32[]`` dan ``byte``,
 kami menggunakan offset dalam byte ke awal area datanya, diukur dari awal nilainya
 encoding (yaitu tidak menghitung empat byte pertama yang berisi hash dari tanda tangan fungsi). Ini adalah:
+=======
+A call to a function with the signature ``f(uint256,uint32[],bytes10,bytes)`` with values
+``(0x123, [0x456, 0x789], "1234567890", "Hello, world!")`` is encoded in the following way:
+
+We take the first four bytes of ``keccak("f(uint256,uint32[],bytes10,bytes)")``, i.e. ``0x8be65246``.
+Then we encode the head parts of all four arguments. For the static types ``uint256`` and ``bytes10``,
+these are directly the values we want to pass, whereas for the dynamic types ``uint32[]`` and ``bytes``,
+we use the offset in bytes to the start of their data area, measured from the start of the value
+encoding (i.e. not counting the first four bytes containing the hash of the function signature). These are:
+>>>>>>> english/develop
 
 - ``0x0000000000000000000000000000000000000000000000000000000000000000123`` (``0x123`` diisi hingga 32 byte)
 - ``0x00000000000000000000000000000000000000000000000000000000000000080`` (offset untuk memulai bagian data dari parameter kedua, 4*32 byte, persis ukuran bagian kepala)
@@ -345,8 +404,13 @@ Secara keseluruhan, encoding adalah (baris baru setelah pemilih fungsi dan masin
       000000000000000000000000000000000000000000000000000000000000000d
       48656c6c6f2c20776f726c642100000000000000000000000000000000000000
 
+<<<<<<< HEAD
 Mari kita terapkan prinsip yang sama untuk mengkodekan data untuk suatu fungsi dengan tanda tangan ``g(uint[][],string[])``
 dengan nilai ``([[1, 2], [3]], ["satu", "dua", "tiga"])`` tetapi mulai dari bagian pengkodean yang paling atomik:
+=======
+Let us apply the same principle to encode the data for a function with a signature ``g(uint256[][],string[])``
+with values ``([[1, 2], [3]], ["one", "two", "three"])`` but start from the most atomic parts of the encoding:
+>>>>>>> english/develop
 
 Pertama kita mengkodekan panjang dan data dari larik dinamis tertanam pertama ``[1, 2]`` dari larik akar pertama ``[[1, 2], [3]]``:
 
@@ -413,8 +477,13 @@ Offset ``e`` menunjuk ke awal konten string ``"three"`` yaitu baris 7 (224 byte)
 jadi ``e = 0x000000000000000000000000000000000000000000000000000000000000000e0``.
 
 
+<<<<<<< HEAD
 Perhatikan bahwa pengkodean elemen tertanam dari array root tidak bergantung satu sama lain
 dan memiliki penyandian yang sama untuk fungsi dengan tanda tangan ``g(string[],uint[][])``.
+=======
+Note that the encodings of the embedded elements of the root arrays are not dependent on each other
+and have the same encodings for a function with a signature ``g(string[],uint256[][])``.
+>>>>>>> english/develop
 
 Kemudian kami menyandikan panjang array root pertama:
 
@@ -499,6 +568,7 @@ yang efisien dan keterbacaan arbitrer dengan mendefinisikan peristiwa dengan dua
 diindeks, satu tidak — dimaksudkan untuk memiliki nilai yang sama.
 
 .. _abi_errors:
+.. index:: error, selector; of an error
 
 Errors
 ======
@@ -558,7 +628,11 @@ Deskripsi fungsi adalah sebuah objek JSON dengan:
   blockchain state <pure-functions>`), ``view`` (:ref:`specified to not modify the blockchain
   state <view-functions>`), ``nonpayable`` (fungsi yang tidak menerima Ether - default) dan ``payable`` (fungsi yang menerima Ether).
 
+<<<<<<< HEAD
 Konstruktor dan fungi fallback tidak pernah memiliki ``name`` atau ``output``. Fungsi fallback juga tidak memiliki ``input``.
+=======
+Constructor, receive, and fallback never have ``name`` or ``outputs``. Receive and fallback do not have ``inputs`` either.
+>>>>>>> english/develop
 
 .. note::
     Mengirim non-zero Ether ke fungsi non-payable akan menggagalkan transaksi.
@@ -586,6 +660,7 @@ Errors terlihat sebagai berikut:
 - ``name``: nama dari error.
 - ``inputs``: an array of objects, each of which contains:
 
+<<<<<<< HEAD
   * ``name``: nama dari parameter.
   * ``type``: tipe canonical dari parameter (lebih lanjut dibawah).
   * ``components``: digunakan untuk tuple types (lebih lanjut dibawah).
@@ -596,6 +671,31 @@ Errors terlihat sebagai berikut:
   tanda tangan yang identik dalam array JSON, misalnya jika kesalahan berasal
   dari file yang berbeda dalam kontrak pintar atau direferensikan dari smart kontrak lain.
   Untuk ABI, hanya nama kesalahan itu sendiri yang relevan dan bukan di mana itu didefinisikan.
+=======
+  * ``name``: the name of the parameter.
+  * ``type``: the canonical type of the parameter (more below).
+  * ``components``: used for tuple types (more below).
+  * ``indexed``: ``true`` if the field is part of the log's topics, ``false`` if it is one of the log's data segments.
+
+- ``anonymous``: ``true`` if the event was declared as ``anonymous``.
+
+Errors look as follows:
+
+- ``type``: always ``"error"``
+- ``name``: the name of the error.
+- ``inputs``: an array of objects, each of which contains:
+
+  * ``name``: the name of the parameter.
+  * ``type``: the canonical type of the parameter (more below).
+  * ``components``: used for tuple types (more below).
+
+.. note::
+  There can be multiple errors with the same name and even with identical signature
+  in the JSON array; for example, if the errors originate from different
+  files in the smart contract or are referenced from another smart contract.
+  For the ABI, only the name of the error itself is relevant and not where it is
+  defined.
+>>>>>>> english/develop
 
 
 Sebagai contoh,
@@ -641,6 +741,7 @@ akan menghasilkan JSON:
 Menangani jenis tupel
 ---------------------
 
+<<<<<<< HEAD
 Meskipun nama-nama itu sengaja bukan bagian dari pengkodean ABI, mereka sangat masuk akal untuk dimasukkan
 dalam JSON untuk memungkinkan menampilkannya kepada pengguna akhir. Struktur *nested *dengan cara berikut:
 
@@ -651,6 +752,18 @@ urutan ``[]`` dan ``[k]`` dengan
 integer ``k``. Komponen dari tupel kemudian disimpan dalam anggota ``components``,
 yang merupakan tipe array dan memiliki struktur yang sama dengan objek tingkat atas kecuali itu
 ``indexed`` tidak diperbolehkan di sana.
+=======
+Despite the fact that names are intentionally not part of the ABI encoding, they do make a lot of sense to be included
+in the JSON to enable displaying it to the end user. The structure is nested in the following way:
+
+An object with members ``name``, ``type`` and potentially ``components`` describes a typed variable.
+The canonical type is determined until a tuple type is reached and the string description up
+to that point is stored in ``type`` prefix with the word ``tuple``, i.e. it will be ``tuple`` followed by
+a sequence of ``[]`` and ``[k]`` with
+integers ``k``. The components of the tuple are then stored in the member ``components``,
+which is of an array type and has the same structure as the top-level object except that
+``indexed`` is not allowed there.
+>>>>>>> english/develop
 
 Sebagai contoh, kode
 
@@ -732,6 +845,7 @@ akan menghasilkan JSON:
 Mode Strict Encoding
 ====================
 
+<<<<<<< HEAD
 Strict encoding mode adalah mode yang mengarah ke pengkodean yang sama persis seperti yang didefinisikan dalam spesifikasi formal di atas.
 Ini berarti offset harus sekecil mungkin sambil tetap tidak membuat tumpang tindih di area data dan dengan demikian tidak ada celah yang
 diizinkan.
@@ -739,15 +853,30 @@ diizinkan.
 Biasanya, decoder ABI ditulis secara langsung hanya dengan mengikuti pointer offset, tetapi beberapa decoder
 mungkin menerapkan strict mode. Decoder Solidity ABI saat ini tidak menerapkan strict mode, tetapi encoder
 selalu membuat data dalam strict mode.
+=======
+Strict encoding mode is the mode that leads to exactly the same encoding as defined in the formal specification above.
+This means that offsets have to be as small as possible while still not creating overlaps in the data areas, and thus no gaps are
+allowed.
+
+Usually, ABI decoders are written in a straightforward way by just following offset pointers, but some decoders
+might enforce strict mode. The Solidity ABI decoder currently does not enforce strict mode, but the encoder
+always creates data in strict mode.
+>>>>>>> english/develop
 
 Mode Non-standard Packed
 ========================
 
 Melalui ``abi.encodePacked()``, Solidity mendukung mode non-standard packed di mana:
 
+<<<<<<< HEAD
 - tipe yang lebih pendek dari 32 byte tidak diisi nol atau tanda diperpanjang dan
 - tipe dinamis dikodekan di tempat dan tanpa panjang.
 - elemen array diisi, tetapi masih dikodekan di tempat
+=======
+- types shorter than 32 bytes are concatenated directly, without padding or sign extension
+- dynamic types are encoded in-place and without the length.
+- array elements are padded, but still encoded in-place
+>>>>>>> english/develop
 
 Selain itu, struct serta nested array tidak didukung.
 
@@ -763,6 +892,7 @@ Sebagai contoh, pengkodean ``int16(-1), bytes1(0x42), uint16(0x03), string("Hell
 
 Lebih spesifik:
 
+<<<<<<< HEAD
 - Selama pengkodean, semuanya dikodekan di tempat. Artinya
   tidak ada perbedaan antara kepala dan ekor, seperti dalam penyandian ABI,
   dan panjang larik tidak disandikan.
@@ -774,6 +904,20 @@ Lebih spesifik:
   tanpa bidang panjangnya.
 - Encoding ``string`` atau ``bytes`` tidak menerapkan padding di akhir
   kecuali jika itu adalah bagian dari array atau struct (kemudian diisi ke kelipatan 32 byte).
+=======
+- During the encoding, everything is encoded in-place. This means that there is
+  no distinction between head and tail, as in the ABI encoding, and the length
+  of an array is not encoded.
+- The direct arguments of ``abi.encodePacked`` are encoded without padding,
+  as long as they are not arrays (or ``string`` or ``bytes``).
+- The encoding of an array is the concatenation of the
+  encoding of its elements **with** padding.
+- Dynamically-sized types like ``string``, ``bytes`` or ``uint[]`` are encoded
+  without their length field.
+- The encoding of ``string`` or ``bytes`` does not apply padding at the end,
+  unless it is part of an array or struct (then it is padded to a multiple of
+  32 bytes).
+>>>>>>> english/develop
 
 Secara umum, pengkodean menjadi ambigu segera setelah ada dua elemen berukuran dinamis,
 karena bidang panjang yang hilang.
@@ -798,9 +942,15 @@ untuk menambahkan pemilih fungsi. Karena penyandiannya ambigu, tidak ada fungsi 
 Encoding Parameter Event Terindeks
 ==================================
 
+<<<<<<< HEAD
 Parameter Event Terindeks yang bukan tipe nilai, yaitu array dan struct tidak disimpan
 secara langsung melainkan keccak256-hash dari pengkodean disimpan. Pengkodean ini
 didefinisikan sebagai berikut:
+=======
+Indexed event parameters that are not value types, i.e. arrays and structs are not
+stored directly but instead a Keccak-256 hash of an encoding is stored. This encoding
+is defined as follows:
+>>>>>>> english/develop
 
 - pengkodean nilai ``byte`` dan ``string`` hanyalah konten string
   tanpa awalan padding atau panjang.
