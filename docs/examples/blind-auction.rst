@@ -16,6 +16,7 @@ melihat tawaran yang sebenarnya sampai periode penawaran berakhir.
 Lelang Terbuka Sederhana (Simple Open Auction)
 ==============================================
 
+<<<<<<< HEAD
 Gagasan umum dari kontrak lelang sederhana berikut
 adalah bahwa setiap orang dapat mengirimkan penawaran
 mereka selama masa penawaran. Tawaran sudah termasuk
@@ -24,6 +25,14 @@ Jika tawaran tertinggi dinaikkan, penawar tertinggi sebelumnya
 mendapatkan uang mereka kembali. Setelah akhir periode penawaran,
 kontrak harus dipanggil secara manual agar penerima menerima
 uang mereka - kontrak tidak dapat mengaktifkan dirinya sendiri.
+=======
+The general idea of the following simple auction contract is that everyone can
+send their bids during a bidding period. The bids already include sending some compensation,
+e.g. Ether, in order to bind the bidders to their bid. If the highest bid is
+raised, the previous highest bidder gets their Ether back.  After the end of
+the bidding period, the contract has to be called manually for the beneficiary
+to receive their Ether - contracts cannot activate themselves.
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
@@ -95,19 +104,19 @@ uang mereka - kontrak tidak dapat mengaktifkan dirinya sendiri.
                 revert AuctionAlreadyEnded();
 
             // If the bid is not higher, send the
-            // money back (the revert statement
+            // Ether back (the revert statement
             // will revert all changes in this
             // function execution including
-            // it having received the money).
+            // it having received the Ether).
             if (msg.value <= highestBid)
                 revert BidNotHighEnough(highestBid);
 
             if (highestBid != 0) {
-                // Sending back the money by simply using
+                // Sending back the Ether by simply using
                 // highestBidder.send(highestBid) is a security risk
                 // because it could execute an untrusted contract.
                 // It is always safer to let the recipients
-                // withdraw their money themselves.
+                // withdraw their Ether themselves.
                 pendingReturns[highestBidder] += highestBid;
             }
             highestBidder = msg.sender;
@@ -124,6 +133,9 @@ uang mereka - kontrak tidak dapat mengaktifkan dirinya sendiri.
                 // before `send` returns.
                 pendingReturns[msg.sender] = 0;
 
+                // msg.sender is not of type `address payable` and must be
+                // explicitly converted using `payable(msg.sender)` in order
+                // use the member function `send()`.
                 if (!payable(msg.sender).send(amount)) {
                     // No need to call throw here, just reset the amount owing
                     pendingReturns[msg.sender] = amount;
@@ -172,6 +184,7 @@ Keuntungan dari pelelangan buta adalah tidak ada tekanan waktu menjelang akhir p
 Membuat pelelangan buta pada platform komputasi transparan mungkin terdengar seperti kontradiksi,
 tetapi kriptografi datang untuk menyelamatkan.
 
+<<<<<<< HEAD
 Selama **periode penawaran**, bidder tidak benar-benar mengirimkan penawaran mereka,
 tetapi hanya versi hash dari penawaran tersebut. Karena saat ini secara praktis
 dianggap tidak mungkin untuk menemukan dua nilai (cukup panjang)
@@ -191,6 +204,27 @@ selama fase pengungkapan, beberapa tawaran mungkin **tidak valid**, dan ini dise
 tanda eksplisit untuk menempatkan tawaran yang tidak valid dengan transfer bernilai tinggi): Penawar
 dapat mengacaukan persaingan dengan menempatkan beberapa tawaran yang tidak valid,
 tinggi maupun rendah.
+=======
+During the **bidding period**, a bidder does not actually send their bid, but
+only a hashed version of it.  Since it is currently considered practically
+impossible to find two (sufficiently long) values whose hash values are equal,
+the bidder commits to the bid by that.  After the end of the bidding period,
+the bidders have to reveal their bids: They send their values unencrypted, and
+the contract checks that the hash value is the same as the one provided during
+the bidding period.
+
+Another challenge is how to make the auction **binding and blind** at the same
+time: The only way to prevent the bidder from just not sending the Ether after
+they won the auction is to make them send it together with the bid. Since value
+transfers cannot be blinded in Ethereum, anyone can see the value.
+
+The following contract solves this problem by accepting any value that is
+larger than the highest bid. Since this can of course only be checked during
+the reveal phase, some bids might be **invalid**, and this is on purpose (it
+even provides an explicit flag to place invalid bids with high-value
+transfers): Bidders can confuse competition by placing several high or low
+invalid bids.
+>>>>>>> english/develop
 
 
 .. code-block:: solidity

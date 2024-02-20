@@ -1,4 +1,4 @@
-.. index:: ! functions
+.. index:: ! functions, ! function;free
 
 .. _functions:
 
@@ -17,28 +17,37 @@ memanggil mereka, mirip dengan fungsi library internal.
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.1 <0.9.0;
 
-    function sum(uint[] memory _arr) pure returns (uint s) {
-        for (uint i = 0; i < _arr.length; i++)
-            s += _arr[i];
+    function sum(uint[] memory arr) pure returns (uint s) {
+        for (uint i = 0; i < arr.length; i++)
+            s += arr[i];
     }
 
     contract ArrayExample {
         bool found;
-        function f(uint[] memory _arr) public {
+        function f(uint[] memory arr) public {
             // This calls the free function internally.
             // The compiler will add its code to the contract.
-            uint s = sum(_arr);
+            uint s = sum(arr);
             require(s >= 10);
             found = true;
         }
     }
 
 .. note::
+<<<<<<< HEAD
     Fungsi yang didefinisikan di luar kontrak masih selalu dijalankan dalam konteks kontrak. Mereka masih
     memiliki akses ke variabel ``this``, dapat memanggil kontrak lain, mengirim mereka Ether dan menghancurkan
     kontrak yang memanggil mereka, antara lain. Perbedaan utama pada fungsi yang didefinisikan di dalam kontrak
     adalah bahwa fungsi bebas tidak memiliki akses langsung ke variabel storage dan fungsi tidak berada dalam
     cakupannya.
+=======
+    Functions defined outside a contract are still always executed
+    in the context of a contract.
+    They still can call other contracts, send them Ether and destroy the contract that called them,
+    among other things. The main difference to functions defined inside a contract
+    is that free functions do not have direct access to the variable ``this``, storage variables and functions
+    not in their scope.
+>>>>>>> english/develop
 
 .. _function-parameters-return-variables:
 
@@ -64,13 +73,14 @@ dengan dua integer, Anda akan menggunakan sesuatu seperti berikut:
 
     contract Simple {
         uint sum;
-        function taker(uint _a, uint _b) public {
-            sum = _a + _b;
+        function taker(uint a, uint b) public {
+            sum = a + b;
         }
     }
 
 Parameter fungsi dapat digunakan sebagai variabel lokal lainnya dan mereka juga dapat ditugaskan.
 
+<<<<<<< HEAD
 .. note::
 
   Sebuah :ref:`external function<external-function-calls>` tidak dapat menerima
@@ -81,6 +91,8 @@ Parameter fungsi dapat digunakan sebagai variabel lokal lainnya dan mereka juga 
   Sebuah :ref:`internal function<external-function-calls>` dapat menerima
   array multi-dimensi tanpa mengaktifkan fitur.
 
+=======
+>>>>>>> english/develop
 .. index:: return array, return string, array, string, array of strings, dynamic array, variably sized array, return struct, struct
 
 Variabel Return
@@ -98,13 +110,13 @@ yang diteruskan sebagai parameter fungsi, maka Anda menggunakan sesuatu seperti:
     pragma solidity >=0.4.16 <0.9.0;
 
     contract Simple {
-        function arithmetic(uint _a, uint _b)
+        function arithmetic(uint a, uint b)
             public
             pure
-            returns (uint o_sum, uint o_product)
+            returns (uint sum, uint product)
         {
-            o_sum = _a + _b;
-            o_product = _a * _b;
+            sum = a + b;
+            product = a * b;
         }
     }
 
@@ -124,12 +136,12 @@ langsung dengan pernyataan ``return``:
     pragma solidity >=0.4.16 <0.9.0;
 
     contract Simple {
-        function arithmetic(uint _a, uint _b)
+        function arithmetic(uint a, uint b)
             public
             pure
-            returns (uint o_sum, uint o_product)
+            returns (uint sum, uint product)
         {
-            return (_a + _b, _a * _b);
+            return (a + b, a * b);
         }
     }
 
@@ -137,6 +149,7 @@ Jika Anda menggunakan ``return`` lebih awal untuk meninggalkan fungsi yang memil
 Anda harus memberikan nilai return bersamaan dengan pernyataan return.
 
 .. note::
+<<<<<<< HEAD
     Anda tidak dapat mengembalikan beberapa tipe dari fungsi non-internal, terutama
     array dan struct dinamis multi-dimensi. Jika Anda mengaktifkan
     You cannot return some types from non-internal functions, notably
@@ -144,6 +157,18 @@ Anda harus memberikan nilai return bersamaan dengan pernyataan return.
     ABI coder v2 dengan menambahkan ``pragma abicoder v2;`` ke file sumber Anda,
     maka lebih banyak jenis yang tersedia, tetapi jenis ``mapping`` masih terbatas
     di dalam satu kontrak dan Anda tidak dapat mentransfernya.
+=======
+    You cannot return some types from non-internal functions.
+    This includes the types listed below and any composite types that recursively contain them:
+
+    - mappings,
+    - internal function types,
+    - reference types with location set to ``storage``,
+    - multi-dimensional arrays (applies only to :ref:`ABI coder v1 <abi_coder>`),
+    - structs (applies only to :ref:`ABI coder v1 <abi_coder>`).
+
+    This restriction does not apply to library functions because of their different :ref:`internal ABI <library-selectors>`.
+>>>>>>> english/develop
 
 .. _multi-return:
 
@@ -255,7 +280,11 @@ Mengembalikan perubahan state tidak dianggap sebagai "modifikasi state", karena 
 state yang dibuat sebelumnya dalam kode yang tidak memiliki batasan ``view`` atau ``pure`` yang dikembalikan
 dan kode tersebut memiliki opsi untuk menangkap ``revert`` dan tidak menyebarkannya.
 
+<<<<<<< HEAD
 Perilaku ini juga sejalan dengan opcode ``STATICCALL``.
+=======
+This behavior is also in line with the ``STATICCALL`` opcode.
+>>>>>>> english/develop
 
 .. warning::
   Tidak mungkin untuk mencegah fungsi membaca state di level EVM,
@@ -279,7 +308,7 @@ Perilaku ini juga sejalan dengan opcode ``STATICCALL``.
 Fungsi Spesial
 ==============
 
-.. index:: ! receive ether function, function;receive ! receive
+.. index:: ! receive ether function, function;receive, ! receive
 
 .. _receive-ether-function:
 
@@ -293,6 +322,7 @@ Fungsi ini tidak dapat memiliki argumen, tidak dapat mengembalikan apa pun dan h
 visibilitas ``eksternal`` dan mutabilitas state ``payable``.
 Itu bisa virtual, dapat menimpa dan dapat memiliki modifiers.
 
+<<<<<<< HEAD
 Fungsi terima dieksekusi pada panggilan
 ke kontrak dengan calldata kosong. Ini adalah fungsi yang dijalankan
 pada transfer Ether biasa (misalnya melalui ``.send()`` atau ``.transfer()``). Jika tidak ada
@@ -300,6 +330,16 @@ fungsi seperti itu, tetapi ada :ref:`fallback function <fallback-function>`
 yang harus dibayar, fungsi fallback akan dipanggil pada transfer Ether biasa. Jika
 tidak ada Fungsi Terima Ehter maupun fungsi fallback yang dapat dibayarkan, kontrak
 tidak dapat menerima Ether melalui transaksi reguler dan mengeluarkan eksepsi.
+=======
+The receive function is executed on a
+call to the contract with empty calldata. This is the function that is executed
+on plain Ether transfers (e.g. via ``.send()`` or ``.transfer()``). If no such
+function exists, but a payable :ref:`fallback function <fallback-function>`
+exists, the fallback function will be called on a plain Ether transfer. If
+neither a receive Ether nor a payable fallback function is present, the
+contract cannot receive Ether through a transaction that does not represent a payable function call and throws an
+exception.
+>>>>>>> english/develop
 
 Dalam kasus terburuk, fungsi ``receive`` hanya dapat mengandalkan 2300 gas yang
 tersedia (misalnya ketika ``send`` atau ``transfer`` digunakan), menyisakan sedikit
@@ -312,6 +352,7 @@ Operasi berikut akan mengkonsumsi lebih banyak gas daripada 2300 tunjangan gas:
 - Mengirim Ether
 
 .. warning::
+<<<<<<< HEAD
     Kontrak yang menerima Ether secara langsung (tanpa pemanggilan fungsi,
     yaitu menggunakan ``send`` atau ``transfer``) tetapi tidak mendefinisikan
     fungsi terima Ether atau fungsi payable fallback, melempar pengecualian,
@@ -319,6 +360,15 @@ Operasi berikut akan mengkonsumsi lebih banyak gas daripada 2300 tunjangan gas:
     Jadi jika Anda ingin kontrak Anda menerima Ether, Anda harus mengimplementasikan
     fungsi terima Ether (menggunakan fungsi payable fallback untuk menerima Ether
     tidak disarankan, karena tidak akan gagal pada *interface confusions*).
+=======
+    When Ether is sent directly to a contract (without a function call, i.e. sender uses ``send`` or ``transfer``)
+    but the receiving contract does not define a receive Ether function or a payable fallback function,
+    an exception will be thrown, sending back the Ether (this was different
+    before Solidity v0.4.0). If you want your contract to receive Ether,
+    you have to implement a receive Ether function (using payable fallback functions for receiving Ether is
+    not recommended, since the fallback is invoked and would not fail for interface confusions
+    on the part of the sender).
+>>>>>>> english/develop
 
 
 .. warning::
@@ -357,11 +407,19 @@ Di bawah ini Anda dapat melihat contoh kontrak Sink yang menggunakan fungsi ``re
 Fungsi Fallback
 ---------------
 
+<<<<<<< HEAD
 Kontrak dapat memiliki paling banyak satu fungsi ``fallback``, yang dideklarasikan
 menggunakan ``fallback () external [payable]`` atau ``fallback (byte calldata _input)
 external [payable] return (bytes memory _output)`` ( keduanya tanpa kata kunci ``fungsi``).
 Fungsi ini harus memiliki visibilitas ``eksternal``. Fungsi fallback dapat berupa virtual,
 dapat ditimpa, dan dapat memiliki modifier.
+=======
+A contract can have at most one ``fallback`` function, declared using either ``fallback () external [payable]``
+or ``fallback (bytes calldata input) external [payable] returns (bytes memory output)``
+(both without the ``function`` keyword).
+This function must have ``external`` visibility. A fallback function can be virtual, can override
+and can have modifiers.
+>>>>>>> english/develop
 
 Fungsi fallback dijalankan pada panggilan ke kontrak jika tidak ada fungsi lain yang cocok
 dengan tanda tangan fungsi yang diberikan, atau jika tidak ada data yang diberikan sama sekali
@@ -369,10 +427,16 @@ dan tidak ada :ref:`Fungsi terima Ether <receive-ether-function>` .
 Fungsi fallback selalu menerima data, tetapi untuk juga menerima Eter, fungsi tersebut harus
 ditandai ``dapat dibayar``.
 
+<<<<<<< HEAD
 Jika versi dengan parameter digunakan, ``_input`` akan berisi data lengkap yang dikirim ke
 kontrak (sama dengan ``msg.data``) dan dapat mengembalikan data dalam ``_output``. Data yang
 dikembalikan tidak akan dikodekan ABI. Sebaliknya itu akan dikembalikan tanpa modifikasi
 (bahkan padding sekalipun).
+=======
+If the version with parameters is used, ``input`` will contain the full data sent to the contract
+(equal to ``msg.data``) and can return data in ``output``. The returned data will not be
+ABI-encoded. Instead it will be returned without modifications (not even padding).
+>>>>>>> english/develop
 
 Dalam kasus terburuk, jika fungsi payable fallback juga digunakan sebagai pengganti fungsi
 penerimaan, itu hanya dapat mengandalkan 2300 gas yang tersedia (lihat :ref:`receive Ether
@@ -388,12 +452,22 @@ kompleks selama ada cukup gas yang diteruskan ke sana.
     fungsi payablefallback untuk membedakan transfer Ether dari kebingungan antarmuka.
 
 .. note::
+<<<<<<< HEAD
     Jika Anda ingin mendekode data input, Anda dapat memeriksa empat byte pertama untuk
     pemilih fungsi dan kemudian Anda dapat menggunakan ``abi.decode`` bersama dengan
     sintaks slice array untuk mendekode data yang dikodekan ABI:
     ``(c, d) = abi.decode(_input[4:], (uint256, uint256));`` Perhatikan bahwa ini hanya
     boleh digunakan sebagai pilihan terakhir dan fungsi yang tepat harus digunakan
     sebagai gantinya.
+=======
+    If you want to decode the input data, you can check the first four bytes
+    for the function selector and then
+    you can use ``abi.decode`` together with the array slice syntax to
+    decode ABI-encoded data:
+    ``(c, d) = abi.decode(input[4:], (uint256, uint256));``
+    Note that this should only be used as a last resort and
+    proper functions should be used instead.
+>>>>>>> english/develop
 
 
 .. code-block:: solidity
@@ -479,13 +553,13 @@ Contoh berikut menunjukkan overloading fungsi:
     pragma solidity >=0.4.16 <0.9.0;
 
     contract A {
-        function f(uint _in) public pure returns (uint out) {
-            out = _in;
+        function f(uint value) public pure returns (uint out) {
+            out = value;
         }
 
-        function f(uint _in, bool _really) public pure returns (uint out) {
-            if (_really)
-                out = _in;
+        function f(uint value, bool really) public pure returns (uint out) {
+            if (really)
+                out = value;
         }
     }
 
@@ -499,12 +573,12 @@ fungsi yang terlihat secara eksternal berbedaberdasarkan tipe Solidity-nya tetap
 
     // This will not compile
     contract A {
-        function f(B _in) public pure returns (B out) {
-            out = _in;
+        function f(B value) public pure returns (B out) {
+            out = value;
         }
 
-        function f(address _in) public pure returns (address out) {
-            out = _in;
+        function f(address value) public pure returns (address out) {
+            out = value;
         }
     }
 
@@ -532,12 +606,12 @@ tepat satu kandidat, resolusi gagal.
     pragma solidity >=0.4.16 <0.9.0;
 
     contract A {
-        function f(uint8 _in) public pure returns (uint8 out) {
-            out = _in;
+        function f(uint8 val) public pure returns (uint8 out) {
+            out = val;
         }
 
-        function f(uint256 _in) public pure returns (uint256 out) {
-            out = _in;
+        function f(uint256 val) public pure returns (uint256 out) {
+            out = val;
         }
     }
 
