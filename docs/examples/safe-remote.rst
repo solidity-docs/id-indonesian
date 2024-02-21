@@ -4,6 +4,7 @@
 Pembelian Jarak Jauh yang Aman (Safe Remote Purchase)
 *****************************************************
 
+<<<<<<< HEAD
 Membeli barang dari jarak jauh saat ini membutuhkan banyak pihak yang perlu saling percaya.
 Konfigurasi paling sederhana melibatkan penjual dan pembeli.
 Pembeli ingin menerima barang dari penjual dan penjual ingin mendapatkan uang
@@ -17,6 +18,22 @@ kontrak sampai pembeli menegaskan bahwa mereka menerima item tersebut. Setelah i
 nilainya dikembalikan ke pembeli (setengah dari deposit mereka) dan penjual mendapat tiga
 kali nilai (deposit mereka ditambah nilai tersebut). Ide di balik ini adalah bahwa kedua belah pihak
 memiliki insentif untuk menyelesaikan situasi atau sebaliknya uang mereka terkunci selamanya.
+=======
+Purchasing goods remotely currently requires multiple parties that need to trust each other.
+The simplest configuration involves a seller and a buyer. The buyer would like to receive
+an item from the seller and the seller would like to get some compensation, e.g. Ether,
+in return. The problematic part is the shipment here: There is no way to determine for
+sure that the item arrived at the buyer.
+
+There are multiple ways to solve this problem, but all fall short in one or the other way.
+In the following example, both parties have to put twice the value of the item into the
+contract as escrow. As soon as this happened, the Ether will stay locked inside
+the contract until the buyer confirms that they received the item. After that,
+the buyer is returned the value (half of their deposit) and the seller gets three
+times the value (their deposit plus the value). The idea behind
+this is that both parties have an incentive to resolve the situation or otherwise
+their Ether is locked forever.
+>>>>>>> english/develop
 
 
 Kontrak ini tentu saja tidak menyelesaikan masalah, tetapi memberikan gambaran tentang bagaimana Anda

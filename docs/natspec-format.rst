@@ -35,17 +35,30 @@ dicapai melalui tag ``@custom:<name>``, dan kasus penggunaan yang baik adalah al
 Contoh Dokumentasi
 ==================
 
+<<<<<<< HEAD
 Dokumentasi disisipkan di atas masing-masing ``contract``, ``interface``,
 ``function``, dan ``event`` menggunakn format notasi Doxygen.
 ``public`` state variable setara dengan ``function``
 untuk keperluan NatSpec.
+=======
+Documentation is inserted above each ``contract``, ``interface``, ``library``,
+``function``, and ``event`` using the Doxygen notation format.
+A ``public`` state variable is equivalent to a ``function``
+for the purposes of NatSpec.
+>>>>>>> english/develop
 
 -  Untuk Solidity Anda dapat memilih ``///`` untuk single atau multi-line
    komentar, atau ``/**`` dan diakhiri dengan ``*/``.
 
+<<<<<<< HEAD
 -  Untuk Vyper, gunakan ``"""`` menjorok ke konten dalam dengan
    komentar kosong. Lihat `Vyper
    documentation <https://vyper.readthedocs.io/en/latest/natspec.html>`__.
+=======
+-  For Vyper, use ``"""`` indented to the inner contents with bare
+   comments. See the `Vyper
+   documentation <https://docs.vyperlang.org/en/latest/natspec.html>`__.
+>>>>>>> english/develop
 
 Contoh berikut menunjukkan kontrak dan fungsi menggunakan semua tag yang tersedia.
 
@@ -57,7 +70,7 @@ Contoh berikut menunjukkan kontrak dan fungsi menggunakan semua tag yang tersedi
 
   Ini mungkin berubah di masa depan.
 
-.. code-block:: Solidity
+.. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.8.2 < 0.9.0;
@@ -153,10 +166,13 @@ kepada pengguna akhir sebagai:
 
 jika suatu fungsi dipanggil dan input ``a`` diberi nilai 10.
 
+<<<<<<< HEAD
 Menentukan ekspresi dinamis ini berada di luar cakupan dokumentasi
 Solidity dan Anda dapat membaca lebih lanjut di
 `the radspec project <https://github.com/aragon/radspec>`__.
 
+=======
+>>>>>>> english/develop
 .. _header-inheritance:
 
 Inheritance Notes
@@ -182,7 +198,7 @@ oleh pengembang.
 Jika kontrak di atas disimpan sebagai ``ex1.sol`` maka Anda dapat membuat
 dokumentasi menggunakan:
 
-.. code::
+.. code-block:: shell
 
    solc --userdoc --devdoc ex1.sol
 
@@ -201,7 +217,7 @@ Dokumentasi User
 Dokumentasi di atas akan menghasilkan file JSON dokumentasi pengguna
 berikut sebagai output:
 
-.. code::
+.. code-block:: json
 
     {
       "version" : 1,
@@ -229,7 +245,7 @@ Dokumentasi Developer
 Terlepas dari file dokumentasi pengguna, dokumentasi pengembang JSON
 file juga harus diproduksi dan akan terlihat seperti ini:
 
-.. code::
+.. code-block:: json
 
     {
       "version" : 1,

@@ -9,12 +9,18 @@ Yul
 Yul (sebelumnaya juga dipanggil JULIA atau IULIA) adalah bahasa perantara yang dapat
 dikompilasi ke bytecode untuk backend yang berbeda.
 
+<<<<<<< HEAD
 Dukungan untuk EVM 1.0, EVM 1.5 dan Ewasm direncanakan, dan dirancang untuk menjadi
 penyebut umum yang dapat digunakan dari ketiga platform. Itu sudah dapat digunakan
 dalam mode mandiri dan untuk "inline assembly" di dalam Solidity dan ada implementasi
 eksperimental dari kompiler Solidity yang menggunakan Yul sebagai bahasa perantara.
 Yul adalah target yang baik untuk tahap pengoptimalan tingkat tinggi yang dapat menguntungkan
 semua platform target secara merata.
+=======
+It can be used in stand-alone mode and for "inline assembly" inside Solidity.
+The compiler uses Yul as an intermediate language in the IR-based code generator ("new codegen" or "IR-based codegen").
+Yul is a good target for high-level optimisation stages that can benefit all target platforms equally.
+>>>>>>> english/develop
 
 Motivation dan Deskiripsi High-level
 =====================================
@@ -86,9 +92,14 @@ Itu dapat dikompilasi menggunakan ``solc --strict-assembly``. Fungsi bawaan
         }
     }
 
+<<<<<<< HEAD
 Dimungkinkan juga untuk mengimplementasikan fungsi yang sama menggunakan for-loop
 bukannya dengan rekursi. Di sini, ``lt(a, b)`` menghitung apakah ``a`` lebih kecil dari ``b``.
 perbandingan kurang-dari.
+=======
+It is also possible to implement the same function using a for-loop
+instead of with recursion. Here, ``lt(a, b)`` computes whether ``a`` is less than ``b``.
+>>>>>>> english/develop
 
 .. code-block:: yul
 
@@ -156,6 +167,7 @@ dimana suatu objek diharapkan.
 Di dalam blok kode, elemen berikut dapat digunakan:
 (lihat bagian selanjutnya untuk lebih jelasnya):
 
+<<<<<<< HEAD
 - literals, misalnya ``0x123``, ``42`` atau ``"abc"`` (string hingga 32 karakter)
 - panggilan ke fungsi bawaan, mis. ``add(1, mload(0))``
 - deklarasi variabel, mis. ``let x := 7``, ``let x := add(y, 3)`` atau ``let x`` (nilai awal 0 ditetapkan)
@@ -166,9 +178,23 @@ Di dalam blok kode, elemen berikut dapat digunakan:
 - switch statements, mis. ``switch mload(0) case 0 { revert() } default { mstore(0, 1) }``
 - for loops, mis. ``for { let i := 0} lt(i, 10) { i := add(i, 1) } { mstore(i, 7) }``
 - function definitions, mis. ``function f(a, b) -> c { c := add(a, b) }```
+=======
+- literals, e.g. ``0x123``, ``42`` or ``"abc"`` (strings up to 32 characters)
+- calls to builtin functions, e.g. ``add(1, mload(0))``
+- variable declarations, e.g. ``let x := 7``, ``let x := add(y, 3)`` or ``let x`` (initial value of 0 is assigned)
+- identifiers (variables), e.g. ``add(3, x)``
+- assignments, e.g. ``x := add(y, 3)``
+- blocks where local variables are scoped inside, e.g. ``{ let x := 3 { let y := add(x, 1) } }``
+- if statements, e.g. ``if lt(a, b) { sstore(0, 1) }``
+- switch statements, e.g. ``switch mload(0) case 0 { revert() } default { mstore(0, 1) }``
+- for loops, e.g. ``for { let i := 0} lt(i, 10) { i := add(i, 1) } { mstore(i, 7) }``
+- function definitions, e.g. ``function f(a, b) -> c { c := add(a, b) }``
+>>>>>>> english/develop
 
 Beberapa elemen sintaksis dapat mengikuti satu sama lain hanya dipisahkan oleh
 whitespace, yaitu tidak diperlukan penghentian ``;`` atau baris baru.
+
+.. index:: ! literal;in Yul
 
 Literals
 --------
@@ -239,11 +265,19 @@ mereka harus ditugaskan ke variabel lokal.
     // Here, the user-defined function `f` returns two values.
     let x, y := f(1, mload(0))
 
+<<<<<<< HEAD
 Untuk fungsi bawaan EVM, ekspresi fungsional
 dapat langsung diterjemahkan ke aliran opcode:
 Anda hanya membaca ekspresi dari kanan ke kiri untuk mendapatkan
 opcode. Dalam kasus baris pertama dalam contoh, ini
 adalah ``PUSH1 3 PUSH1 0x80 MLOAD ADD PUSH1 0x80 MSTORE``.
+=======
+For built-in functions of the EVM, functional expressions
+can be directly translated to a stream of opcodes:
+You just read the expression from right to left to obtain the
+opcodes. In the case of the second line in the example, this
+is ``PUSH1 3 PUSH1 0x80 MLOAD ADD PUSH1 0x80 MSTORE``.
+>>>>>>> english/develop
 
 Untuk panggilan ke fungsi yang ditentukan pengguna, argumennya juga
 ditaruh di stack dari kanan ke kiri dan ini urutannya
@@ -540,10 +574,31 @@ dievaluasi ke nilai nol.
 
 Dalam semua situasi lain, ekspresi harus mengevaluasi tepat satu nilai.
 
+<<<<<<< HEAD
 Pernyataan ``continue`` dan ``break`` hanya dapat digunakan di dalam badan loop
 dan harus dalam fungsi yang sama dengan loop (atau keduanya harus berada di
 level tertinggi). Pernyataan ``continue`` dan ``break`` tidak dapat digunakan
 di bagian lain dari loop, bahkan ketika itu dicakup di dalam tubuh loop kedua.
+=======
+A ``continue`` or ``break`` statement can only be used inside the body of a for-loop, as follows.
+Consider the innermost loop that contains the statement.
+The loop and the statement must be in the same function, or both must be at the top level.
+The statement must be in the loop's body block;
+it cannot be in the loop's initialization block or update block.
+It is worth emphasizing that this restriction applies just
+to the innermost loop that contains the ``continue`` or ``break`` statement:
+this innermost loop, and therefore the ``continue`` or ``break`` statement,
+may appear anywhere in an outer loop, possibly in an outer loop's initialization block or update block.
+For example, the following is legal,
+because the ``break`` occurs in the body block of the inner loop,
+despite also occurring in the update block of the outer loop:
+
+.. code-block:: yul
+
+    for {} true { for {} true {} { break } }
+    {
+    }
+>>>>>>> english/develop
 
 Bagian kondisi dari for-loop harus dievaluasi ke tepat satu nilai.
 
@@ -648,10 +703,10 @@ Kami akan menggunakan notasi destructuring untuk node AST.
     E(G, L, <var_1, ..., var_n := rhs>: Assignment) =
         let G1, L1, v1, ..., vn = E(G, L, rhs)
         let L2 be a copy of L1 where L2[$var_i] = vi for i = 1, ..., n
-        G, L2, regular
+        G1, L2, regular
     E(G, L, <for { i1, ..., in } condition post body>: ForLoop) =
         if n >= 1:
-            let G1, L, mode = E(G, L, i1, ..., in)
+            let G1, L1, mode = E(G, L, i1, ..., in)
             // mode has to be regular or leave due to the syntactic restrictions
             if mode is leave then
                 G1, L1 restricted to variables of L, leave
@@ -671,7 +726,7 @@ Kami akan menggunakan notasi destructuring untuk node AST.
                 else:
                     G3, L3, mode = E(G2, L2, post)
                     if mode is leave:
-                        G2, L3, leave
+                        G3, L3, leave
                     otherwise
                         E(G3, L3, for {} condition post body)
     E(G, L, break: BreakContinue) =
@@ -713,23 +768,32 @@ Kami akan menggunakan notasi destructuring untuk node AST.
         L'[$parami] = vi and L'[$reti] = 0 for all i.
         Let G'', L'', mode = E(Gn, L', block)
         G'', Ln, L''[$ret1], ..., L''[$retm]
-    E(G, L, l: StringLiteral) = G, L, utf8EncodeLeftAligned(l),
-        where utf8EncodeLeftAligned performs a UTF-8 encoding of l
-        and aligns it left into 32 bytes
+    E(G, L, l: StringLiteral) = G, L, str(l),
+        where str is the string evaluation function,
+        which for the EVM dialect is defined in the section 'Literals' above
     E(G, L, n: HexNumber) = G, L, hex(n)
-        where hex is the hexadecimal decoding function
+        where hex is the hexadecimal evaluation function,
+        which turns a sequence of hexadecimal digits into their big endian value
     E(G, L, n: DecimalNumber) = G, L, dec(n),
-        where dec is the decimal decoding function
+        where dec is the decimal evaluation function,
+        which turns a sequence of decimal digits into their big endian value
 
 .. _opcodes:
 
 Dialek EVM
 -----------
 
+<<<<<<< HEAD
 Dialek default Yul saat ini adalah dialek EVM untuk versi EVM yang saat ini dipilih.
 dengan versi EVM. Satu-satunya jenis yang tersedia dalam dialek ini
 adalah ``u256``, tipe asli 256-bit dari Mesin Virtual Ethereum.
 Karena ini adalah tipe default dari dialek, ini dapat dihilangkan.
+=======
+The default dialect of Yul currently is the EVM dialect for the currently selected version of the EVM.
+The only type available in this dialect
+is ``u256``, the 256-bit native type of the Ethereum Virtual Machine.
+Since it is the default type of this dialect, it can be omitted.
+>>>>>>> english/develop
 
 Tabel berikut mencantumkan semua fungsi bawaan
 (tergantung pada versi EVM) dan memberikan deskripsi singkat tentang
@@ -737,12 +801,22 @@ semantik dari fungsi/opcode.
 Dokumen ini tidak ingin menjadi gambaran lengkap dari mesin virtual Ethereum.
 Silakan merujuk ke dokumen lain jika Anda tertarik dengan semantik yang tepat.
 
+<<<<<<< HEAD
 Opcode yang ditandai dengan ``-`` tidak mengembalikan hasil dan yang lainnya mengembalikan tepat satu nilai.
 Opcode yang ditandai dengan ``F``, ``H``, ``B``, ``C``, ``I`` dan ``L`` hadir sejak Frontier, Homestead,
 Byzantium, Konstantinopel, Istanbul atau London berturutan.
 
 Berikut ini, ``mem[a...b)`` menandakan byte memori mulai dari posisi ``a`` hingga
 tetapi tidak termasuk posisi ``b`` dan ``storage[p]`` menandakan isi penyimpanan pada slot ``p``.
+=======
+Opcodes marked with ``-`` do not return a result and all others return exactly one value.
+Opcodes marked with ``F``, ``H``, ``B``, ``C``, ``I``, ``L``, ``P`` and ``N`` are present since Frontier,
+Homestead, Byzantium, Constantinople, Istanbul, London, Paris or Cancun respectively.
+
+In the following, ``mem[a...b)`` signifies the bytes of memory starting at position ``a`` up to
+but not including position ``b``, ``storage[p]`` signifies the storage contents at slot ``p``, and
+similarly, ``transientStorage[p]`` signifies the transient storage contents at slot ``p``.
+>>>>>>> english/develop
 
 Karena Yul mengelola variabel lokal dan control-flow,
 opcode yang mengganggu fitur ini tidak tersedia. Ini termasuk
@@ -751,7 +825,11 @@ instruksi ``dup`` dan ``swap`` serta instruksi ``jump``, label dan instruksi ``p
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | Instruksi               |     |   | Penjelasan                                                      |
 +=========================+=====+===+=================================================================+
+<<<<<<< HEAD
 | stop()                  + `-` | F | hentikan eksekusi, identik dengan return(0, 0)                  |
+=======
+| stop()                  | `-` | F | stop execution, identical to return(0, 0)                       |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | add(x, y)               |     | F | x + y                                                           |
 +-------------------------+-----+---+-----------------------------------------------------------------+
@@ -823,7 +901,15 @@ instruksi ``dup`` dan ``swap`` serta instruksi ``jump``, label dan instruksi ``p
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | sstore(p, v)            | `-` | F | storage[p] := v                                                 |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | msize()                 |     | F | ukuran memori, yaitu indeks memori yang diakses terbesar        |
+=======
+| tload(p)                |     | N | transientStorage[p]                                             |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| tstore(p, v)            | `-` | N | transientStorage[p] := v                                        |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| msize()                 |     | F | size of memory, i.e. largest accessed memory index              |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | gas()                   |     | F | gas masih tersedia untuk dieksekusi                             |
 +-------------------------+-----+---+-----------------------------------------------------------------+
@@ -855,7 +941,13 @@ instruksi ``dup`` dan ``swap`` serta instruksi ``jump``, label dan instruksi ``p
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | returndatacopy(t, f, s) | `-` | B | salin s byte dari returndata di posisi f ke mem di posisi t     |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | extcodehash(a)          |     | C | kode hash alamat a                                              |
+=======
+| mcopy(t, f, s)          | `-` | N | copy s bytes from mem at position f to mem at position t        |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| extcodehash(a)          |     | C | code hash of address a                                          |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | create(v, p, n)         |     | F | buat kontrak baru dengan kode mem[p...(p+n)) dan kirim v wei    |
 |                         |     |   | dan kembalikan alamat baru; mengembalikan 0 pada kesalahan      |
@@ -890,10 +982,16 @@ instruksi ``dup`` dan ``swap`` serta instruksi ``jump``, label dan instruksi ``p
 | revert(p, s)            | `-` | B | akhiri eksekusi, kembalikan perubahan state, kembalikan data    |
 |                         |     |   | mem[p...(p+s))                                                  |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | selfdestruct(a)         | `-` | F | akhiri eksekusi, hancurkan kontrak saat ini dan kirim dana ke a |
+=======
+| selfdestruct(a)         | `-` | F | end execution, destroy current contract and send funds to a     |
+|                         |     |   | (deprecated)                                                    |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | invalid()               | `-` | F | akhiri eksekusi dengan instruksi yang tidak valid               |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | log0(p, s)              | `-` | F | log tanpa topik dan data mem[p...(p+s))                         |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | log1(p, s, t1)          | `-` | F | log dengan topik t1 dan data mem[p...(p+s))                     |
@@ -903,26 +1001,55 @@ instruksi ``dup`` dan ``swap`` serta instruksi ``jump``, label dan instruksi ``p
 | log3(p, s, t1, t2, t3)  | `-` | F | log dengan topik t1, t2, t3 dan data mem[p...(p+s))             |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | log4(p, s, t1, t2, t3,  | `-` | F | log dengan topik t1, t2, t3, t4 dan data mem[p...(p+s))         |
+=======
+| log0(p, s)              | `-` | F | log data mem[p...(p+s))                                         |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| log1(p, s, t1)          | `-` | F | log data mem[p...(p+s)) with topic t1                           |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| log2(p, s, t1, t2)      | `-` | F | log data mem[p...(p+s)) with topics t1, t2                      |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| log3(p, s, t1, t2, t3)  | `-` | F | log data mem[p...(p+s)) with topics t1, t2, t3                  |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| log4(p, s, t1, t2, t3,  | `-` | F | log data mem[p...(p+s)) with topics t1, t2, t3, t4              |
+>>>>>>> english/develop
 | t4)                     |     |   |                                                                 |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | chainid()               |     | I | ID chain pelaksana (EIP-1344)                                   |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | basefee()               |     | L | biaya dasar blok saat ini (EIP-3198 and EIP-1559)               |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | origin()                |     | F | pengirim transaksi                                              |
+=======
+| blobbasefee()           |     | N | current block's blob base fee (EIP-7516 and EIP-4844)           |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| origin()                |     | F | transaction sender                                              |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | gasprice()              |     | F | harga gas dari transaksi                                        |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | blockhash(b)            |     | F | hash blok nr b - hanya untuk 256 blok terakhir tidak            |
 |                         |     |   | termasuk saat ini                                               |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | coinbase()              |     | F | penerima manfaat pertambangan saat ini                          |
+=======
+| blobhash(i)             |     | N | versioned hash of transaction's i-th blob                       |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| coinbase()              |     | F | current mining beneficiary                                      |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | timestamp()             |     | F | stempel waktu blok saat ini dalam hitungan detik sejak zaman    |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | number()                |     | F | nomor blok saat ini                                             |
 +-------------------------+-----+---+-----------------------------------------------------------------+
+<<<<<<< HEAD
 | difficulty()            |     | F | kesulitan blok saat ini                                         |
+=======
+| difficulty()            |     | F | difficulty of the current block (see note below)                |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| prevrandao()            |     | P | randomness provided by the beacon chain (see note below)        |
+>>>>>>> english/develop
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | gaslimit()              |     | F | batas gas blok dari blok saat ini                               |
 +-------------------------+-----+---+-----------------------------------------------------------------+
@@ -937,6 +1064,20 @@ instruksi ``dup`` dan ``swap`` serta instruksi ``jump``, label dan instruksi ``p
   Anda perlu menggunakan opcode ``returndatasize`` untuk memeriksa bagian mana dari area memori ini yang berisi data yang dikembalikan.
   Byte yang tersisa akan mempertahankan nilainya seperti sebelum panggilan.
 
+.. note::
+  The ``difficulty()`` instruction is disallowed in EVM version >= Paris.
+  With the Paris network upgrade the semantics of the instruction that was previously called
+  ``difficulty`` have been changed and the instruction was renamed to ``prevrandao``.
+  It can now return arbitrary values in the full 256-bit range, whereas the highest recorded
+  difficulty value within Ethash was ~54 bits.
+  This change is described in `EIP-4399 <https://eips.ethereum.org/EIPS/eip-4399>`_.
+  Please note that irrelevant to which EVM version is selected in the compiler, the semantics of
+  instructions depend on the final chain of deployment.
+
+.. warning::
+    From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
+    deprecation warning, since the ``SELFDESTRUCT`` opcode will eventually undergo breaking changes in behavior
+    as stated in `EIP-6049 <https://eips.ethereum.org/EIPS/eip-6049>`_.
 
 Dalam beberapa dialek internal, ada fungsi tambahan:
 
@@ -964,6 +1105,7 @@ ke ``loadimmutable("name")`` dalam kode runtime.
 
 linkersymbol
 ^^^^^^^^^^^^
+<<<<<<< HEAD
 Fungsi ``linkerssymbol("library_id")`` adalah placeholder untuk literal alamat yang akan diganti
 oleh penghubung.
 Argumen pertama dan satu-satunya harus berupa string literal dan secara unik mewakili alamat yang akan disisipkan.
@@ -971,6 +1113,15 @@ Pengidentifikasi dapat sewenang-wenang tetapi ketika kompiler menghasilkan kode 
 itu menggunakan nama perpustakaan yang memenuhi syarat dengan nama unit sumber yang mendefinisikan library itu.
 Untuk menautkan kode dengan alamat perpustakaan tertentu, pengenal yang sama harus diberikan ke
 Opsi ``--libraries`` pada baris perintah.
+=======
+The function ``linkersymbol("library_id")`` is a placeholder for an address literal to be substituted
+by the linker.
+Its first and only argument must be a string literal and uniquely represents the address to be inserted.
+Identifiers can be arbitrary but when the compiler produces Yul code from Solidity sources,
+it uses a library name qualified with the name of the source unit that defines that library.
+To link the code with a particular library address, the same identifier must be provided to the
+``--libraries`` option on the command-line.
+>>>>>>> english/develop
 
 Misalnya kode ini
 
@@ -1045,6 +1196,7 @@ dengan argumen paling kiri di atas, sedangkan nilai yang dikembalikan
 diasumsikan ditata sedemikian rupa sehingga variabel paling kanan adalah
 di bagian atas stack.
 
+<<<<<<< HEAD
 Karena ``verbatim`` dapat digunakan untuk menghasilkan opcode arbitrer
 atau bahkan opcode yang tidak diketahui oleh kompiler Solidity, harus berhati-hati
 saat menggunakan ``verbatim`` bersama dengan pengoptimal. Bahkan ketika
@@ -1056,6 +1208,19 @@ Berikut ini adalah daftar pembatasan yang tidak lengkap pada
 bytecode verbatim yang tidak diperiksa oleh
 kompiler. Pelanggaran terhadap pembatasan ini dapat mengakibatkan
 perilaku yang tidak terdefinisi.
+=======
+Since ``verbatim`` can be used to generate arbitrary opcodes
+or even opcodes unknown to the Solidity compiler, care has to be taken
+when using ``verbatim`` together with the optimizer. Even when the
+optimizer is switched off, the code generator has to determine
+the stack layout, which means that e.g. using ``verbatim`` to modify
+the stack height can lead to undefined behavior.
+
+The following is a non-exhaustive list of restrictions on
+verbatim bytecode that are not checked by
+the compiler. Violations of these restrictions can result in
+undefined behavior.
+>>>>>>> english/develop
 
 - Control-flow tidak boleh melompat ke dalam atau keluar dari blok verbatim,
   tetapi dapat melompat dalam blok verbatim yang sama.
@@ -1114,10 +1279,22 @@ Di atas, ``Block`` mengacu pada ``Block`` dalam tata bahasa kode Yul yang dijela
 
 .. note::
 
+<<<<<<< HEAD
     Objek data atau sub-objek yang namanya mengandung ``.`` dapat didefinisikan
     tetapi tidak mungkin untuk mengaksesnya melalui ``datasize``,
     ``dataoffset`` atau ``datacopy`` karena ``.`` digunakan sebagai pemisah
     untuk mengakses objek di dalam objek lain.
+=======
+    An object with a name that ends in ``_deployed`` is treated as deployed code by the Yul optimizer.
+    The only consequence of this is a different gas cost heuristic in the optimizer.
+
+.. note::
+
+    Data objects or sub-objects whose names contain a ``.`` can be defined
+    but it is not possible to access them through ``datasize``,
+    ``dataoffset`` or ``datacopy`` because ``.`` is used as a separator
+    to access objects inside another object.
+>>>>>>> english/develop
 
 .. note::
 
@@ -1145,6 +1322,7 @@ Contoh Yul Object ditunjukkan di bawah ini:
         code {
             function allocate(size) -> ptr {
                 ptr := mload(0x40)
+                // Note that Solidity generated IR code reserves memory offset ``0x60`` as well, but a pure Yul object is free to use memory as it chooses.
                 if iszero(ptr) { ptr := 0x60 }
                 mstore(0x40, add(ptr, size))
             }
@@ -1156,24 +1334,24 @@ Contoh Yul Object ditunjukkan di bawah ini:
             datacopy(offset, dataoffset("Contract2"), size)
             // constructor parameter is a single number 0x1234
             mstore(add(offset, size), 0x1234)
-            pop(create(offset, add(size, 32), 0))
+            pop(create(0, offset, add(size, 32)))
 
             // now return the runtime object (the currently
             // executing code is the constructor code)
-            size := datasize("runtime")
+            size := datasize("Contract1_deployed")
             offset := allocate(size)
-            // This will turn into a memory->memory copy for Ewasm and
-            // a codecopy for EVM
-            datacopy(offset, dataoffset("runtime"), size)
+            // This will turn into a codecopy for EVM
+            datacopy(offset, dataoffset("Contract1_deployed"), size)
             return(offset, size)
         }
 
         data "Table2" hex"4123"
 
-        object "runtime" {
+        object "Contract1_deployed" {
             code {
                 function allocate(size) -> ptr {
                     ptr := mload(0x40)
+                    // Note that Solidity generated IR code reserves memory offset ``0x60`` as well, but a pure Yul object is free to use memory as it chooses.
                     if iszero(ptr) { ptr := 0x60 }
                     mstore(0x40, add(ptr, size))
                 }
@@ -1192,7 +1370,7 @@ Contoh Yul Object ditunjukkan di bawah ini:
                 // code here ...
             }
 
-            object "runtime" {
+            object "Contract2_deployed" {
                 code {
                     // code here ...
                 }
@@ -1221,6 +1399,7 @@ dan secara opsional tentukan :ref:`jumlah eksekusi kontrak yang diharapkan <opti
 
 Dalam mode Solidity, pengoptimal Yul diaktifkan bersama dengan pengoptimal biasa.
 
+<<<<<<< HEAD
 Urutan Langkah Pengoptimalan
 ----------------------------
 
@@ -1283,6 +1462,15 @@ ReasoningBasedSimplifier adalah langkah pengoptimal yang saat ini tidak diaktifk
 dalam rangkaian langkah default. Ini menggunakan pemecah SMT untuk menyederhanakan ekspresi aritmatika
 dan kondisi boolean. Itu belum menerima pengujian atau validasi menyeluruh dan dapat menghasilkan
 hasil yang tidak dapat direproduksi, jadi harap gunakan dengan hati-hati!
+=======
+.. _optimization-step-sequence:
+
+Optimization Step Sequence
+--------------------------
+
+Detailed information regarding the optimization sequence as well as a list of abbreviations is
+available in the :ref:`optimizer docs <optimizer-steps>`.
+>>>>>>> english/develop
 
 .. _erc20yul:
 
