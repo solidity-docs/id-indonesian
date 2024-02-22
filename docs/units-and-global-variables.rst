@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 *********************************************
 Unit dan Variabel yang Tersedia Secara Global
 *********************************************
+=======
+.. index:: ! denomination
 
-.. index:: wei, finney, szabo, gwei, ether
+**************************************
+Units and Globally Available Variables
+**************************************
+>>>>>>> english/develop
+
+.. index:: ! wei, ! finney, ! szabo, ! gwei, ! ether, ! denomination;ether
 
 Unit Ether
 ===========
@@ -21,7 +29,7 @@ Satu-satunya efek dari sufiks subdenominasi adalah perkalian dengan kekuatan sep
 .. note::
     Denominasi ``finney`` dan ``szabo`` telah dihapus di versi 0.7.0.
 
-.. index:: time, seconds, minutes, hours, days, weeks, years
+.. index:: ! seconds, ! minutes, ! hours, ! days, ! weeks, ! years, ! denomination;time
 
 Unit Waktu
 ==========
@@ -52,7 +60,7 @@ menginterpretasikan parameter fungsi dalam hari, Anda dapat dengan cara berikut:
 
     function f(uint start, uint daysAfter) public {
         if (block.timestamp >= start + daysAfter * 1 days) {
-          // ...
+            // ...
         }
     }
 
@@ -65,12 +73,13 @@ Ada variabel dan fungsi khusus yang selalu ada di namespace
 global dan terutama digunakan untuk memberikan informasi
 tentang blockchain atau fungsi utilitas general-use.
 
-.. index:: abi, block, coinbase, difficulty, encode, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
+.. index:: abi, block, coinbase, difficulty, prevrandao, encode, number, block;number, timestamp, block;timestamp, block;basefee, block;blobbasefee, msg, data, gas, sender, value, gas price, origin
 
 
 Properti Block dan Transaksi
 ----------------------------
 
+<<<<<<< HEAD
 - ``blockhash(uint blockNumber) returns (bytes32)``: hash dari block yang diberikan ketika ``blocknumber`` adalah salah satu dari 256 blok terbaru; jika tidak maka hasilnya nol
 - ``block.basefee`` (``uint``): block base fee terkini (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
 - ``block.chainid`` (``uint``): chain id terkini
@@ -86,6 +95,28 @@ Properti Block dan Transaksi
 - ``msg.value`` (``uint``): jumlah wei yang dikirim bersama pesan
 - ``tx.gasprice`` (``uint``): harga gas untuk transaksi
 - ``tx.origin`` (``address``): pengirim transaksi (full call chain)
+=======
+- ``blockhash(uint blockNumber) returns (bytes32)``: hash of the given block when ``blocknumber`` is one of the 256 most recent blocks; otherwise returns zero
+- ``blobhash(uint index) returns (bytes32)``: versioned hash of the ``index``-th blob associated with the current transaction.
+  A versioned hash consists of a single byte representing the version (currently ``0x01``), followed by the last 31 bytes
+  of the SHA256 hash of the KZG commitment (`EIP-4844 <https://eips.ethereum.org/EIPS/eip-4844>`_).
+- ``block.basefee`` (``uint``): current block's base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
+- ``block.blobbasefee`` (``uint``): current block's blob base fee (`EIP-7516 <https://eips.ethereum.org/EIPS/eip-7516>`_ and `EIP-4844 <https://eips.ethereum.org/EIPS/eip-4844>`_)
+- ``block.chainid`` (``uint``): current chain id
+- ``block.coinbase`` (``address payable``): current block miner's address
+- ``block.difficulty`` (``uint``): current block difficulty (``EVM < Paris``). For other EVM versions it behaves as a deprecated alias for ``block.prevrandao`` (`EIP-4399 <https://eips.ethereum.org/EIPS/eip-4399>`_ )
+- ``block.gaslimit`` (``uint``): current block gaslimit
+- ``block.number`` (``uint``): current block number
+- ``block.prevrandao`` (``uint``): random number provided by the beacon chain (``EVM >= Paris``)
+- ``block.timestamp`` (``uint``): current block timestamp as seconds since unix epoch
+- ``gasleft() returns (uint256)``: remaining gas
+- ``msg.data`` (``bytes calldata``): complete calldata
+- ``msg.sender`` (``address``): sender of the message (current call)
+- ``msg.sig`` (``bytes4``): first four bytes of the calldata (i.e. function identifier)
+- ``msg.value`` (``uint``): number of wei sent with the message
+- ``tx.gasprice`` (``uint``): gas price of the transaction
+- ``tx.origin`` (``address``): sender of the transaction (full call chain)
+>>>>>>> english/develop
 
 .. note::
     Nilai semua member ``msg``, termasuk ``msg.sender`` dan
@@ -102,9 +133,15 @@ Properti Block dan Transaksi
     Jangan mengandalkan ``block.timestamp`` atau ``blockhash`` sebagai sumber acak,
     kecuali Anda tahu apa yang Anda lakukan.
 
+<<<<<<< HEAD
     Baik timestamp dan block hash dapat dipengaruhi oleh penambang sampai tingkat tertentu.
     Aktor jahat di komunitas penambangan misalnya dapat menjalankan fungsi pembayaran kasino pada hash yang dipilih
     dan coba ulangi hash yang berbeda jika mereka tidak menerima uang.
+=======
+    Both the timestamp and the block hash can be influenced by miners to some degree.
+    Bad actors in the mining community can for example run a casino payout function on a chosen hash
+    and just retry a different hash if they did not receive any compensation, e.g. Ether.
+>>>>>>> english/develop
 
     Block timestamp saat ini harus benar-benar lebih besar dari block timestamp terakhir,
     tetapi satu-satunya jaminan adalah bahwa itu akan berada di antara timestamp
@@ -131,11 +168,20 @@ Properti Block dan Transaksi
 Fungsi ABI Encoding dan Decoding
 --------------------------------
 
+<<<<<<< HEAD
 - ``abi.decode(bytes memory encodedData, (...)) returns (...)``: data ABI-decodes yang diberikan, sedangkan tipenya diberikan dalam tanda kurung sebagai argumen kedua. Misalnya: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
 - ``abi.encode(...) returns (bytes memory)``: Argumen ABI-encodes yang diberikan
 - ``abi.encodePacked(...) returns (bytes memory)``: Melakukan :ref:`packed encoding <abi_packed_mode>` dari argumen yang diberikan. Perhatikan bahwa packed encoding dapat menjadi ambigu!
 - ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes argumen yang diberikan mulai dari yang kedua dan menambahkan pemilih empat byte yang diberikan
 - ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Setara dengan ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)```
+=======
+- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: ABI-decodes the given data, while the types are given in parentheses as second argument. Example: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
+- ``abi.encode(...) returns (bytes memory)``: ABI-encodes the given arguments
+- ``abi.encodePacked(...) returns (bytes memory)``: Performs :ref:`packed encoding <abi_packed_mode>` of the given arguments. Note that packed encoding can be ambiguous!
+- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
+- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)``
+- ``abi.encodeCall(function functionPointer, (...)) returns (bytes memory)``: ABI-encodes a call to ``functionPointer`` with the arguments found in the tuple. Performs a full type-check, ensuring the types match the function signature. Result equals ``abi.encodeWithSelector(functionPointer.selector, (...))``
+>>>>>>> english/develop
 
 .. note::
     Fungsi encoding ini dapat digunakan untuk membuat data untuk panggilan fungsi eksternal tanpa
@@ -152,6 +198,14 @@ Member dari bytes
 -----------------
 
 - ``bytes.concat(...) returns (bytes memory)``: :ref:`Menggabungkan jumlah variabel byte dan byte1, ..., argumen byte32 ke array satu byte<bytes-concat>`
+
+.. index:: string members
+
+Members of string
+-----------------
+
+- ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of string arguments to one string array<string-concat>`
+
 
 .. index:: assert, revert, require
 
@@ -222,8 +276,13 @@ Fungsi Matematika dan Kriptografi
     untuk tanda tangan _transaction_ (lihat `EIP-2 <https://eips.ethereum.org/EIPS/eip-2#specification>`_), tetapi
     fungsi ecrecover tetap tidak berubah.
 
+<<<<<<< HEAD
     Ini biasanya tidak menjadi masalah kecuali Anda memerlukan tanda tangan untuk menjadi unik atau
     menggunakannya untuk mengidentifikasi item. OpenZeppelin memiliki `library pembantu ECDSA <https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA>`_ yang dapat Anda gunakan sebagai wrapper untuk ``ecrecover`` tanpa masalah ini.
+=======
+    This is usually not a problem unless you require signatures to be unique or use them to identify items.
+    OpenZeppelin has an `ECDSA helper library <https://docs.openzeppelin.com/contracts/4.x/api/utils#ECDSA>`_ that you can use as a wrapper for ``ecrecover`` without this issue.
+>>>>>>> english/develop
 
 .. note::
 
@@ -267,10 +326,17 @@ Untuk informasi lebih lanjut, lihat bagian :ref:`address`.
     pengecekan keberadaan fungsi, dan argumen packing.
 
 .. warning::
+<<<<<<< HEAD
     Ada beberapa bahaya dalam menggunakan ``send``: Transfer gagal jika kedalaman call stack berada pada 1024
     (ini selalu dapat dipaksakan oleh pemanggil) dan juga gagal jika penerima kehabisan gas. Jadi untuk melakukan
     transfer Ether yang aman, selalu periksa nilai yang dihasilkan oleh ``send``, gunakan ``transfer`` atau bahkan lebih baik:
     Gunakan pola di mana penerima menarik uangnya.
+=======
+    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
+    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
+    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
+    Use a pattern where the recipient withdraws the Ether.
+>>>>>>> english/develop
 
 .. warning::
     Karena kenyataan bahwa EVM menganggap panggilan ke kontrak non-existing selalu berhasil,
@@ -301,13 +367,24 @@ Untuk informasi lebih lanjut, lihat bagian :ref:`address`.
     sedikit berbeda dari ``delegatecall``.
 
 
-.. index:: this, selfdestruct
+.. index:: this, selfdestruct, super
 
+<<<<<<< HEAD
 Terkait Kontrak
 ---------------
 
 ``this`` (tipe kontrak saat ini)
     kontrak saat ini, secara eksplisit dapat dikonversi ke :ref:`address`
+=======
+Contract-related
+----------------
+
+``this`` (current contract's type)
+    The current contract, explicitly convertible to :ref:`address`
+
+``super``
+    A contract one level higher in the inheritance hierarchy
+>>>>>>> english/develop
 
 ``selfdestruct(address payable recipient)``
     Hancurkan kontrak saat ini, kirimkan dananya ke :ref:`address` . yang diberikan
@@ -317,10 +394,19 @@ Terkait Kontrak
     - fungsi penerimaan kontrak penerima tidak dijalankan.
     - kontrak hanya benar-benar dihancurkan pada akhir transaksi dan ``revert`` mungkin "membatalkan" penghancuran tersebut.
 
+<<<<<<< HEAD
 
 
 
 Lebih lanjut, semua fungsi dari kontrak saat ini dapat dipanggil secara langsung termasuk fungsi saat ini.
+=======
+Furthermore, all functions of the current contract are callable directly including the current function.
+>>>>>>> english/develop
+
+.. warning::
+    From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
+    deprecation warning, since the ``SELFDESTRUCT`` opcode will eventually undergo breaking changes in behavior
+    as stated in `EIP-6049 <https://eips.ethereum.org/EIPS/eip-6049>`_.
 
 .. note::
     Sebelum versi 0.5.0, ada fungsi yang disebut ``suicide`` dengan semantik yang sama dengan ``selfdestruct``.
@@ -360,10 +446,17 @@ Properti berikut tersedia untuk tipe kontrak ``C``:
 
 Selain properti di atas, properti berikut tersedia untuk tipe antarmuka ``I``:
 
+<<<<<<< HEAD
 ``type(I).interfaceId``:
     Nilai ``bytes4`` yang berisi `EIP-165 <https://eips.ethereum.org/EIPS/eip-165>`_
     pengidentifikasi antarmuka dari antarmuka yang diberikan ``I``. Pengidentifikasi ini didefinisikan sebagai ``XOR`` dari semua
     pemilih fungsi yang ditentukan dalam antarmuka itu sendiri - tidak termasuk semua fungsi yang diwariskan.
+=======
+``type(I).interfaceId``
+    A ``bytes4`` value containing the `EIP-165 <https://eips.ethereum.org/EIPS/eip-165>`_
+    interface identifier of the given interface ``I``. This identifier is defined as the ``XOR`` of all
+    function selectors defined within the interface itself - excluding all inherited functions.
+>>>>>>> english/develop
 
 Properti berikut tersedia untuk tipe integer ``T``:
 
@@ -371,4 +464,19 @@ Properti berikut tersedia untuk tipe integer ``T``:
     Nilai terkecil yang dapat diwakili oleh tipe ``T``.
 
 ``type(T).max``
+<<<<<<< HEAD
     Nilai terbesar yang dapat direpresentasikan menurut jenis ``T``.
+=======
+    The largest value representable by type ``T``.
+
+Reserved Keywords
+=================
+
+These keywords are reserved in Solidity. They might become part of the syntax in the future:
+
+``after``, ``alias``, ``apply``, ``auto``, ``byte``, ``case``, ``copyof``, ``default``,
+``define``, ``final``, ``implements``, ``in``, ``inline``, ``let``, ``macro``, ``match``,
+``mutable``, ``null``, ``of``, ``partial``, ``promise``, ``reference``, ``relocatable``,
+``sealed``, ``sizeof``, ``static``, ``supports``, ``switch``, ``typedef``, ``typeof``,
+``var``.
+>>>>>>> english/develop
