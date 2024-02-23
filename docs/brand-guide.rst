@@ -55,16 +55,23 @@ Anda bebas untuk:
 
 Di bawah ketentuan berikut:
 
+<<<<<<< HEAD
 - **Atribusi** — Anda harus memberikan kredit yang sesuai, memberikan tautan ke lisensi, dan menunjukkan
   jika ada perubahan. Anda dapat melakukannya dengan cara yang wajar, tetapi tidak dengan cara apa pun yang
   menunjukkan bahwa tim inti Solidity mendukung Anda atau penggunaan Anda.
+=======
+- **Attribution** — You must give appropriate credit, provide a link to
+  the license, and indicate if changes were made. You may do so in any
+  reasonable manner, but not in any way that suggests that the Solidity
+  core team endorses you or your use.
+>>>>>>> english/develop
 
 Saat menggunakan logo Solidity, harap hormati pedoman logo Solidity.
 
 Pedoman Logo Solidity
 =====================
 
-.. image:: logo.svg
+.. image:: solidity_logo.svg
   :width: 256
 
 *(Klik kanan pada logo untuk mengunduhnya.)*

@@ -10,20 +10,34 @@ Untuk daftar lengkap cek
 Perubahan Senyap dari Semantics
 ===============================
 
+<<<<<<< HEAD
 Bagian ini mencantumkan perubahan di mana kode yang ada mengubah perilakunya tanpa
 kompiler memberi tahu Anda tentang hal itu.
 
 * Operasi aritmatika kembali pada underflow dan overflow. Anda dapat menggunakan ``unchecked { ... }`` untuk menggunakan
   perilaku wrapping sebelumnya.
+=======
+This section lists changes where existing code changes its behavior without
+the compiler notifying you about it.
+
+* Arithmetic operations revert on underflow and overflow. You can use ``unchecked { ... }`` to use
+  the previous wrapping behavior.
+>>>>>>> english/develop
 
   Pemeriksaan overflow sangat umum, jadi kami menjadikannya default untuk meningkatkan keterbacaan kode,
   bahkan jika itu datang dengan sedikit peningkatan biaya gas.
 
 * ABI coder v2 diaktifkan secara default.
 
+<<<<<<< HEAD
   Anda dapat memilih untuk menggunakan perilaku lama menggunakan ``pragma abicoder v1;``.
   Pragma ``pragma eksperimental ABIEncoderV2;`` masih valid, tetapi tidak digunakan lagi dan tidak berpengaruh.
   Jika Anda ingin eksplisit, gunakan ``pragma abicoder v2;`` sebagai gantinya.
+=======
+  You can choose to use the old behavior using ``pragma abicoder v1;``.
+  The pragma ``pragma experimental ABIEncoderV2;`` is still valid, but it is deprecated and has no effect.
+  If you want to be explicit, please use ``pragma abicoder v2;`` instead.
+>>>>>>> english/develop
 
   Perhatikan bahwa ABI coder v2 mendukung lebih banyak jenis daripada v1 dan melakukan lebih banyak pemeriksaan *sanity* pada input.
   ABI coder v2 membuat beberapa panggilan fungsi lebih mahal dan juga dapat membuat panggilan kontrak
@@ -57,8 +71,13 @@ Pembatasan Baru
 
 Bagian ini mencantumkan perubahan yang mungkin menyebabkan kontrak yang ada tidak dapat dikompilasi lagi.
 
+<<<<<<< HEAD
 * Ada batasan baru terkait dengan konversi literal yang eksplisit. Perilaku sebelumnya dalam
   kasus-kasus berikut mungkin ambigu:
+=======
+* There are new restrictions related to explicit conversions of literals. The previous behavior in
+  the following cases was likely ambiguous:
+>>>>>>> english/develop
 
   1. Konversi eksplisit dari literal negatif dan literal yang lebih besar dari ``type(uint160).max`` ke
      ``address`` tidak diizinkan.
@@ -106,7 +125,11 @@ Bagian ini mencantumkan perubahan yang mungkin menyebabkan kontrak yang ada tida
 
 * Fungsi global ``log0``, ``log1``, ``log2``, ``log3`` dan ``log4`` tealah dihapus.
 
+<<<<<<< HEAD
   Ini adalah fungsi low-level yang sebagian besar tidak terpakai. Perilaku mereka dapat diakses dari inline assembly.
+=======
+  These are low-level functions that were largely unused. Their behavior can be accessed from inline assembly.
+>>>>>>> english/develop
 
 * definisi ``enum`` tidak boleh berisi lebih dari 256 anggota.
 
@@ -163,6 +186,7 @@ PErubahan Interface
 Bagaimana cara memperbarui kode Anda?
 =====================================
 
+<<<<<<< HEAD
 - Jika Anda mengandalkan wrapping arithmetic, kelilingi setiap operasi dengan ``unchecked { ... }``.
 - Opsional: Jika Anda menggunakan SafeMath atau library serupa, ubah ``x.add(y)`` menjadi ``x + y``, ``x.mul(y)`` menjadi ``x * y`` dll.
 - Tambahkan ``pragma abicoder v1;`` jika Anda ingin tetap menggunakan ABI coder lama.
@@ -174,3 +198,16 @@ Bagaimana cara memperbarui kode Anda?
 - ubah ``x**y**z`` menjadi ``(x**y)**z``.
 - gunakan inline assembly sebagai pengganti untuk ``log0``, ..., ``log4``.
 - Negate unsigned integers dengan menguranginya dari nilai maksimum tipe dan menambahkan 1 (mis. ``type(uint256).max - x + 1``, sambil memastikan bahwa `x` bukan nol)
+=======
+- If you rely on wrapping arithmetic, surround each operation with ``unchecked { ... }``.
+- Optional: If you use SafeMath or a similar library, change ``x.add(y)`` to ``x + y``, ``x.mul(y)`` to ``x * y`` etc.
+- Add ``pragma abicoder v1;`` if you want to stay with the old ABI coder.
+- Optionally remove ``pragma experimental ABIEncoderV2`` or ``pragma abicoder v2`` since it is redundant.
+- Change ``byte`` to ``bytes1``.
+- Add intermediate explicit type conversions if required.
+- Combine ``c.f{gas: 10000}{value: 1}()`` to ``c.f{gas: 10000, value: 1}()``.
+- Change ``msg.sender.transfer(x)`` to ``payable(msg.sender).transfer(x)`` or use a stored variable of ``address payable`` type.
+- Change ``x**y**z`` to ``(x**y)**z``.
+- Use inline assembly as a replacement for ``log0``, ..., ``log4``.
+- Negate unsigned integers by subtracting them from the maximum value of the type and adding 1 (e.g. ``type(uint256).max - x + 1``, while ensuring that ``x`` is not zero)
+>>>>>>> english/develop
