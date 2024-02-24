@@ -8,13 +8,20 @@ Panduan Gaya
 pengantar
 ************
 
+<<<<<<< HEAD
 Panduan ini dimaksudkan untuk memberikan konvensi pengkodean untuk menulis kode solidity.
 Panduan ini harus dianggap sebagai dokumen yang berkembang yang akan berubah seiring waktu
 karena konvensi yang berguna ditemukan dan konvensi lama dianggap usang.
+=======
+This guide is intended to provide coding conventions for writing Solidity code.
+This guide should be thought of as an evolving document that will change over
+time as useful conventions are found and old conventions are rendered obsolete.
+>>>>>>> english/develop
 
 Banyak proyek akan menerapkan panduan gaya mereka sendiri. Jika terjadi konflik,
 panduan gaya proyek tertentu diutamakan.
 
+<<<<<<< HEAD
 Struktur dan banyak rekomendasi dalam panduan gaya ini
 diambil dari python
 `pep8 style guide <https://www.python.org/dev/peps/pep-0008/>`_.
@@ -23,12 +30,26 @@ Tujuan dari panduan ini adalah *bukan* menjadi cara yang benar atau cara terbaik
 kode solidity. Tujuan dari panduan ini adalah *konsistensi*. Kutipan dari python's
 `pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_
 menangkap konsep ini dengan baik.
+=======
+The structure and many of the recommendations within this style guide were
+taken from Python's
+`pep8 style guide <https://peps.python.org/pep-0008/>`_.
+
+The goal of this guide is *not* to be the right way or the best way to write
+Solidity code.  The goal of this guide is *consistency*.  A quote from Python's
+`pep8 <https://peps.python.org/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_
+captures this concept well.
+>>>>>>> english/develop
 
 .. note::
 
     Panduan gaya adalah tentang konsistensi. Konsistensi dengan panduan gaya ini penting. Konsistensi dalam sebuah proyek lebih penting. Konsistensi dalam satu modul atau fungsi adalah yang paling penting.
 
+<<<<<<< HEAD
     Namun yang terpenting: **tahu kapan harus tidak konsisten** -- terkadang panduan gaya tidak berlaku. Jika ragu, gunakan penilaian terbaik Anda. Lihat contoh lain dan putuskan apa yang terlihat terbaik. Dan jangan ragu untuk bertanya!
+=======
+    But most importantly: **know when to be inconsistent** -- sometimes the style guide just doesn't apply. When in doubt, use your best judgment. Look at other examples and decide what looks best. And do not hesitate to ask!
+>>>>>>> english/develop
 
 
 ***********
@@ -51,7 +72,11 @@ Pencampuran tab dan spasi harus dihindari.
 Garis Kosong
 ============
 
+<<<<<<< HEAD
 Mengelilingi deklarasi tingkat atas di sumber solidity dengan dua baris kosong.
+=======
+Surround top level declarations in Solidity source with two blank lines.
+>>>>>>> english/develop
 
 Ya:
 
@@ -146,8 +171,12 @@ Tidak:
 Panjang Garis Maksimum
 ======================
 
+<<<<<<< HEAD
 Menjaga garis di bawah `rekomendasi PEP 8 <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ hingga maksimum 79 (atau 99)
 karakter membantu pembaca dengan mudah mengurai kode.
+=======
+Maximum suggested line length is 120 characters.
+>>>>>>> english/develop
 
 Garis yang dibungkus harus sesuai dengan pedoman berikut.
 
@@ -204,7 +233,7 @@ Ya:
 
 .. code-block:: solidity
 
-    thisIsALongNestedMapping[being][set][to_some_value] = someFunction(
+    thisIsALongNestedMapping[being][set][toSomeValue] = someFunction(
         argument1,
         argument2,
         argument3,
@@ -215,7 +244,7 @@ Tidak:
 
 .. code-block:: solidity
 
-    thisIsALongNestedMapping[being][set][to_some_value] = someFunction(argument1,
+    thisIsALongNestedMapping[being][set][toSomeValue] = someFunction(argument1,
                                                                        argument2,
                                                                        argument3,
                                                                        argument4);
@@ -234,7 +263,7 @@ Ya:
         bytes32[] options
     );
 
-    LongAndLotsOfArgs(
+    emit LongAndLotsOfArgs(
         sender,
         recipient,
         publicKey,
@@ -252,7 +281,7 @@ Tidak:
                             uint256 amount,
                             bytes32[] options);
 
-    LongAndLotsOfArgs(sender,
+    emit LongAndLotsOfArgs(sender,
                       recipient,
                       publicKey,
                       amount,
@@ -280,6 +309,7 @@ Ya:
     contract A {
         // ...
     }
+
 
     contract B is Owned {
         // ...
@@ -438,17 +468,21 @@ Ya:
 
     x = 1;
     y = 2;
-    long_variable = 3;
+    longVariable = 3;
 
 Tidak:
 
 .. code-block:: solidity
 
-    x             = 1;
-    y             = 2;
-    long_variable = 3;
+    x            = 1;
+    y            = 2;
+    longVariable = 3;
 
+<<<<<<< HEAD
 Jangan sertakan whitespace dalam fungsi receive dan fallback:
+=======
+Do not include a whitespace in the receive and fallback functions:
+>>>>>>> english/develop
 
 Ya:
 
@@ -678,10 +712,17 @@ Tidak:
         selfdestruct(owner);
     }
 
+<<<<<<< HEAD
 Untuk deklarasi fungsi yang panjang, disarankan untuk menjatuhkan setiap argumen
 ke barisnya sendiri pada tingkat lekukan yang sama dengan badan fungsi. Tanda kurung
 tutup dan kurung buka harus ditempatkan pada barisnya masing-masing serta pada tingkat
 lekukan yang sama dengan deklarasi fungsi.
+=======
+For long function declarations, it is recommended to drop each argument onto
+its own line at the same indentation level as the function body.  The closing
+parenthesis and opening bracket should be placed on their own line as well at
+the same indentation level as the function declaration.
+>>>>>>> english/develop
 
 Ya:
 
@@ -747,7 +788,7 @@ Ya:
     function thisFunctionNameIsReallyLong(
         address x,
         address y,
-        address z,
+        address z
     )
         public
         onlyOwner
@@ -846,14 +887,19 @@ Ya:
         constructor(uint) {
         }
     }
+
+
     contract C {
         constructor(uint, uint) {
         }
     }
+
+
     contract D {
         constructor(uint) {
         }
     }
+
 
     contract A is B, C, D {
         uint x;
@@ -926,9 +972,15 @@ Permissible:
 
     function shortFunction() public { doSomething(); }
 
+<<<<<<< HEAD
 Panduan untuk deklarasi fungsi ini dimaksudkan untuk meningkatkan keterbacaan.
 Penulis harus menggunakan penilaian terbaik mereka karena panduan ini tidak mencoba untuk mencakup semua
 kemungkinan permutasi untuk deklarasi fungsi.
+=======
+These guidelines for function declarations are intended to improve readability.
+Authors should use their best judgment as this guide does not try to cover all
+possible permutations for function declarations.
+>>>>>>> english/develop
 
 Mapping
 =======
@@ -1015,10 +1067,17 @@ Tidak:
     x += 3+4;
     x |= y&&z;
 
+<<<<<<< HEAD
 * Operator dengan prioritas lebih tinggi daripada yang lain dapat mengecualikan whitespace
   di sekitarnya untuk menunjukkan prioritas. Ini dimaksudkan untuk memungkinkan peningkatan
   keterbacaan untuk pernyataan yang kompleks. Anda harus selalu menggunakan jumlah spasi
   yang sama di kedua sisi operator:
+=======
+* Operators with a higher priority than others can exclude surrounding
+  whitespace in order to denote precedence.  This is meant to allow for
+  improved readability for complex statements. You should always use the same
+  amount of whitespace on either side of an operator:
+>>>>>>> english/develop
 
 Ya:
 
@@ -1040,25 +1099,58 @@ Tidak:
 Urutan Tata Letak
 ******************
 
+<<<<<<< HEAD
 Tata letak elemen kontrak dalam urutan berikut:
+=======
+Contract elements should be laid out in the following order:
+>>>>>>> english/develop
 
 1. Pragma statements
 2. Import statements
-3. Interfaces
-4. Libraries
-5. Contracts
+3. Events
+4. Errors
+5. Interfaces
+6. Libraries
+7. Contracts
 
 Di dalam setiap kontrak, library, atau interface, gunakan urutan berikut:
 
 1. Type declarations
 2. State variables
 3. Events
-4. Functions
+4. Errors
+5. Modifiers
+6. Functions
 
 .. note::
 
     Mungkin lebih jelas untuk mendeklarasikan tipe yang dekat dengan penggunaannya dalam
     event atau variabel state.
+
+Yes:
+
+.. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.4 <0.9.0;
+
+    abstract contract Math {
+        error DivideByZero();
+        function divide(int256 numerator, int256 denominator) public virtual returns (uint256);
+    }
+
+No:
+
+.. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.4 <0.9.0;
+
+    abstract contract Math {
+        function divide(int256 numerator, int256 denominator) public virtual returns (uint256);
+        error DivideByZero();
+    }
+
 
 ******************
 Konvensi Penamaan
@@ -1082,6 +1174,7 @@ Gaya Penamaan
 Untuk menghindari kebingungan, nama-nama berikut akan digunakan untuk merujuk ke gaya
 penamaan yang berbeda.
 
+<<<<<<< HEAD
 * ``b`` (huruf kecil tunggal)
 * ``B`` (huruf besar tunggal)
 * ``lowercasel``
@@ -1091,6 +1184,15 @@ penamaan yang berbeda.
 * ``CapitalizedWords`` (atau CapWords)
 * ``mixedCase`` (berbeda dari CapitalizedWords dengan karakter huruf kecil awal!)
 * ``Capitalized_Words_With_Underscores``
+=======
+* ``b`` (single lowercase letter)
+* ``B`` (single uppercase letter)
+* ``lowercase``
+* ``UPPERCASE``
+* ``UPPER_CASE_WITH_UNDERSCORES``
+* ``CapitalizedWords`` (or CapWords)
+* ``mixedCase`` (differs from CapitalizedWords by initial lowercase character!)
+>>>>>>> english/develop
 
 .. note:: Saat menggunakan inisial di CapWords, gunakan huruf kapital untuk semua huruf inisial. Jadi HTTPServerError lebih baik daripada HttpServerError. Saat menggunakan inisialisme dalam mixedCase, gunakan huruf besar untuk semua huruf inisial, kecuali pertahankan huruf kecil pertama jika itu adalah awal dari nama. Jadi xmlHTTPRequest lebih baik daripada XMLHTTPRequest.
 
@@ -1126,13 +1228,13 @@ Ya:
     contract Owned {
         address public owner;
 
-        constructor() {
-            owner = msg.sender;
-        }
-
         modifier onlyOwner {
             require(msg.sender == owner);
             _;
+        }
+
+        constructor() {
+            owner = msg.sender;
         }
 
         function transferOwnership(address newOwner) public onlyOwner {
@@ -1165,13 +1267,13 @@ Tidak:
     contract owned {
         address public owner;
 
-        constructor() {
-            owner = msg.sender;
-        }
-
         modifier onlyOwner {
             require(msg.sender == owner);
             _;
+        }
+
+        constructor() {
+            owner = msg.sender;
         }
 
         function transferOwnership(address newOwner) public onlyOwner {
@@ -1249,10 +1351,30 @@ Enums, dalam gaya deklarasi tipe sederhana, harus diberi nama menggunakan gaya C
 Menghindari Tabrakan Penamaan
 =============================
 
-* ``single_trailing_underscore_``
+* ``singleTrailingUnderscore_``
 
+<<<<<<< HEAD
 Konvensi ini disarankan ketika nama yang diinginkan bertabrakan dengan
 nama bawaan atau nama yang dicadangkan.
+=======
+This convention is suggested when the desired name collides with that of
+an existing state variable, function, built-in or otherwise reserved name.
+
+Underscore Prefix for Non-external Functions and Variables
+==========================================================
+
+* ``_singleLeadingUnderscore``
+
+This convention is suggested for non-external functions and state variables (``private`` or ``internal``). State variables without a specified visibility are ``internal`` by default.
+
+When designing a smart contract, the public-facing API (functions that can be called by any account)
+is an important consideration.
+Leading underscores allow you to immediately recognize the intent of such functions,
+but more importantly, if you change a function from non-external to external (including ``public``)
+and rename it accordingly, this forces you to review every call site while renaming.
+This can be an important manual check against unintended external functions
+and a common source of security vulnerabilities (avoid find-replace-all tooling for this change).
+>>>>>>> english/develop
 
 .. _style_guide_natspec:
 
