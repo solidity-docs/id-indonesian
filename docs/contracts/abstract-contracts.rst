@@ -6,12 +6,24 @@
 Kontrak Abstrak
 ******************
 
+<<<<<<< HEAD
 Kontrak perlu ditandai sebagai abstrak ketika setidaknya salah satu fungsinya tidak diimplementasikan.
 Kontrak dapat ditandai sebagai abstrak meskipun semua fungsi diimplementasikan.
 
 Ini dapat dilakukan dengan menggunakan kata kunci ``abstract`` seperti yang ditunjukkan pada contoh berikut. Perhatikan bahwa kontrak
 ini perlu didefinisikan sebagai abstrak, karena fungsi ``utterance()`` telah didefinisikan, tetapi tidak ada implementasi yang diberikan
 (tidak ada badan implementasi ``{ }`` yang diberikan).
+=======
+Contracts must be marked as abstract when at least one of their functions is not implemented or when
+they do not provide arguments for all of their base contract constructors.
+Even if this is not the case, a contract may still be marked abstract, such as when you do not intend
+for the contract to be created directly. Abstract contracts are similar to :ref:`interfaces` but an
+interface is more limited in what it can declare.
+
+An abstract contract is declared using the ``abstract`` keyword as shown in the following example.
+Note that this contract needs to be defined as abstract, because the function ``utterance()`` is declared,
+but no implementation was provided (no implementation body ``{ }`` was given).
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
