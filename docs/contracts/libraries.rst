@@ -22,6 +22,7 @@ khusus, tidak mungkin untuk menghancurkan library.
     versi tersebut, library berisi :ref:`mekanisme<call-protection>` yang melarang fungsi state-modifying
     dipanggil secara langsung (yaitu tanpa ``DELEGATECALL``).
 
+<<<<<<< HEAD
 Perpustakaan dapat dilihat sebagai basis kontrak implisit dari kontrak yang menggunakannya.
 Mereka tidak akan terlihat secara eksplisit dalam hierarki pewarisan, tetapi panggilan ke
 fungsi library terlihat seperti panggilan ke fungsi  eksplisit basis kontrak (menggunakan akses
@@ -32,6 +33,19 @@ memori <data-location>` akan diteruskan dengan referensi dan tidak disalin.
 Untuk merealisasikan hal ini dalam EVM, kode fungsi library internal dan semua fungsi yang dipanggil
 dari dalamnya pada waktu kompilasi akan dimasukkan dalam kontrak panggilan, dan panggilan ``JUMP`` biasa
 akan digunakan sebagai pengganti ``DELEGATECALL``.
+=======
+Libraries can be seen as implicit base contracts of the contracts that use them.
+They will not be explicitly visible in the inheritance hierarchy, but calls
+to library functions look just like calls to functions of explicit base
+contracts (using qualified access like ``L.f()``).
+Of course, calls to internal functions
+use the internal calling convention, which means that all internal types
+can be passed and types :ref:`stored in memory <data-location>` will be passed by reference and not copied.
+To realize this in the EVM, the code of internal library functions
+that are called from a contract
+and all functions called from therein will at compile time be included in the calling
+contract, and a regular ``JUMP`` call will be used instead of a ``DELEGATECALL``.
+>>>>>>> english/develop
 
 .. note::
     Analogi inheritance rusak ketika datang ke fungsi publik.
@@ -136,16 +150,16 @@ fungsi eksternal:
             r.limbs[0] = x;
         }
 
-        function add(bigint memory _a, bigint memory _b) internal pure returns (bigint memory r) {
-            r.limbs = new uint[](max(_a.limbs.length, _b.limbs.length));
+        function add(bigint memory a, bigint memory b) internal pure returns (bigint memory r) {
+            r.limbs = new uint[](max(a.limbs.length, b.limbs.length));
             uint carry = 0;
             for (uint i = 0; i < r.limbs.length; ++i) {
-                uint a = limb(_a, i);
-                uint b = limb(_b, i);
+                uint limbA = limb(a, i);
+                uint limbB = limb(b, i);
                 unchecked {
-                    r.limbs[i] = a + b + carry;
+                    r.limbs[i] = limbA + limbB + carry;
 
-                    if (a + b < a || (a + b == type(uint).max && carry > 0))
+                    if (limbA + limbB < limbA || (limbA + limbB == type(uint).max && carry > 0))
                         carry = 1;
                     else
                         carry = 0;
@@ -162,8 +176,8 @@ fungsi eksternal:
             }
         }
 
-        function limb(bigint memory _a, uint _limb) internal pure returns (uint) {
-            return _limb < _a.limbs.length ? _a.limbs[_limb] : 0;
+        function limb(bigint memory a, uint index) internal pure returns (uint) {
+            return index < a.limbs.length ? a.limbs[index] : 0;
         }
 
         function max(uint a, uint b) private pure returns (uint) {
@@ -205,7 +219,7 @@ Dibandingkan dengan kontrak, library dibatasi dengan cara berikut:
 (hal Ini mungkin akan diangkat di lain waktu.)
 
 .. _library-selectors:
-.. index:: selector
+.. index:: ! selector; of a library function
 
 Fungsi Tanda Tangan dan Selektor di library
 ===========================================
