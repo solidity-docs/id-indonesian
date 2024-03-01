@@ -21,7 +21,7 @@ unit sumber diberi *source unit name* unik yang merupakan pengidentifikasi buram
 Saat Anda menggunakan :ref:`import statement <import>`, Anda menentukan *import path* yang mereferensikan
 nama unit sumber.
 
-.. index:: ! import callback, ! Host Filesystem Loader
+.. index:: ! import callback, ! Host Filesystem Loader, ! --no-import-callback
 .. _import-callback:
 
 Import Callback
@@ -36,6 +36,7 @@ Import callback bebas untuk menafsirkan nama unit sumber dengan cara yang sewena
 Jika tidak ada callback yang tersedia saat diperlukan atau jika gagal menemukan kode sumber,
 kompilasi gagal.
 
+<<<<<<< HEAD
 Kompilator baris perintah menyediakan *Host Filesystem Loader* - callback yang belum sempurna
 yang menafsirkan nama unit sumber sebagai jalur di sistem file lokal.
 `Antarmuka JavaScript <https://github.com/ethereum/solc-js>`_ tidak menyediakan apa pun secara default,
@@ -44,6 +45,17 @@ Mekanisme ini dapat digunakan untuk mendapatkan kode sumber dari lokasi selain s
 (yang bahkan mungkin tidak dapat diakses, misalnya ketika kompiler berjalan di browser).
 Misalnya `Remix IDE <https://remix.ethereum.org/>`_ menyediakan callback serbaguna yang
 memungkinkan Anda `mengimpor file dari HTTP, IPFS, dan URL Swarm atau merujuk langsung ke paket di registri NPM
+=======
+By default, the command-line compiler provides the *Host Filesystem Loader* - a rudimentary callback
+that interprets a source unit name as a path in the local filesystem.
+This callback can be disabled using the ``--no-import-callback`` command-line option.
+The `JavaScript interface <https://github.com/ethereum/solc-js>`_ does not provide any by default,
+but one can be provided by the user.
+This mechanism can be used to obtain source code from locations other than the local filesystem
+(which may not even be accessible, e.g. when the compiler is running in a browser).
+For example the `Remix IDE <https://remix.ethereum.org/>`_ provides a versatile callback that
+lets you `import files from HTTP, IPFS and Swarm URLs or refer directly to packages in NPM registry
+>>>>>>> english/develop
 <https://remix-ide.readthedocs.io/en/latest/import.html>`_.
 
 .. note::
@@ -138,8 +150,13 @@ Konten awal VFS bergantung pada cara Anda memanggil kompiler:
 
 #. **Standard input**
 
+<<<<<<< HEAD
    Pada baris perintah juga dimungkinkan untuk menyediakan sumber dengan mengirimkan input standar
    ke kompiler:
+=======
+   On the command-line it is also possible to provide the source by sending it to compiler's
+   standard input:
+>>>>>>> english/develop
 
    .. code-block:: bash
 
@@ -194,11 +211,19 @@ nama unit sumber.
 
 .. note::
 
+<<<<<<< HEAD
     Nama unit sumber hanyalah pengidentifikasi dan bahkan jika nilainya terlihat seperti jalur, itu
     tidak tunduk pada aturan normalisasi yang biasanya Anda harapkan di shell.
     Setiap segmen ``/./`` atau ``/../`` atau urutan beberapa garis miring tetap menjadi bagian darinya.
     Ketika sumber disediakan melalui antarmuka JSON Standar, sangat mungkin untuk mengaitkan
     konten yang berbeda dengan nama unit sumber yang akan merujuk ke file yang sama pada disk.
+=======
+    A source unit name is just an identifier and even if its value happens to look like a path, it
+    is not subject to the normalization rules you would typically expect in a shell.
+    Any ``/./`` or ``/../`` segments or sequences of multiple slashes remain a part of it.
+    When the source is provided via Standard JSON interface it is entirely possible to associate
+    different content with source unit names that would refer to the same file on disk.
+>>>>>>> english/develop
 
 Ketika sumber tidak tersedia di sistem file virtual, kompiler meneruskan nama unit sumber
 ke import callback.
@@ -247,6 +272,7 @@ dan dibatasi oleh dua pemisah jalur.
 Pemisah adalah garis miring ke depan atau awal/akhir string.
 Misalnya dalam ``./abc/..//`` ada tiga segmen jalur: ``.``, ``abc`` dan ``..``.
 
+<<<<<<< HEAD
 Kompilator menghitung nama unit sumber dari jalur impor dengan cara berikut:
 
 1. Pertama sebuah prefix dihitung
@@ -260,6 +286,17 @@ Kompilator menghitung nama unit sumber dari jalur impor dengan cara berikut:
 
 2. Kemudian prefix ditambahkan ke import path yang dinormalisasi.
    Jika prefix non-empty, satu garis miring disisipkan di antaranya dan import path.
+=======
+The compiler resolves the import into a source unit name based on the import path, in the following way:
+
+#. We start with the source unit name of the importing source unit.
+#. The last path segment with preceding slashes is removed from the resolved name.
+#. Then, for every segment in the import path, starting from the leftmost one:
+
+    - If the segment is ``.``, it is skipped.
+    - If the segment is ``..``, the last path segment with preceding slashes is removed from the resolved name.
+    - Otherwise, the segment (preceded by a single slash if the resolved name is not empty), is appended to the resolved name.
+>>>>>>> english/develop
 
 Penghapusan segmen jalur terakhir dengan garis miring sebelumnya dipahami
 bekerja sebagai berikut:
@@ -267,6 +304,7 @@ bekerja sebagai berikut:
 1. Semua yang melewati garis miring terakhir dihapus (yaitu ``a/b//c.sol`` menjadi ``a/b//``).
 2. Semua garis miring dihilangkan (yaitu ``a/b//`` menjadi ``a/b``).
 
+<<<<<<< HEAD
 Aturan normalisasinya sama dengan jalur UNIX, yaitu:
 
 - Semua segmen ``.`` internal dihapus.
@@ -277,6 +315,14 @@ Perhatikan bahwa normalisasi dilakukan hanya pada import path.
 Nama unit sumber modul pengimporan yang digunakan untuk awalan tetap tidak dinormalisasi.
 Ini memastikan bahwa bagian ``protokol://`` tidak berubah menjadi ``protokol:/`` jika file pengimpor
 diidentifikasi dengan URL.
+=======
+Note that the process normalizes the part of the resolved source unit name that comes from the import path according
+to the usual rules for UNIX paths, i.e. all ``.`` and ``..`` are removed and multiple slashes are
+squashed into a single one.
+On the other hand, the part that comes from the source unit name of the importing module remains unnormalized.
+This ensures that the ``protocol://`` part does not turn into ``protocol:/`` if the importing file
+is identified with a URL.
+>>>>>>> english/develop
 
 Jika jalur impor Anda sudah dinormalisasi, Anda dapat mengharapkan algoritme di atas menghasilkan hasil yang
 sangat intuitif.
@@ -352,6 +398,7 @@ kerja kompiler saat ini.
 CLI Path Normalization dan Stripping
 ------------------------------------
 
+<<<<<<< HEAD
 Pada baris perintah, kompiler berperilaku seperti yang Anda harapkan dari program lain:
 ia menerima jalur dalam format asli platform dan relative paths relatif terhadap direktori
 kerja saat ini.
@@ -360,6 +407,16 @@ tidak boleh berubah hanya karena proyek sedang dikompilasi pada platform yang be
 compiler kebetulan telah dipanggil dari direktori yang berbeda.
 Untuk mencapai ini, jalur ke file sumber yang berasal dari baris perintah harus dikonversi ke bentuk
 canonical, dan, jika mungkin, dibuat relatif terhadap base path atau salah satu include path.
+=======
+On the command-line the compiler behaves just as you would expect from any other program:
+it accepts paths in a format native to the platform and relative paths are relative to the current
+working directory.
+The source unit names assigned to files whose paths are specified on the command-line, however,
+should not change just because the project is being compiled on a different platform or because the
+compiler happens to have been invoked from a different directory.
+To achieve this, paths to source files coming from the command-line must be converted to a canonical
+form, and, if possible, made relative to the base path or one of the include paths.
+>>>>>>> english/develop
 
 Aturan normalisasi adalah sebagai berikut:
 
@@ -412,10 +469,17 @@ Jalur file yang dihasilkan menjadi nama unit sumber.
 
 .. note::
 
+<<<<<<< HEAD
     Sebelum versi 0.8.8, CLI path stripping tidak dilakukan dan satu-satunya normalisasi yang diterapkan
     adalah konversi pemisah jalur.
     Saat bekerja dengan versi kompiler yang lebih lama, disarankan untuk memanggil kompiler dari
     jalur dasar dan hanya menggunakan jalur relatif pada baris perintah.
+=======
+    Prior to version 0.8.8, CLI path stripping was not performed and the only normalization applied
+    was the conversion of path separators.
+    When working with older versions of the compiler it is recommended to invoke the compiler from
+    the base path and to only use relative paths on the command-line.
+>>>>>>> english/develop
 
 .. index:: ! allowed paths, ! --allow-paths, remapping; target
 .. _allowed-paths:
@@ -428,11 +492,19 @@ lokasi yang dianggap aman secara default:
 
 - Di luar mode JSON Standar:
 
+<<<<<<< HEAD
   - Direktori yang berisi file input yang terdaftar pada baris perintah.
   - Direktori yang digunakan sebagai target :ref:`remapping <import-remapping>`.
     Jika target bukan direktori (yaitu tidak diakhiri dengan ``/``, ``/.`` atau ``/..``) direktori
     berisi target digunakan sebagai gantinya.
   - Base path dan include path.
+=======
+  - The directories containing input files listed on the command-line.
+  - The directories used as :ref:`remapping <import-remapping>` targets.
+    If the target is not a directory (i.e does not end with ``/``, ``/.`` or ``/..``) the directory
+    containing the target is used instead.
+  - Base path and include paths.
+>>>>>>> english/develop
 
 - Dalam mode JSON Standar:
 
@@ -520,9 +592,15 @@ Anda dapat menggunakan yang berikut ini di file sumber Anda:
 
     import "github.com/ethereum/dapp-bin/library/math.sol"; // source unit name: dapp-bin/library/math.sol
 
+<<<<<<< HEAD
 Kompilator akan mencari file dalam VFS di bawah ``dapp-bin/library/math.sol``.
 Jika file tidak tersedia di sana, nama unit sumber akan diteruskan ke Sistem File Host
 Loader, yang kemudian akan mencari di ``/project/dapp-bin/library/iterable_mapping.sol``.
+=======
+The compiler will look for the file in the VFS under ``dapp-bin/library/math.sol``.
+If the file is not available there, the source unit name will be passed to the Host Filesystem
+Loader, which will then look in ``/project/dapp-bin/library/math.sol``.
+>>>>>>> english/develop
 
 .. warning::
 
@@ -558,7 +636,11 @@ Anda memeriksa ke ``/project/dapp-bin_old``, lalu Anda dapat menjalankan:
 Ini berarti bahwa semua impor di ``module2`` mengarah ke versi lama tetapi mengimpor di ``module1``
 mengarahkan ke versi baru.
 
+<<<<<<< HEAD
 Berikut adalah aturan terperinci yang mengatur perilaku remapping:
+=======
+Here are the detailed rules governing the behavior of remappings:
+>>>>>>> english/develop
 
 #. **Remappings hanya memengaruhi terjemahan antara jalur impor dan nama unit sumber.**
 

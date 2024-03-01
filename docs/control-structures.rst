@@ -144,8 +144,13 @@ sendiri mengeluarkan pengecualian atau kehabisan gas.
     dengan menggunakan ``f.value(x).gas(g)()``. Ini tidak digunakan lagi di Solidity 0.6.2
     dan tidak mungkin lagi sejak Solidity 0.7.0.
 
+<<<<<<< HEAD
 Panggilan Bernama dan Parameter Fungsi Anonim
 ---------------------------------------------
+=======
+Function Calls with Named Parameters
+------------------------------------
+>>>>>>> english/develop
 
 Argumen pemanggilan fungsi dapat diberikan berdasarkan nama, dalam urutan apa pun,
 jika diapit dalam ``{ }`` seperti yang dapat dilihat pada contoh berikut.
@@ -167,14 +172,23 @@ tetapi bisa dalam urutan arbitrer.
         function set(uint key, uint value) public {
             data[key] = value;
         }
-
     }
 
+<<<<<<< HEAD
 Nama Parameter Fungsi yang Dihilangkan
 --------------------------------------
 
 Nama parameter yang tidak digunakan (terutama parameter pengembalian) dapat dihilangkan.
 Parameter tersebut akan tetap ada pada stack, tetapi tidak dapat diakses.
+=======
+Omitted Names in Function Definitions
+-------------------------------------
+
+The names of parameters and return values in the function declaration can be omitted.
+Those items with omitted names will still be present on the stack, but they are
+inaccessible by name. An omitted return value name
+can still return a value to the caller by use of the ``return`` statement.
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
@@ -276,7 +290,7 @@ yang hanya perlu dibuat jika terjadi perselisihan.
                 salt,
                 keccak256(abi.encodePacked(
                     type(D).creationCode,
-                    arg
+                    abi.encode(arg)
                 ))
             )))));
 
@@ -356,15 +370,26 @@ misalnya yang berikut ini tidaklah valid: ``(x, uint y) = (1, 2);``
     jadi kedua belah pihak harus memiliki jumlah komponen yang sama.
 
 .. warning::
+<<<<<<< HEAD
     Berhati-hatilah saat menetapkan ke beberapa variabel pada saat yang
     sama ketika tipe referensi terlibat, karena dapat menyebabkan perilaku
     penyalinan yang tidak terduga.
+=======
+    Be careful when assigning to multiple variables at the same time when
+    reference types are involved, because it could lead to unexpected
+    copying behavior.
+>>>>>>> english/develop
 
 Komplikasi untuk Array dan Struct
 ---------------------------------
 
+<<<<<<< HEAD
 Semantik assignments lebih rumit untuk tipe non-value seperti array dan struct,
 termasuk ``byte`` dan ``string``, lihat :ref:`Lokasi data dan perilaku assignments <data-location-assignment>` untuk detailnya.
+=======
+The semantics of assignments are more complicated for non-value types like arrays and structs,
+including ``bytes`` and ``string``, see :ref:`Data location and assignment behavior <data-location-assignment>` for details.
+>>>>>>> english/develop
 
 Pada contoh di bawah, panggilan ke ``g(x)`` tidak berpengaruh pada ``x`` karena
 panggilan tersebut membuat salinan independen dari nilai penyimpanan di memori.
@@ -503,7 +528,11 @@ pemeriksaan tambahan.
 Sejak Solidity 0.8.0, semua operasi aritmatika kembali ke over- dan underflow secara default,
 sehingga membuat penggunaan libraries ini tidak perlu.
 
+<<<<<<< HEAD
 Untuk mendapatkan perilaku sebelumnya, blok ``unchecked`` dapat digunakan:
+=======
+To obtain the previous behavior, an ``unchecked`` block can be used:
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
@@ -636,9 +665,15 @@ dalam situasi berikut:
    Pengubah ``payable`` (termasuk konstruktor dan fungsi fallback).
 #. Jika kontrak Anda menerima Ether melalui fungsi getter publik.
 
+<<<<<<< HEAD
 Untuk kasus berikut, data kesalahan dari panggilan eksternal
 (jika disediakan) diteruskan. Ini berarti bahwa hal itu dapat menyebabkan
 sebuah `Error` atau `Panic` (atau apa pun yang diberikan):
+=======
+For the following cases, the error data from the external call
+(if provided) is forwarded. This means that it can either cause
+an ``Error`` or a ``Panic`` (or whatever else was given):
+>>>>>>> english/develop
 
 #. Jika sebuah ``.transfer()`` gagal.
 #. Jika Anda memanggil suatu fungsi melalui panggilan pesan tetapi tidak selesai
@@ -673,7 +708,7 @@ dan ``assert`` untuk pemeriksaan kesalahan internal.
             addr.transfer(msg.value / 2);
             // Since transfer throws an exception on failure and
             // cannot call back here, there should be no way for us to
-            // still have half of the money.
+            // still have half of the Ether.
             assert(address(this).balance == balanceBeforeTransfer - msg.value / 2);
             return address(this).balance;
         }
@@ -687,8 +722,13 @@ karena efek yang diharapkan tidak terjadi. Karena kami ingin menjaga atomisitas 
 tindakan teraman adalah mengembalikan semua perubahan dan membuat seluruh transaksi (atau
 setidaknya panggilan) tanpa efek.
 
+<<<<<<< HEAD
 Dalam kedua kasus, pemanggil dapat bereaksi pada kegagalan tersebut menggunakan ``try``/``catch``, tetapi
 perubahan pada pemanggil akan selalu dikembalikan.
+=======
+In both cases, the caller can react on such failures using ``try``/``catch``, but
+the changes in the callee will always be reverted.
+>>>>>>> english/develop
 
 .. note::
 
@@ -707,8 +747,13 @@ Pernyataan ``revert`` mengambil kesalahan khusus sebagai argumen langsung tanpa 
 
     revert CustomError(arg1, arg2);
 
+<<<<<<< HEAD
 Untuk alasan backwards-compatibility, ada juga fungsi ``revert()``, yang menggunakan tanda kurung
 dan menerima string:
+=======
+For backward-compatibility reasons, there is also the ``revert()`` function, which uses parentheses
+and accepts a string:
+>>>>>>> english/develop
 
     revert();
     revert("description");
@@ -848,8 +893,13 @@ jenis kesalahan:
   ``catch { ... }`` (bahkan sebagai satu-satunya klausa catch) alih-alih klausa sebelumnya.
 
 
+<<<<<<< HEAD
 Direncanakan untuk mendukung jenis data kesalahan lainnya di masa mendatang.
 String ``Error`` dan ``Panic`` saat ini diuraikan apa adanya dan tidak diperlakukan sebagai identifiers.
+=======
+It is planned to support other types of error data in the future.
+The strings ``Error`` and ``Panic`` are currently parsed as is and are not treated as identifiers.
+>>>>>>> english/develop
 
 Untuk menangkap semua kasus kesalahan, Anda harus memiliki setidaknya klausa
 ``catch { ...}`` atau klausa ``catch (byte memory lowLevelData) { ... }``.
@@ -872,8 +922,19 @@ dalam cakupan di blok berikut.
     kegagalan decoding seperti disebutkan di atas atau karena tidak menyediakan klausa catch level rendah).
 
 .. note::
+<<<<<<< HEAD
     Alasan di balik panggilan yang gagal bisa bermacam-macam. Jangan berasumsi bahwa pesan kesalahan datang langsung dari
     kontrak yang dipanggil: Kesalahan mungkin terjadi lebih dalam di rantai panggilan dan kontrak yang dipanggil baru saja
     meneruskannya. Juga, bisa jadi karena situasi out-of-gas dan bukan kondisi kesalahan yang disengaja: Penelepon selalu
     mempertahankan 63/64 gas dalam panggilan dan dengan demikian bahkan jika kontrak yang dipanggil kehabisan gas, pemanggil
     masih memiliki sisa gas.
+=======
+    The reason behind a failed call can be manifold. Do not assume that
+    the error message is coming directly from the called contract:
+    The error might have happened deeper down in the call chain and the
+    called contract just forwarded it. Also, it could be due to an
+    out-of-gas situation and not a deliberate error condition:
+    The caller always retains at least 1/64th of the gas in a call and thus
+    even if the called contract goes out of gas, the caller still
+    has some gas left.
+>>>>>>> english/develop
