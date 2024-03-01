@@ -35,17 +35,30 @@ dicapai melalui tag ``@custom:<name>``, dan kasus penggunaan yang baik adalah al
 Contoh Dokumentasi
 ==================
 
+<<<<<<< HEAD
 Dokumentasi disisipkan di atas masing-masing ``contract``, ``interface``,
 ``function``, dan ``event`` menggunakn format notasi Doxygen.
 ``public`` state variable setara dengan ``function``
 untuk keperluan NatSpec.
+=======
+Documentation is inserted above each ``contract``, ``interface``, ``library``,
+``function``, and ``event`` using the Doxygen notation format.
+A ``public`` state variable is equivalent to a ``function``
+for the purposes of NatSpec.
+>>>>>>> english/develop
 
 -  Untuk Solidity Anda dapat memilih ``///`` untuk single atau multi-line
    komentar, atau ``/**`` dan diakhiri dengan ``*/``.
 
+<<<<<<< HEAD
 -  Untuk Vyper, gunakan ``"""`` menjorok ke konten dalam dengan
    komentar kosong. Lihat `Vyper
    documentation <https://vyper.readthedocs.io/en/latest/natspec.html>`__.
+=======
+-  For Vyper, use ``"""`` indented to the inner contents with bare
+   comments. See the `Vyper
+   documentation <https://docs.vyperlang.org/en/latest/natspec.html>`__.
+>>>>>>> english/develop
 
 Contoh berikut menunjukkan kontrak dan fungsi menggunakan semua tag yang tersedia.
 
@@ -57,7 +70,7 @@ Contoh berikut menunjukkan kontrak dan fungsi menggunakan semua tag yang tersedi
 
   Ini mungkin berubah di masa depan.
 
-.. code-block:: Solidity
+.. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.8.2 < 0.9.0;
@@ -114,6 +127,7 @@ dengan cara yang sama seperti jika diberi tag dengan ``@notice``.
 =============== ====================================================================================== =============================
 Tag                                                                                                    Context
 =============== ====================================================================================== =============================
+<<<<<<< HEAD
 ``@title``      Judul yang harus menggambarkan kontrak/interface                                       contract, library, interface
 ``@author``     Nama penulis                                                                           contract, library, interface
 ``@notice``     Jelaskan kepada pengguna akhir apa fungsinya                                           contract, library, interface, function, public state variable, event
@@ -122,6 +136,16 @@ Tag                                                                             
 ``@return``     Dokumentasikan variabel return dari fungsi kontrak                                     function, public state variable
 ``@inheritdoc`` Salin semua tag yang hilang dari fungsi dasar (harus diikuti dengan nama kontrak)      function, public state variable
 ``@custom:...`` Tag khusus, semantik ditentukan oleh aplikasi                                          everywhere
+=======
+``@title``      A title that should describe the contract/interface                                    contract, library, interface, struct, enum
+``@author``     The name of the author                                                                 contract, library, interface, struct, enum
+``@notice``     Explain to an end user what this does                                                  contract, library, interface, function, public state variable, event, struct, enum
+``@dev``        Explain to a developer any extra details                                               contract, library, interface, function, state variable, event, struct, enum
+``@param``      Documents a parameter just like in Doxygen (must be followed by parameter name)        function, event
+``@return``     Documents the return variables of a contract's function                                function, public state variable
+``@inheritdoc`` Copies all missing tags from the base function (must be followed by the contract name) function, public state variable
+``@custom:...`` Custom tag, semantics is application-defined                                           everywhere
+>>>>>>> english/develop
 =============== ====================================================================================== =============================
 
 Jika fungsi Anda mengembalikan banyak nilai, seperti ``(int quotient, int rest)``
@@ -153,10 +177,13 @@ kepada pengguna akhir sebagai:
 
 jika suatu fungsi dipanggil dan input ``a`` diberi nilai 10.
 
+<<<<<<< HEAD
 Menentukan ekspresi dinamis ini berada di luar cakupan dokumentasi
 Solidity dan Anda dapat membaca lebih lanjut di
 `the radspec project <https://github.com/aragon/radspec>`__.
 
+=======
+>>>>>>> english/develop
 .. _header-inheritance:
 
 Inheritance Notes
@@ -182,7 +209,7 @@ oleh pengembang.
 Jika kontrak di atas disimpan sebagai ``ex1.sol`` maka Anda dapat membuat
 dokumentasi menggunakan:
 
-.. code::
+.. code-block:: shell
 
    solc --userdoc --devdoc ex1.sol
 
@@ -201,7 +228,7 @@ Dokumentasi User
 Dokumentasi di atas akan menghasilkan file JSON dokumentasi pengguna
 berikut sebagai output:
 
-.. code::
+.. code-block:: json
 
     {
       "version" : 1,
@@ -229,7 +256,7 @@ Dokumentasi Developer
 Terlepas dari file dokumentasi pengguna, dokumentasi pengembang JSON
 file juga harus diproduksi dan akan terlihat seperti ini:
 
-.. code::
+.. code-block:: json
 
     {
       "version" : 1,

@@ -12,8 +12,13 @@ Untuk daftar lengkap cek
 Perubahan yang Mungkin Tidak Diperingatkan oleh Kompiler
 ========================================================
 
+<<<<<<< HEAD
 Bagian ini mencantumkan perubahan di mana perilaku kode Anda mungkin
 berubah tanpa kompiler memberi tahu Anda tentang hal itu.
+=======
+This section lists changes where the behavior of your code might
+change without the compiler telling you about it.
+>>>>>>> english/develop
 
 * Jenis eksponensial yang dihasilkan adalah jenis basis. Dulunya adalah tipe terkecil
   yang dapat menampung tipe basis dan tipe eksponen, seperti halnya operasi simetris.
@@ -51,9 +56,17 @@ Untuk sebagian besar topik, kompiler akan memberikan saran.
   Jika nama mengandung titik, awalan hingga titik tidak boleh bertentangan dengan deklarasi apa pun di luar inline
   assembly blok.
 
+<<<<<<< HEAD
 * Pembayangan variabel state sekarang tidak diizinkan. Kontrak turunan hanya bisa
   mendeklarasikan variabel state ``x``, jika tidak ada variabel state yang terlihat dengan
   nama yang sama di salah satu basisnya.
+=======
+* In inline assembly, opcodes that do not take arguments are now represented as "built-in functions" instead of standalone identifiers. So ``gas`` is now ``gas()``.
+
+* State variable shadowing is now disallowed.  A derived contract can only
+  declare a state variable ``x``, if there is no visible state variable with
+  the same name in any of its bases.
+>>>>>>> english/develop
 
 
 Perubahan Semantic dan Syntactic
@@ -100,25 +113,45 @@ atau lebih sulit untuk dicapai.
 Perubahan Interface
 ===================
 
+<<<<<<< HEAD
 Bagian ini mencantumkan perubahan yang tidak terkait dengan bahasa itu sendiri, tetapi memiliki efek pada antarmuka
 kompiler. Ini dapat mengubah cara Anda menggunakan kompiler pada baris perintah, cara Anda menggunakan antarmuka
 yang dapat diprogram, atau cara Anda menganalisis output yang dihasilkan olehnya.
+=======
+This section lists changes that are unrelated to the language itself, but that have an effect on the interfaces of
+the compiler. These may change the way how you use the compiler on the command-line, how you use its programmable
+interface, or how you analyze the output produced by it.
+>>>>>>> english/develop
 
 Reporter Error Baru
 ~~~~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD
 Reporter kesalahan baru diperkenalkan, yang bertujuan untuk menghasilkan pesan kesalahan yang lebih mudah diakses di baris perintah.
 Ini diaktifkan secara default, tetapi meneruskan ``--old-reporter`` akan mengembalikan ke pelapor kesalahan lama yang tidak digunakan lagi.
+=======
+A new error reporter was introduced, which aims at producing more accessible error messages on the command-line.
+It is enabled by default, but passing ``--old-reporter`` falls back to the deprecated old error reporter.
+>>>>>>> english/develop
 
 Metadata Hash Options
 ~~~~~~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD
 Kompiler sekarang menambahkan hash `IPFS <https://ipfs.io/>`_ dari file metadata ke akhir bytecode secara default
 (untuk detailnya, lihat dokumentasi di :doc:`contract metadata <metadata>`). Sebelum 0.6.0, kompiler menambahkan
 `Swarm <https://ethersphere.github.io/swarm-home/>`_ hash secara default, dan untuk tetap mendukung perilaku ini,
 opsi baris perintah baru ``--metadata-hash`` diperkenalkan. Ini memungkinkan Anda untuk memilih hash yang akan diproduksi dan
 ditambahkan, dengan meneruskan ``ipfs`` atau ``swarm`` sebagai nilai ke opsi baris perintah ``--metadata-hash``.
 Meneruskan nilai ``none`` akan menghapus hash sepenuhnya.
+=======
+The compiler now appends the `IPFS <https://ipfs.io/>`_ hash of the metadata file to the end of the bytecode by default
+(for details, see documentation on :doc:`contract metadata <metadata>`). Before 0.6.0, the compiler appended the
+`Swarm <https://ethersphere.github.io/swarm-home/>`_ hash by default, and in order to still support this behavior,
+the new command-line option ``--metadata-hash`` was introduced. It allows you to select the hash to be produced and
+appended, by passing either ``ipfs`` or ``swarm`` as value to the ``--metadata-hash`` command-line option.
+Passing the value ``none`` completely removes the hash.
+>>>>>>> english/develop
 
 Perubahan ini juga dapat digunakan melalui :ref:`Standard JSON Interface<compiler-api>` dan mempengaruhi metadata JSON yang dihasilkan oleh compiler.
 
@@ -168,8 +201,19 @@ Bagian ini memberikan petunjuk terperinci tentang cara memperbarui kode sebelumn
 * Pilih pengidentifikasi unik untuk deklarasi variabel di inline assembly yang tidak bertentangan
   dengan deklarasi di luar blok rakitan sebaris.
 
+<<<<<<< HEAD
 * Tambahkan ``virtual`` ke setiap fungsi non-antarmuka yang ingin Anda timpa. Tambahkan ``virtual``
   ke semua fungsi tanpa implementasi di luar antarmuka. Untuk pewarisan tunggal, tambahkan ``override``
   ke setiap fungsi utama. Untuk pewarisan berganda, tambahkan ``override(A, B, ..)``, tempat Anda
   mencantumkan semua kontrak yang mendefinisikan fungsi yang diganti dalam tanda kurung. Ketika beberap
   basis mendefinisikan fungsi yang sama, kontrak pewarisan harus mengesampingkan semua fungsi yang bertentangan.
+=======
+* Add ``virtual`` to every non-interface function you intend to override. Add ``virtual``
+  to all functions without implementation outside interfaces. For single inheritance, add
+  ``override`` to every overriding function. For multiple inheritance, add ``override(A, B, ..)``,
+  where you list all contracts that define the overridden function in the parentheses. When
+  multiple bases define the same function, the inheriting contract must override all conflicting functions.
+
+* In inline assembly, add ``()`` to all opcodes that do not otherwise accept an argument.
+  For example, change ``pc`` to ``pc()``, and ``gas`` to ``gas()``.
+>>>>>>> english/develop
