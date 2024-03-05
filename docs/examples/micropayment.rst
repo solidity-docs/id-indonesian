@@ -2,11 +2,19 @@
 Saluran Pembayaran Mikro (Micropayment Channel)
 ************************************************
 
+<<<<<<< HEAD
 Di bagian ini kita akan mempelajari cara membuat contoh
 implementasi saluran pembayaran. Dengan menggunakan tanda tangan
 kriptografi untuk membuat transfer Ether secara berulang antara pihak yang sama,
 aman, seketika, dan tanpa biaya transaksi. Misalnya, kita perlu memahami cara menyetujui
 dan memverifikasi tanda tangan, dan mengatur saluran pembayaran.
+=======
+In this section, we will learn how to build an example implementation
+of a payment channel. It uses cryptographic signatures to make
+repeated transfers of Ether between the same parties secure, instantaneous, and
+without transaction fees. For the example, we need to understand how to
+sign and verify signatures, and setup the payment channel.
+>>>>>>> english/develop
 
 
 Membuat dan memverifikasi tanda tangan
@@ -15,14 +23,29 @@ Membuat dan memverifikasi tanda tangan
 Bayangkan, Alice ingin mengirim sejumlah Ether kepada Bob, misalnya
 disini Alice sebagai pengirim dan Bob sebagai penerimanya.
 
+<<<<<<< HEAD
 Alice hanya perlu mengirim pesan yang ditandatangani secara kriptografis off-chain
 (misalnya melalui email) ke Bob dan ini mirip dengan menulis cek.
+=======
+Alice and Bob use signatures to authorize transactions, which is possible with smart contracts on Ethereum.
+Alice will build a simple smart contract that lets her transmit Ether, but instead of calling a function herself
+to initiate a payment, she will let Bob do that, and therefore pay the transaction fee.
+>>>>>>> english/develop
 
 Alice dan Bob menggunakan tanda tangan untuk mengotorisasi transaksi, hal ini dimungkinkan dengan smart kontrak di Ethereum.
 Alice akan membuat smart kontrak sederhana yang memumngkinkan dia mengirim Ether, tetapi alih-alih memanggil fungsi sendiri
 untuk melakukan pembayaran, dia akan membiarkan Bob melakukan itu, dan sekaligus membayar biaya transaksi.
 
+<<<<<<< HEAD
 Kontrak akan bekerja sebagai berikut:
+=======
+    1. Alice deploys the ``ReceiverPays`` contract, attaching enough Ether to cover the payments that will be made.
+    2. Alice authorizes a payment by signing a message with her private key.
+    3. Alice sends the cryptographically signed message to Bob. The message does not need to be kept secret
+       (explained later), and the mechanism for sending it does not matter.
+    4. Bob claims his payment by presenting the signed message to the smart contract, it verifies the
+       authenticity of the message and then releases the funds.
+>>>>>>> english/develop
 
     1. Alice mendeploy kontrak ``ReceiverPays``, melampirkan cukup Ether untuk menutupi pembayaran yang akan dilakukan.
     2. Alice mengotorisasi pembayaran dengan menandatangani pesan dengan kunci pribadinya.
@@ -34,6 +57,7 @@ Kontrak akan bekerja sebagai berikut:
 Membuat tanda tangan
 ----------------------
 
+<<<<<<< HEAD
 Alice tidak perlu berinteraksi dengan jaringan Ethereum
 untuk menandatangani transaksi, prosesnya benar-benar offline.
 
@@ -41,6 +65,14 @@ Dalam tutorial ini, kita akan menandatangani pesan di browser
 menggunakan `web3.js <https://github.com/ethereum/web3.js>`_ dan
 `MetaMask <https://metamask.io>`_, menggunakan metode yang dijelaskan dalam `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_,
 karena memberikan sejumlah manfaat keamanan lainnya.
+=======
+Alice does not need to interact with the Ethereum network
+to sign the transaction, the process is completely offline.
+In this tutorial, we will sign messages in the browser
+using `web3.js <https://github.com/web3/web3.js>`_ and
+`MetaMask <https://metamask.io>`_, using the method described in `EIP-712 <https://github.com/ethereum/EIPs/pull/712>`_,
+as it provides a number of other security benefits.
+>>>>>>> english/develop
 
 .. code-block:: javascript
 
@@ -80,12 +112,21 @@ penuh di akhir bagian ini.
 Packing arguments
 -----------------
 
+<<<<<<< HEAD
 Sekarang kita telah mengidentifikasi informasi apa yang akan disertakan dalam pesan yang ditandatangani,
 kita siap untuk menyatukan pesan, hash, dan menandatanganinya. Untuk kesederhanaan,
 kita gabungkan datanya. Library `Ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_
 menyediakan fungsi yang disebut ``soliditySHA3`` yang meniru perilaku fungsi
 Solidity ``keccak256`` yang diterapkan pada argumen yang dikodekan menggunakan ``abi.encodePacked``.
 Berikut adalah fungsi JavaScript yang membuat tanda tangan yang tepat untuk contoh ``ReceiverPays``:
+=======
+Now that we have identified what information to include in the signed message,
+we are ready to put the message together, hash it, and sign it. For simplicity,
+we concatenate the data. The `ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_
+library provides a function called ``soliditySHA3`` that mimics the behavior of
+Solidity's ``keccak256`` function applied to arguments encoded using ``abi.encodePacked``.
+Here is a JavaScript function that creates the proper signature for the ``ReceiverPays`` example:
+>>>>>>> english/develop
 
 .. code-block:: javascript
 
@@ -140,6 +181,7 @@ Kontrak penuh
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
     contract ReceiverPays {
         address owner = msg.sender;
 
@@ -236,8 +278,13 @@ menit akses jaringan, saluran pembayaran dapat tetap terbuka untuk jangka waktu 
 Di sisi lain, untuk pembayaran berulang, seperti membayar upah per jam kepada karyawan, saluran
 pembayaran dapat tetap terbuka selama beberapa bulan atau tahun.
 
+<<<<<<< HEAD
 Membuka Saluran Pembayaran
 ---------------------------
+=======
+    * The smart contract's address, used to prevent cross-contract replay attacks.
+    * The total amount of Ether that is owed to the recipient so far.
+>>>>>>> english/develop
 
 Untuk membuka saluran pembayaran, Alice menyebarkan smart kontrak,
 melampirkan Ether untuk di*escrow*kan dan menentukan penerima yang
@@ -337,6 +384,7 @@ Kontrak penuh
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
     contract SimplePaymentChannel {
         address payable public sender;      // The account sending payments.
         address payable public recipient;   // The account receiving the payments.
