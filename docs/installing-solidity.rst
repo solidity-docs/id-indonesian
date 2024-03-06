@@ -9,17 +9,37 @@ Menginstal Kompiler Solidity
 Versioning
 ==========
 
+<<<<<<< HEAD
 Versi Solidity mengikuti `semantic versioning <https://semver.org>`_ dan sebagai tambahan
 untuk rilis, versi **nightly development builds** juga tersedia. Nightly builds tidak
 dijamin akan berfungsi dan meskipun telah dilakukan upaya terbaik build tersebut mungkin berisi perubahan
 yang tidak terdokumentasi dan/atau rusak. Kami merekomendasikan menggunakan rilis terbaru. Penginstal paket di bawah ini
 akan menggunakan rilis terbaru.
+=======
+Solidity versions follow `Semantic Versioning <https://semver.org>`_. In
+addition, patch-level releases with major release 0 (i.e. 0.x.y) will not
+contain breaking changes. That means code that compiles with version 0.x.y
+can be expected to compile with 0.x.z where z > y.
+
+In addition to releases, we provide **nightly development builds** to make
+it easy for developers to try out upcoming features and
+provide early feedback. Note, however, that while the nightly builds are usually
+very stable, they contain bleeding-edge code from the development branch and are
+not guaranteed to be always working. Despite our best efforts, they might
+contain undocumented and/or broken changes that will not become a part of an
+actual release. They are not meant for production use.
+
+When deploying contracts, you should use the latest released version of Solidity. This
+is because breaking changes, as well as new features and bug fixes are introduced regularly.
+We currently use a 0.x version number `to indicate this fast pace of change <https://semver.org/#spec-item-4>`_.
+>>>>>>> english/develop
 
 Remix
 =====
 
 *Kami merekomendasikan Remix untuk kontrak kecil dan untuk mempelajari Solidity dengan cepat.*
 
+<<<<<<< HEAD
 `Akses Remix online <https://remix.ethereum.org/>`_, anda tidak perlu menginstal apapun.
 Jika ingin menggunakannya tanpa koneksi internet, silahkan kunjungi
 https://github.com/ethereum/remix-live/tree/gh-pages dan download file ``.zip`` seperti
@@ -29,6 +49,17 @@ tanpa menginstal beberapa versi Solidity.
 Opsi lebih lanjut di halaman ini merinci penginstalan sofware commandline Solidity compiler
 di komputer anda. Pilih commandline compiler jika anda mengerjakan kontrak yang lebih besar
 atau jika anda membutuhkan lebih banyak opsi compilation.
+=======
+`Access Remix online <https://remix.ethereum.org/>`_, you do not need to install anything.
+If you want to use it without connection to the Internet, go to
+https://github.com/ethereum/remix-live/tree/gh-pages#readme and follow the instructions on that page.
+Remix is also a convenient option for testing nightly builds
+without installing multiple Solidity versions.
+
+Further options on this page detail installing command-line Solidity compiler software
+on your computer. Choose a command-line compiler if you are working on a larger contract
+or if you require more compilation options.
+>>>>>>> english/develop
 
 .. _solcjs:
 
@@ -42,10 +73,17 @@ lebih lanjut di halaman ini. dokumentasi
 kompiler berfitur lengkap, ``solc``. Penggunaan ``solcjs`` didokumentasikan di dalam
 `repository <https://github.com/ethereum/solc-js>`_ nya sendiri.
 
+<<<<<<< HEAD
 Note: Proyek solc-js diturunkan dari C++
 `solc` dengan menggunakan Emscripten yang artinya keduanya menggunakan source code compiler yang sama.
 `solc-js` dapat digunakan dalam proyek JavaScript secara langsung (seperti Remix).
 Silakan merujuk ke repositori solc-js untuk instruksi.
+=======
+Note: The solc-js project is derived from the C++
+`solc` by using Emscripten, which means that both use the same compiler source code.
+`solc-js` can be used in JavaScript projects directly (such as Remix).
+Please refer to the solc-js repository for instructions.
+>>>>>>> english/develop
 
 .. code-block:: bash
 
@@ -53,42 +91,80 @@ Silakan merujuk ke repositori solc-js untuk instruksi.
 
 .. note::
 
+<<<<<<< HEAD
     Commandline yang dapat dieksekusi bernama ``solcjs``.
 
     Opsi baris perintah ``solcjs`` tidak kompatibel dengan ``solc`` dan alat (seperti ``geth``)
     mengharapkan perilaku ``solc`` tidak akan bekerja dengan ``solcjs``.
+=======
+    The command-line executable is named ``solcjs``.
+
+    The command-line options of ``solcjs`` are not compatible with ``solc`` and tools (such as ``geth``)
+    expecting the behavior of ``solc`` will not work with ``solcjs``.
+>>>>>>> english/develop
 
 Docker
 ======
 
+<<<<<<< HEAD
 Image Docker dari build Solidity tersedia menggunakan image ``solc`` dari organisasi ``ethereum``.
 Gunakan tag ``stable`` untuk versi rilis terbaru, dan ``nightly`` untuk perubahan yang berpotensi tidak stabil di branch pengembangan.
 
 Image Docker menjalankan kompiler yang dapat dieksekusi, sehingga Anda dapat meneruskan semua argumen kompiler ke dalamnya.
 Misalnya, perintah di bawah ini menarik versi stabil dari image ``solc`` (jika Anda belum memilikinya),
 dan menjalankannya dalam kontainer baru, melewati argumen ``--help``.
+=======
+Docker images of Solidity builds are available using the ``solc`` image from the ``ethereum`` organization.
+Use the ``stable`` tag for the latest released version, and ``nightly`` for potentially unstable changes in the ``develop`` branch.
+
+The Docker image runs the compiler executable so that you can pass all compiler arguments to it.
+For example, the command below pulls the stable version of the ``solc`` image (if you do not have it already),
+and runs it in a new container, passing the ``--help`` argument.
+>>>>>>> english/develop
 
 .. code-block:: bash
 
     docker run ethereum/solc:stable --help
 
+<<<<<<< HEAD
 Anda juga dapat menentukan versi build rilis di tag, misalnya, untuk rilis 0.5.4.
+=======
+You can specify release build versions in the tag. For example:
+>>>>>>> english/develop
 
 .. code-block:: bash
 
-    docker run ethereum/solc:0.5.4 --help
+    docker run ethereum/solc:stable --help
 
+<<<<<<< HEAD
 Untuk menggunakan image Docker untuk mengkompilasi file Solidity di mesin host, *mount* folder lokal untuk input dan output,
 dan tentukan kontrak untuk dikompilasi. Sebagai contoh.
+=======
+Note
+
+Specific compiler versions are supported as the Docker image tag such as `ethereum/solc:0.8.23`. We will be passing the
+`stable` tag here instead of specific version tag to ensure that users get the latest version by default and avoid the issue of
+an out-of-date version.
+
+To use the Docker image to compile Solidity files on the host machine, mount a
+local folder for input and output, and specify the contract to compile. For example:
+>>>>>>> english/develop
 
 .. code-block:: bash
 
     docker run -v /local/path:/sources ethereum/solc:stable -o /sources/output --abi --bin /sources/Contract.sol
 
+<<<<<<< HEAD
 Anda juga dapat menggunakan antarmuka JSON standar (yang direkomendasikan saat menggunakan kompiler dengan *tooling*).
 Saat menggunakan antarmuka ini, tidak perlu *me-mount* direktori apa pun selama input JSON
 *self-contained* (yaitu tidak merujuk ke file eksternal apa pun yang harus
 :ref:`dimuat oleh impor callback <initial-vfs -content-standard-json-with-import-callback>`).
+=======
+You can also use the standard JSON interface (which is recommended when using the compiler with tooling).
+When using this interface, it is not necessary to mount any directories as long as the JSON input is
+self-contained (i.e. it does not refer to any external files that would have to be
+:ref:`loaded by the import callback <initial-vfs-content-standard-json-with-import-callback>`).
+>>>>>>> english/develop
 
 .. code-block:: bash
 
@@ -118,9 +194,26 @@ Versi nightly dapat diinstal menggunakan perintah berikut:
     sudo apt-get update
     sudo apt-get install solc
 
+<<<<<<< HEAD
 Kami juga merilis `paket snap <https://snapcraft.io/>`_,
 yang dapat diinstal di semua `distro Linux yang didukung
 <https://snapcraft.io/docs/core/install>`_. Untuk menginstal solc versi stabil terbaru:
+=======
+Furthermore, some Linux distributions provide their own packages. These packages are not directly
+maintained by us but usually kept up-to-date by the respective package maintainers.
+
+For example, Arch Linux has packages for the latest development version as AUR packages: `solidity <https://aur.archlinux.org/packages/solidity>`_
+and `solidity-bin <https://aur.archlinux.org/packages/solidity-bin>`_.
+
+.. note::
+
+    Please be aware that `AUR <https://wiki.archlinux.org/title/Arch_User_Repository>`_ packages
+    are user-produced content and unofficial packages. Exercise caution when using them.
+
+There is also a `snap package <https://snapcraft.io/solc>`_, however, it is **currently unmaintained**.
+It is installable in all the `supported Linux distros <https://snapcraft.io/docs/core/install>`_. To
+install the latest stable version of solc:
+>>>>>>> english/develop
 
 .. code-block:: bash
 
@@ -139,6 +232,7 @@ dengan perubahan terbaru, silakan gunakan yang berikut ini:
     tetapi memiliki batasan, seperti hanya mengakses file di direktori ``/home`` dan ``/media`` Anda.
     Untuk informasi selengkapnya, buka `Demystifying Snap Confinement <https://snapcraft.io/blog/demystifying-snap-confinement>`_.
 
+<<<<<<< HEAD
 Arch Linux juga mempunyai paket, meskipun terbatas pada versi pengembangan terbaru:
 
 .. code-block:: bash
@@ -151,6 +245,8 @@ Setelah overlay diatur, ``solc`` dapat diinstal di arsitektur x86_64 dengan:
 .. code-block:: bash
 
     emerge dev-lang/solidity
+=======
+>>>>>>> english/develop
 
 Paket macOS
 ==============
@@ -172,8 +268,13 @@ dan ``brew install solidity@5``, berturut-turut.
 Jika Anda memerlukan versi Solidity tertentu, Anda dapat menginstal
 formula Homebrew langsung dari Github.
 
+<<<<<<< HEAD
 Lihat
 `solidity.rb commits di Github <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_.
+=======
+View
+`solidity.rb commits on GitHub <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_.
+>>>>>>> english/develop
 
 Salin comit hash dari versi yang Anda inginkan dan periksa di mesin Anda.
 
@@ -200,6 +301,7 @@ platform yang didukung di `solc-bin`_. Ini juga merupakan lokasi di mana Anda da
 Repositori bukan hanya cara cepat dan mudah bagi pengguna  untuk menyiapkan binari agar siap digunakan
 *out-of-the-box*, tetapi juga dimaksudkan agar ramah terhadap alat pihak ketiga:
 
+<<<<<<< HEAD
 - Konten di*mirror*kan ke https://binaries.soliditylang.org di mana dapat dengan mudah diunduh
   melalui HTTPS tanpa autentikasi, pembatasan kecepatan, atau tanpa menggunakan git.
 - Konten disajikan dengan header `Content-Type` yang benar dan konfigurasi CORS yang lunak sehingga
@@ -222,6 +324,30 @@ build untuk platform yang tidak didukung pada saat rilis. Ini hanya terjadi di `
 Repositori ``solc-bin`` berisi beberapa direktori Top-level, masing-masing mewakili satu platform.
 Masing-masing berisi file ``list.json`` yang mencantumkan binari yang tersedia. Sebagai contoh, di
 ``emscripten-wasm32/list.json`` Anda akan menemukan informasi berikut tentang versi 0.7.4:
+=======
+- The content is mirrored to https://binaries.soliditylang.org where it can be easily downloaded over
+  HTTPS without any authentication, rate limiting or the need to use git.
+- Content is served with correct `Content-Type` headers and lenient CORS configuration so that it
+  can be directly loaded by tools running in the browser.
+- Binaries do not require installation or unpacking (exception for older Windows builds
+  bundled with necessary DLLs).
+- We strive for a high level of backward-compatibility. Files, once added, are not removed or moved
+  without providing a symlink/redirect at the old location. They are also never modified
+  in place and should always match the original checksum. The only exception would be broken or
+  unusable files with the potential to cause more harm than good if left as is.
+- Files are served over both HTTP and HTTPS. As long as you obtain the file list in a secure way
+  (via git, HTTPS, IPFS or just have it cached locally) and verify hashes of the binaries
+  after downloading them, you do not have to use HTTPS for the binaries themselves.
+
+The same binaries are in most cases available on the `Solidity release page on GitHub`_. The
+difference is that we do not generally update old releases on the GitHub release page. This means
+that we do not rename them if the naming convention changes and we do not add builds for platforms
+that were not supported at the time of release. This only happens in ``solc-bin``.
+
+The ``solc-bin`` repository contains several top-level directories, each representing a single platform.
+Each one includes a ``list.json`` file listing the available binaries. For example in
+``emscripten-wasm32/list.json`` you will find the following information about version 0.7.4:
+>>>>>>> english/develop
 
 .. code-block:: json
 
@@ -242,6 +368,7 @@ Ini berarti bahwa:
 
 - Anda dapat menemukan biner di direktori yang sama dengan nama
   `solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js <https://github.com/ethereum/solc-bin/blob/gh-pages/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js>`_.
+<<<<<<< HEAD
   Perhatikan bahwa file tersebut mungkin berupa symlink, dan Anda harus menyelesaikannya sendiri jika tidak menggunakan
   git untuk mengunduhnya atau sistem file Anda tidak mendukung symlink.
 - Binary juga di*mirror*kan ke https://binaries.soliditylang.org/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js.
@@ -254,6 +381,20 @@ Ini berarti bahwa:
   pada baris perintah menggunakan utilitas ``keccak256sum`` yang disediakan oleh fungsi `sha3sum`_ atau fungsi `keccak256()
   dari ethereumjs-util`_ dalam JavaScript.
 - Anda juga dapat memverifikasi integritas biner dengan membandingkan hash sha256 dengan
+=======
+  Note that the file might be a symlink, and you will need to resolve it yourself if you are not using
+  git to download it or your file system does not support symlinks.
+- The binary is also mirrored at https://binaries.soliditylang.org/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js.
+  In this case git is not necessary and symlinks are resolved transparently, either by serving a copy
+  of the file or returning a HTTP redirect.
+- The file is also available on IPFS at `QmTLs5MuLEWXQkths41HiACoXDiH8zxyqBHGFDRSzVE5CS`_.
+- The file might in future be available on Swarm at `16c5f09109c793db99fe35f037c6092b061bd39260ee7a677c8a97f18c955ab1`_.
+- You can verify the integrity of the binary by comparing its keccak256 hash to
+  ``0x300330ecd127756b824aa13e843cb1f43c473cb22eaf3750d5fb9c99279af8c3``.  The hash can be computed
+  on the command-line using ``keccak256sum`` utility provided by `sha3sum`_ or `keccak256() function
+  from ethereumjs-util`_ in JavaScript.
+- You can also verify the integrity of the binary by comparing its sha256 hash to
+>>>>>>> english/develop
   ``0x2b55ed5fec4d9625b6c7b3ab1abd2b7fb7dd2a9c68543bf0323db2c7e2d55af2``.
 
 .. warning::
@@ -290,7 +431,7 @@ Ini berarti bahwa:
 .. _IPFS: https://ipfs.io
 .. _Swarm: https://swarm-gateways.net/bzz:/swarm.eth
 .. _solc-bin: https://github.com/ethereum/solc-bin/
-.. _Solidity release page on github: https://github.com/ethereum/solidity/releases
+.. _Solidity release page on GitHub: https://github.com/ethereum/solidity/releases
 .. _sha3sum: https://github.com/maandree/sha3sum
 .. _keccak256() function from ethereumjs-util: https://github.com/ethereumjs/ethereumjs-util/blob/master/docs/modules/_hash_.md#const-keccak256
 .. _WebAssembly builds: https://emscripten.org/docs/compiling/WebAssembly.html
@@ -299,10 +440,16 @@ Ini berarti bahwa:
 
 .. _building-from-source:
 
+<<<<<<< HEAD
 Membangun dari Sumber (Building from source)
 ============================================
 
 Prasyarat - Semua Sistem Operasi
+=======
+Building from Source
+====================
+Prerequisites - All Operating Systems
+>>>>>>> english/develop
 -------------------------------------
 
 Berikut ini adalah dependensi untuk semua build Solidity:
@@ -310,14 +457,15 @@ Berikut ini adalah dependensi untuk semua build Solidity:
 +-----------------------------------+-------------------------------------------------------+
 | Software                          | Notes                                                 |
 +===================================+=======================================================+
-| `CMake`_ (version 3.13+)          | Cross-platform build file generator.                  |
+| `CMake`_ (version 3.21.3+ on      | Cross-platform build file generator.                  |
+| Windows, 3.13+ otherwise)         |                                                       |
 +-----------------------------------+-------------------------------------------------------+
 | `Boost`_ (version 1.77+ on        | C++ libraries.                                        |
 | Windows, 1.65+ otherwise)         |                                                       |
 +-----------------------------------+-------------------------------------------------------+
 | `Git`_                            | Command-line tool for retrieving source code.         |
 +-----------------------------------+-------------------------------------------------------+
-| `z3`_ (version 4.8+, Optional)    | For use with SMT checker.                             |
+| `z3`_ (version 4.8.16+, Optional) | For use with SMT checker.                             |
 +-----------------------------------+-------------------------------------------------------+
 | `cvc4`_ (Optional)                | For use with SMT checker.                             |
 +-----------------------------------+-------------------------------------------------------+
@@ -329,9 +477,15 @@ Berikut ini adalah dependensi untuk semua build Solidity:
 .. _z3: https://github.com/Z3Prover/z3
 
 .. note::
+<<<<<<< HEAD
     Versi solidity sebelum 0.5.10 dapat gagal menautkan dengan benar ke versi Boost 1.70+.
     Solusi yang mungkin adalah mengganti nama sementara ``<Boost install path>/lib/cmake/Boost-1.70.0``
     sebelum menjalankan perintah cmake untuk mengkonfigurasi solidity.
+=======
+    Solidity versions prior to 0.5.10 can fail to correctly link against Boost versions 1.70+.
+    A possible workaround is to temporarily rename ``<Boost install path>/lib/cmake/Boost-1.70.0``
+    prior to running the cmake command to configure Solidity.
+>>>>>>> english/develop
 
     Mulai dari 0.5.10 penautan terhadap Boost 1.70+ seharusnya bekerja tanpa intervensi manual.
 
@@ -345,7 +499,22 @@ Berikut ini adalah dependensi untuk semua build Solidity:
     Namun, jika Anda melakukan ini, harap ingat untuk meneruskan opsi ``--no-smt`` ke ``scripts/tests.sh``
     untuk melewati tes SMT.
 
+<<<<<<< HEAD
 Versi Compiler Minimum
+=======
+.. note::
+    By default the build is performed in *pedantic mode*, which enables extra warnings and tells the
+    compiler to treat all warnings as errors.
+    This forces developers to fix warnings as they arise, so they do not accumulate "to be fixed later".
+    If you are only interested in creating a release build and do not intend to modify the source code
+    to deal with such warnings, you can pass ``-DPEDANTIC=OFF`` option to CMake to disable this mode.
+    Doing this is not recommended for general use but may be necessary when using a toolchain we are
+    not testing with or trying to build an older version with newer tools.
+    If you encounter such warnings, please consider
+    `reporting them <https://github.com/ethereum/solidity/issues/new>`_.
+
+Minimum Compiler Versions
+>>>>>>> english/develop
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Kompiler C++ berikut dan versi minimumnya dapat mem*build* basis kode Solidity:
@@ -357,6 +526,7 @@ Kompiler C++ berikut dan versi minimumnya dapat mem*build* basis kode Solidity:
 Prasyarat - macOS
 ---------------------
 
+<<<<<<< HEAD
 Untuk macOS, pastikan bahwa anda telah menginstal `Xcode <https://developer.apple.com/xcode/download/>`_
 versi terbaru.
 Yang berisi `Clang C++ compiler <https://en.wikipedia.org/wiki/Clang>`_,
@@ -364,6 +534,16 @@ Yang berisi `Clang C++ compiler <https://en.wikipedia.org/wiki/Clang>`_,
 yang dibuthkan untuk membangun aplikasi C++ di OS X.
 Jika Anda menginstal Xcode untuk pertama kalinya, atau baru saja menginstal versi baru,
 Anda harus menyetujui lisensi sebelum Anda dapat melakukan builds command-line :
+=======
+For macOS builds, ensure that you have the latest version of
+`Xcode installed <https://developer.apple.com/xcode/resources/>`_.
+This contains the `Clang C++ compiler <https://en.wikipedia.org/wiki/Clang>`_, the
+`Xcode IDE <https://en.wikipedia.org/wiki/Xcode>`_ and other Apple development
+tools that are required for building C++ applications on OS X.
+If you are installing Xcode for the first time, or have just installed a new
+version then you will need to agree to the license before you can do
+command-line builds:
+>>>>>>> english/develop
 
 .. code-block:: bash
 
@@ -407,7 +587,7 @@ di Visual Studio 2019 Build Tools atau Visual Studio 2019:
 * C++/CLI support
 
 .. _Visual Studio 2019: https://www.visualstudio.com/vs/
-.. _Visual Studio 2019 Build Tools: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
+.. _Visual Studio 2019 Build Tools: https://visualstudio.microsoft.com/vs/older-downloads/#visual-studio-2019-and-other-products
 
 Kami memiliki skrip pembantu yang dapat Anda gunakan untuk menginstal semua dependensi eksternal yang diperlukan:
 
@@ -427,14 +607,20 @@ Untuk mengkloning kode sumber, jalankan perintah berikut:
     git clone --recursive https://github.com/ethereum/solidity.git
     cd solidity
 
+<<<<<<< HEAD
 Jika Anda ingin membantu mengembangkan Solidity,
 anda harus mem*fork* Solidity dan tambahkan fork pribadi Anda sebagai remote kedua:
+=======
+If you want to help develop Solidity,
+you should fork Solidity and add your personal fork as a second remote:
+>>>>>>> english/develop
 
 .. code-block:: bash
 
     git remote add personal git@github.com:[username]/solidity.git
 
 .. note::
+<<<<<<< HEAD
     Metode ini akan menghasilkan build prarilis yang mengarah ke mis. sebuah flag
     diatur dalam setiap bytecode yang dihasilkan oleh kompiler tersebut.
     Jika Anda ingin membangun kembali kompiler Solidity yang dirilis, maka
@@ -443,6 +629,16 @@ anda harus mem*fork* Solidity dan tambahkan fork pribadi Anda sebagai remote ked
     https://github.com/ethereum/solidity/releases/download/v0.X.Y/solidity_0.X.Y.tar.gz
 
     (bukan "Kode sumber" yang disediakan oleh github).
+=======
+    This method will result in a pre-release build leading to e.g. a flag
+    being set in each bytecode produced by such a compiler.
+    If you want to re-build a released Solidity compiler, then
+    please use the source tarball on the GitHub release page:
+
+    https://github.com/ethereum/solidity/releases/download/v0.X.Y/solidity_0.X.Y.tar.gz
+
+    (not the "Source code" provided by GitHub).
+>>>>>>> english/develop
 
 Command-Line Build
 ------------------
@@ -504,8 +700,13 @@ Jika Anda tertarik dengan opsi CMake apa yang tersedia, jalankan ``cmake .. -LH`
 
 SMT Solvers
 -----------
+<<<<<<< HEAD
 Solidity dapat dibangun bertentangan dengan SMT solver dan akan melakukannya secara default
 jika ditemukan dalam sistem. Setiap solver dapat dinonaktifkan dengan opsi `cmake`.
+=======
+Solidity can be built against SMT solvers and will do so by default if
+they are found in the system. Each solver can be disabled by a ``cmake`` option.
+>>>>>>> english/develop
 
 *Note: Dalam beberapa kasus, ini juga bisa menjadi solusi potensial untuk kegagalan build.*
 
@@ -535,8 +736,13 @@ String versi Solidity berisi empat bagian:
 
 Jika ada modifikasi lokal, komit akan di-postfixed dengan ``.mod``.
 
+<<<<<<< HEAD
 Bagian-bagian ini digabungkan seperti yang dipersyaratkan oleh Semver, di mana tag pra-rilis Solidity sama dengan pra-rilis Semver
 dan komit Solidity dan platform yang digabungkan membentuk metadata build Semver.
+=======
+These parts are combined as required by SemVer, where the Solidity pre-release tag equals to the SemVer pre-release
+and the Solidity commit and platform combined make up the SemVer build metadata.
+>>>>>>> english/develop
 
 Contoh rilis: ``0.4.8+commit.60cc1668.Emscripten.clang``.
 
@@ -545,13 +751,21 @@ Contoh pre-release: ``0.4.9-nightly.2017.1.17+commit.6ecb4aa3.Emscripten.clang``
 Informasi Penting Tentang Pembuatan Versi
 =========================================
 
+<<<<<<< HEAD
 Setelah rilis dibuat, tingkat versi patch terbentur, karena kami berasumsi bahwa hanya
 perubahan tingkat patch yang mengikuti. Saat perubahan digabung, versi harus dibenturkan sesuai
 dengan semver dan tingkat keparahan perubahan. Terakhir, rilis selalu dibuat dengan versi nightly build
 saat ini, tetapi tanpa specifier ``prerelease``.
+=======
+After a release is made, the patch version level is bumped, because we assume that only
+patch level changes follow. When changes are merged, the version should be bumped according
+to SemVer and the severity of the change. Finally, a release is always made with the version
+of the current nightly build, but without the ``prerelease`` specifier.
+>>>>>>> english/develop
 
 Contoh:
 
+<<<<<<< HEAD
 0. Rilis 0.4.0 dibuat.
 1. Nightly build memiliki versi 0.4.1 mulai sekarang.
 2. Perubahan non-breaking diperkenalkan --> tidak ada perubahan versi.
@@ -559,3 +773,12 @@ Contoh:
 4. Rilis 0.5.0 dibuat.
 
 Perilaku ini berfungsi baik dengan :ref:`versi pragma <version_pragma>`.
+=======
+1. The 0.4.0 release is made.
+2. The nightly build has a version of 0.4.1 from now on.
+3. Non-breaking changes are introduced --> no change in version.
+4. A breaking change is introduced --> version is bumped to 0.5.0.
+5. The 0.5.0 release is made.
+
+This behavior works well with the  :ref:`version pragma <version_pragma>`.
+>>>>>>> english/develop

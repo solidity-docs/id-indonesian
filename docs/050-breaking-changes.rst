@@ -87,6 +87,7 @@ Untuk sebagian besar topik, kompiler akan memberikan saran.
   fungsi dan konstruktor, dan ``external`` ke setiap fungsi fallback atau interface
   yang belum menentukan visibilitasnya.
 
+<<<<<<< HEAD
 * Lokasi data eksplisit untuk semua variabel tipe struct, array, atau mapping
   sekarang wajib. Ini juga diterapkan pada parameter fungsi dan variabel
   return. Misalnya, ubah ``uint[] x = m_x`` menjadi ``uint[] storage x =
@@ -94,6 +95,15 @@ Untuk sebagian besar topik, kompiler akan memberikan saran.
   di mana ``memory`` adalah lokasi data dan dapat diganti dengan ``storage`` atau
   ``calldata`` yang sesuai. Perhatikan bahwa fungsi ``external`` memerlukan parameter
   dengan lokasi data ``calldata``.
+=======
+* Explicit data location for all variables of struct, array or mapping types is
+  now mandatory. This is also applied to function parameters and return
+  variables.  For example, change ``uint[] x = z`` to ``uint[] storage x =
+  z``, and ``function f(uint[][] x)`` to ``function f(uint[][] memory x)``
+  where ``memory`` is the data location and might be replaced by ``storage`` or
+  ``calldata`` accordingly.  Note that ``external`` functions require
+  parameters with a data location of ``calldata``.
+>>>>>>> english/develop
 
 * Jenis kontrak tidak lagi menyertakan anggota ``address``
   untuk memisahkan namespace. Oleh karena itu, sekarang perlu
@@ -136,8 +146,13 @@ Untuk sebagian besar topik, kompiler akan memberikan saran.
   atau buat fungsi internal baru untuk logika program yang menggunakan
   ``msg.value``.
 
+<<<<<<< HEAD
 * Untuk alasan kejelasan, command line interface sekarang memerlukan ``-`` jika input
   standar digunakan sebagai sumber.
+=======
+* For clarity reasons, the command-line interface now requires ``-`` if the
+  standard input is used as source.
+>>>>>>> english/develop
 
 Elemen Usang
 ============
@@ -146,6 +161,7 @@ Bagian ini mencantumkan perubahan yang menghentikan fitur atau sintaks sebelumny
 banyak dari perubahan ini sudah diaktifkan dalam mode eksperimental
 ``v0.5.0``.
 
+<<<<<<< HEAD
 Command Line dan JSON Interfaces
 --------------------------------
 
@@ -157,6 +173,21 @@ Command Line dan JSON Interfaces
   penggantian nama bahasa perantara ``Julia`` menjadi ``Yul``.
 
 * Opsi baris perintah ``--clone-bin`` dan ``--combined-json clone-bin`` telah dihapus.
+=======
+Command-line and JSON Interfaces
+--------------------------------
+
+* The command-line option ``--formal`` (used to generate Why3 output for
+  further formal verification) was deprecated and is now removed.  A new
+  formal verification module, the SMTChecker, is enabled via ``pragma
+  experimental SMTChecker;``.
+
+* The command-line option ``--julia`` was renamed to ``--yul`` due to the
+  renaming of the intermediate language ``Julia`` to ``Yul``.
+
+* The ``--clone-bin`` and ``--combined-json clone-bin`` command-line options
+  were removed.
+>>>>>>> english/develop
 
 * Remapping dengan awalan kosong tidak diizinkan.
 
@@ -475,7 +506,7 @@ Versi baru:
             return data;
         }
 
-        using address_make_payable for address;
+        using AddressMakePayable for address;
         // Data location for 'arr' must be specified
         function g(uint[] memory /* arr */, bytes8 x, OtherContract otherContract, address unknownContract) public payable {
             // 'otherContract.transfer' is not provided.
@@ -492,7 +523,7 @@ Versi baru:
             // 'address payable' should be used whenever possible.
             // To increase clarity, we suggest the use of a library for
             // the conversion (provided after the contract in this example).
-            address payable addr = unknownContract.make_payable();
+            address payable addr = unknownContract.makePayable();
             require(addr.send(1 ether));
 
             // Since uint32 (4 bytes) is smaller than bytes8 (8 bytes),
@@ -508,8 +539,8 @@ Versi baru:
 
     // We can define a library for explicitly converting ``address``
     // to ``address payable`` as a workaround.
-    library address_make_payable {
-        function make_payable(address x) internal pure returns (address payable) {
+    library AddressMakePayable {
+        function makePayable(address x) internal pure returns (address payable) {
             return address(uint160(x));
         }
     }
