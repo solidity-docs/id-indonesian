@@ -12,6 +12,7 @@ options { tokenVocab=SolidityLexer; }
 sourceUnit: (
 	pragmaDirective
 	| importDirective
+	| usingDirective
 	| contractDefinition
 	| interfaceDefinition
 	| libraryDefinition
@@ -21,6 +22,7 @@ sourceUnit: (
 	| enumDefinition
 	| userDefinedValueTypeDefinition
 	| errorDefinition
+	| eventDefinition
 )* EOF;
 
 //@doc: inline
@@ -151,16 +153,22 @@ stateMutability: Pure | View | Payable;
  */
 overrideSpecifier: Override (LParen overrides+=identifierPath (Comma overrides+=identifierPath)* RParen)?;
 /**
+<<<<<<< HEAD
  * Definisi kontrak, library and fungsi interface.
  * Tergantung pada konteks di mana fungsi didefinisikan, pembatasan lebih lanjut mungkin berlaku,
  * misalnya fungsi dalam interface harus tidak diimplementasikan, yaitu tidak boleh berisi tubuh blok.
+=======
+ * The definition of contract, library, interface or free functions.
+ * Depending on the context in which the function is defined, further restrictions may apply,
+ * e.g. functions in interfaces have to be unimplemented, i.e. may not contain a body block.
+>>>>>>> english/develop
  */
 functionDefinition
 locals[
 	boolean visibilitySet = false,
 	boolean mutabilitySet = false,
 	boolean virtualSet = false,
-	boolean overrideSpecifierSet = false
+	boolean overrideSpecifierSet = false,
 ]
 :
 	Function (identifier | Fallback | Receive)
@@ -174,6 +182,7 @@ locals[
 	 )*
 	(Returns LParen returnParameters=parameterList RParen)?
 	(Semicolon | body=block);
+
 /**
  * Definisi modifier.
  * Perhatikan bahwa di dalam tubuh blok modifier, garis bawah tidak dapat digunakan sebagai pengenal,
@@ -311,10 +320,42 @@ errorDefinition:
 	Semicolon;
 
 /**
+<<<<<<< HEAD
  * Menggunakan direktif untuk mengikat fungsi library ke tipe.
  * Dapat terjadi dalam kontrak dan library.
+=======
+ * Operators that users are allowed to implement for some types with `using for`.
+>>>>>>> english/develop
  */
-usingDirective: Using identifierPath For (Mul | typeName) Semicolon;
+userDefinableOperator:
+	BitAnd
+	| BitNot
+	| BitOr
+	| BitXor
+	| Add
+	| Div
+	| Mod
+	| Mul
+	| Sub
+	| Equal
+	| GreaterThan
+	| GreaterThanOrEqual
+	| LessThan
+	| LessThanOrEqual
+	| NotEqual;
+
+/**
+ * Using directive to attach library functions and free functions to types.
+ * Can occur within contracts and libraries and at the file level.
+ */
+usingDirective:
+  Using (
+    identifierPath
+    | (LBrace usingAliases (Comma usingAliases)* RBrace)
+  ) For (Mul | typeName) Global? Semicolon;
+
+usingAliases: identifierPath (As userDefinableOperator)?;
+
 /**
  * Nama tipe dapat berupa tipe dasar, tipe fungsi, tipe mapping, tipe user-defined
  * (misalnya kontrak atau struct) atau tipe array.
@@ -346,7 +387,7 @@ dataLocation: Memory | Storage | Calldata;
  */
 expression:
 	expression LBrack index=expression? RBrack # IndexAccess
-	| expression LBrack start=expression? Colon end=expression? RBrack # IndexRangeAccess
+	| expression LBrack startIndex=expression? Colon endIndex=expression? RBrack # IndexRangeAccess
 	| expression Period (identifier | Address) # MemberAccess
 	| expression LBrace (namedArgument (Comma namedArgument)*)? RBrace # FunctionCallOptions
 	| expression callArgumentList # FunctionCall
@@ -367,12 +408,13 @@ expression:
 	| expression Or expression # OrOperation
 	|<assoc=right> expression Conditional expression Colon expression # Conditional
 	|<assoc=right> expression assignOp expression # Assignment
-	| New typeName # NewExpression
+	| New typeName # NewExpr
 	| tupleExpression # Tuple
 	| inlineArrayExpression # InlineArray
  	| (
 		identifier
 		| literal
+		| literalWithSubDenomination
 		| elementaryTypeName[false]
 	  ) # PrimaryExpression
 ;
@@ -388,9 +430,12 @@ inlineArrayExpression: LBrack (expression ( Comma expression)* ) RBrack;
 /**
  * Selain identifier non-kata kunci biasa, beberapa kata kunci seperti 'from' dan 'error' juga dapat digunakan sebagai identifier.
  */
-identifier: Identifier | From | Error | Revert;
+identifier: Identifier | From | Error | Revert | Global;
 
 literal: stringLiteral | numberLiteral | booleanLiteral | hexStringLiteral | unicodeStringLiteral;
+
+literalWithSubDenomination: numberLiteral SubDenomination;
+
 booleanLiteral: True | False;
 /**
  * Literal string penuh terdiri dari satu atau beberapa string yang dikutip secara berurutan.
@@ -408,7 +453,8 @@ unicodeStringLiteral: UnicodeStringLiteral+;
 /**
  * Angka literal dapat berupa angka desimal atau heksadesimal dengan unit opsional.
  */
-numberLiteral: (DecimalNumber | HexNumber) NumberUnit?;
+numberLiteral: DecimalNumber | HexNumber;
+
 /**
  * Blok pernyataan dengan kurung kurawal. Membuka ruang lingkupnya sendiri.
  */
@@ -476,7 +522,13 @@ revertStatement: Revert expression callArgumentList Semicolon;
  * Isi blok inline assembly menggunakan pemindai/lexer terpisah, yaitu kumpulan kata kunci dan
  * identifier yang diizinkan berbeda di dalam blok inline assembly.
  */
-assemblyStatement: Assembly AssemblyDialect? AssemblyLBrace yulStatement* YulRBrace;
+assemblyStatement: Assembly AssemblyDialect? assemblyFlags? AssemblyLBrace yulStatement* YulRBrace;
+
+/**
+ * Assembly flags.
+ * Comma-separated list of double-quoted strings as flags.
+ */
+assemblyFlags: AssemblyBlockLParen AssemblyFlagString (AssemblyBlockComma AssemblyFlagString)* AssemblyBlockRParen;
 
 //@doc:inline
 variableDeclarationList: variableDeclarations+=variableDeclaration (Comma variableDeclarations+=variableDeclaration)*;
@@ -497,7 +549,7 @@ variableDeclarationTuple:
 variableDeclarationStatement: ((variableDeclaration (Assign expression)?) | (variableDeclarationTuple Assign expression)) Semicolon;
 expressionStatement: expression Semicolon;
 
-mappingType: Mapping LParen key=mappingKeyType DoubleArrow value=typeName RParen;
+mappingType: Mapping LParen key=mappingKeyType name=identifier? DoubleArrow value=typeName name=identifier? RParen;
 /**
  * Hanya tipe dasar atau tipe yang ditentukan pengguna yang layak sebagai kunci mapping.
  */
@@ -564,7 +616,7 @@ yulFunctionDefinition:
  * Meskipun hanya pengidentifikasi tanpa titik yang dapat dideklarasikan dalam inline assembly,,
  * jalur yang berisi titik dapat merujuk ke deklarasi di luar blok inline assembly,.
  */
-yulPath: YulIdentifier (YulPeriod YulIdentifier)*;
+yulPath: YulIdentifier (YulPeriod (YulIdentifier | YulEVMBuiltin))*;
 /**
  * Panggilan ke fungsi dengan nilai return hanya dapat terjadi sebagai sisi kanan tugas atau
  * deklarasi variabel.
