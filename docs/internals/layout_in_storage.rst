@@ -52,12 +52,21 @@ sebagai nilai individual.
     yang terakhir akan menggunakan tiga.
 
 .. note::
+<<<<<<< HEAD
      Tata letak variabel state dalam penyimpanan dianggap sebagai bagian dari
      antarmuka eksternal Solidity karena fakta bahwa pointer penyimpanan dapat
      diteruskan ke library. Ini berarti bahwa setiap perubahan pada aturan yang
      diuraikan dalam bagian ini dianggap sebagai perubahan bahasa yang melanggar
      dan karena sifatnya yang kritis harus dipertimbangkan dengan sangat hati-hati
      sebelum dieksekusi.
+=======
+     The layout of state variables in storage is considered to be part of the external interface
+     of Solidity due to the fact that storage pointers can be passed to libraries. This means that
+     any change to the rules outlined in this section is considered a breaking change
+     of the language and due to its critical nature should be considered very carefully before
+     being executed. In the event of such a breaking change, we would want to release a
+     compatibility mode in which the compiler would generate bytecode supporting the old layout.
+>>>>>>> english/develop
 
 
 Mapping dan Array Dinamis
@@ -90,8 +99,13 @@ elemen dapat diperoleh dari data slot ``v`` menggunakan ``(v >> ((j % floor(256 
 Nilai yang sesuai dengan kunci pemetaan ``k`` terletak di ``keccak256(h(k) . p)``
 di mana ``.`` adalah rangkaian dan ``h`` adalah fungsi yang diterapkan ke kunci tergantung pada jenisnya:
 
+<<<<<<< HEAD
 - untuk tipe nilai, ``h`` memasukkan nilai ke 32 byte dengan cara yang sama seperti saat menyimpan nilai dalam memori.
 - untuk string dan array byte, ``h`` menghitung hash ``keccak256`` dari data yang tidak diisi.
+=======
+- for value types, ``h`` pads the value to 32 bytes in the same way as when storing the value in memory.
+- for strings and byte arrays, ``h(k)`` is just the unpadded data.
+>>>>>>> english/develop
 
 Jika nila mapping adalah
 tipe non-value, slot yang dihitung menandai awal dari data. Jika nilainya bertipe struct,
@@ -137,9 +151,14 @@ Untuk array byte yang menyimpan data dengan panjang ``32`` atau lebih byte, slot
 Ini berarti bahwa Anda dapat membedakan array pendek dari array panjang dengan memeriksa apakah bit terendah disetel: pendek (tidak disetel) dan panjang (diatur).
 
 .. note::
+<<<<<<< HEAD
   Menangani slot yang disandikan secara tidak valid saat ini tidak didukung tetapi dapat ditambahkan di masa mendatang.
   Jika Anda mengompilasi melalui pipeline compiler berbasis IR eksperimental, membaca slot yang dikodekan secara tidak
   valid akan menghasilkan kesalahan ``Panic(0x22)``.
+=======
+  Handling invalidly encoded slots is currently not supported but may be added in the future.
+  If you are compiling via IR, reading an invalidly encoded slot results in a ``Panic(0x22)`` error.
+>>>>>>> english/develop
 
 JSON Output
 ===========
@@ -151,7 +170,7 @@ Outputnya adalah objek JSON yang berisi dua kunci, ``storage`` dan ``types``.
 Objek ``storage`` adalah array di mana setiap elemen memiliki bentuk berikut:
 
 
-.. code::
+.. code-block:: json
 
 
     {
@@ -177,7 +196,7 @@ dan
 ``types``, yang berbentuk:
 
 
-.. code::
+.. code-block:: json
 
     {
         "encoding": "inplace",
@@ -204,9 +223,15 @@ jenis), array memiliki tipe ``base``, dan struct mencantumkan ``members`` mereka
 format yang sama dengan ``storage`` tingkat atas (lihat :ref:`di atas
 <storage-layout-top-level>`).
 
+<<<<<<< HEAD
 .. note ::
   Format output JSON dari layout penyimpanan kontrak masih dianggap eksperimental
   dan dapat berubah dalam rilis Solidity yang tidak melanggar.
+=======
+.. note::
+  The JSON output format of a contract's storage layout is still considered experimental
+  and is subject to change in non-breaking releases of Solidity.
+>>>>>>> english/develop
 
 Contoh berikut menunjukkan kontrak dan tata letak penyimpanannya, yang berisi:
 tipe nilai dan referensi, tipe yang encoded packed, dan tipe nested.
@@ -228,13 +253,13 @@ tipe nilai dan referensi, tipe yang encoded packed, dan tipe nested.
         uint y;
         S s;
         address addr;
-        mapping (uint => mapping (address => bool)) map;
+        mapping(uint => mapping(address => bool)) map;
         uint[] array;
         string s1;
         bytes b1;
     }
 
-.. code:: json
+.. code-block:: json
 
     {
       "storage": [
