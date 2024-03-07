@@ -24,10 +24,17 @@ bagian dari input asli tetapi direferensikan dari sumber
 mapping. File sumber ini bersama dengan pengidentifikasinya dapat
 diperoleh melalui ``output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources']``.
 
+<<<<<<< HEAD
 .. note ::
     Dalam hal instruksi yang tidak terkait dengan file sumber tertentu,
     mapping sumber menetapkan pengidentifikasi integer ``-1``. Ini mungkin terjadi untuk
     bagian bytecode yang berasal dari pernyataan inline assembly yang dihasilkan oleh kompiler.
+=======
+.. note::
+    In the case of instructions that are not associated with any particular source file,
+    the source mapping assigns an integer identifier of ``-1``. This may happen for
+    bytecode sections stemming from compiler-generated inline assembly statements.
+>>>>>>> english/develop
 
 Source mapping di dalam AST menggunakan notasi
 berikut:

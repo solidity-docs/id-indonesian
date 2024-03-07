@@ -6,8 +6,13 @@
 Daftar Bug yang Diketahui
 #########################
 
+<<<<<<< HEAD
 Di bawah, Anda dapat menemukan daftar berformat JSON dari beberapa bug terkait keamanan yang diketahui di
 Kompiler solidity. File itu sendiri di-host di `repositori Github
+=======
+Below, you can find a JSON-formatted list of some of the known security-relevant bugs in the
+Solidity compiler. The file itself is hosted in the `GitHub repository
+>>>>>>> english/develop
 <https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_.
 Daftar ini terbentang hingga versi 0.3.0, bug yang diketahui hanya ada
 dalam versi sebelumnya yang tidak terdaftar.
@@ -67,6 +72,7 @@ conditions
     nanti.
     Jika tidak ada kondisi yang diberikan, asumsikan bahwa bug tetap ada.
 check
+<<<<<<< HEAD
     Bidang ini berisi pemeriksaan berbeda yang melaporkan apakah kontrak pintar
     mengandung bug atau tidak. Jenis pemeriksaan pertama adalah ekspresi Javascript
     reguler yang akan dicocokkan dengan kode sumber ("source-regex")
@@ -77,6 +83,20 @@ check
     program Solidity ("ast-compact-json-path"). Kueri penelusuran yang ditentukan
     adalah ekspresi `JsonPath <https://github.com/json-path/JsonPath>`_.
     Jika setidaknya satu jalur AST Soliditas cocok dengan kueri, kemungkinan besar bug ada.
+=======
+    This field contains different checks that report whether the smart contract
+    contains the bug or not. The first type of check are JavaScript regular
+    expressions that are to be matched against the source code ("source-regex")
+    if the bug is present.  If there is no match, then the bug is very likely
+    not present. If there is a match, the bug might be present.  For improved
+    accuracy, the checks should be applied to the source code after stripping
+    comments.
+    The second type of check are patterns to be checked on the compact AST of
+    the Solidity program ("ast-compact-json-path"). The specified search query
+    is a `JsonPath <https://github.com/json-path/JsonPath>`_ expression.
+    If at least one path of the Solidity AST matches the query, the bug is
+    likely present.
+>>>>>>> english/develop
 
 .. literalinclude:: bugs.json
    :language: js
