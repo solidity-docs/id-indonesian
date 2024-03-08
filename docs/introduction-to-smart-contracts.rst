@@ -8,9 +8,15 @@ Pengenalan Smart Kontrak
 Smart Kontrak Sederhana
 ************************
 
+<<<<<<< HEAD
 Mari kita mulai dengan contoh dasar yang menetapkan nilai variabel dan mengeksposnya
 untuk dapat diakses oleh kontrak lain. Tidak mengapa jika Anda tidak memahami
 semuanya sekarang, kita akan bahas lebih detail nanti.
+=======
+Let us begin with a basic example that sets the value of a variable and exposes
+it for other contracts to access. It is fine if you do not understand
+everything right now, we will go into more details later.
+>>>>>>> english/develop
 
 Contoh Storage
 ===============
@@ -91,7 +97,7 @@ mendaftar dengan nama pengguna dan kata sandi, yang dibutuhkan hanyalah *keypair
         // The keyword "public" makes variables
         // accessible from other contracts
         address public minter;
-        mapping (address => uint) public balances;
+        mapping(address => uint) public balances;
 
         // Events allow clients to react to specific
         // contract changes you declare
@@ -151,6 +157,7 @@ Anda tidak perlu melakukan ini, *compiler* akan mencarikannya untuk Anda.
 
 .. index:: mapping
 
+<<<<<<< HEAD
 Baris berikutnya, ``mapping (address => uint) public balances;`` juga
 membuat variabel state publik, tetapi ini adalah datatype yang lebih kompleks.
 Jenis :ref:`mapping <mapping-types>` memetakan alamat ke :ref:`unsigned integer <integer>`.
@@ -161,14 +168,26 @@ ke nilai yang representasi byte-nya adalah semua nol. Namun, tidak mungkin untuk
 atau daftar semua values. Catat apa yang Anda tambahkan ke mapping,
 atau gunakan dalam konteks di mana ini tidak diperlukan.
 bahkan lebih baik, simpan daftar atau gunakan tipe data yang lebih cocok.
+=======
+The next line, ``mapping(address => uint) public balances;`` also
+creates a public state variable, but it is a more complex datatype.
+The :ref:`mapping <mapping-types>` type maps addresses to :ref:`unsigned integers <integers>`.
+
+Mappings can be seen as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_ which are
+virtually initialized such that every possible key exists from the start and is mapped to a
+value whose byte-representation is all zeros. However, it is neither possible to obtain a list of all keys of
+a mapping, nor a list of all values. Record what you
+added to the mapping, or use it in a context where this is not needed. Or
+even better, keep a list, or use a more suitable data type.
+>>>>>>> english/develop
 
 :ref:`getter function<getter-functions>` yang dibuat oleh kata kunci ``public``
 lebih kompleks dalam hal mapping. Ini terlihat seperti berikut:
 
 .. code-block:: solidity
 
-    function balances(address _account) external view returns (uint) {
-        return balances[_account];
+    function balances(address account) external view returns (uint) {
+        return balances[account];
     }
 
 Anda dapat menggunakan fungsi ini untuk menampilkan saldo satu akun.
@@ -183,9 +202,17 @@ biaya. Sesegera setelah dikeluarkan, pendengar menerima
 argumen ``from``, ``to`` dan ``amount``, yang memungkinkan untuk
 melacak transaksi.
 
+<<<<<<< HEAD
 Untuk mendengarkan event ini, anda harus menggunakan kode
 JavaScript berikut, yang menggunakan `web3.js <https://github.com/ethereum/web3.js/>`_ untuk membuat objek kontrak  ``Coin``,
 dan setiap antarmuka pengguna memanggil fungsi ``balances`` yang dibuat secara otomatis dari atas::
+=======
+To listen for this event, you could use the following
+JavaScript code, which uses `web3.js <https://github.com/web3/web3.js/>`_ to create the ``Coin`` contract object,
+and any user interface calls the automatically generated ``balances`` function from above:
+
+.. code-block:: javascript
+>>>>>>> english/develop
 
     Coin.Sent().watch({}, '', function(error, result) {
         if (!error) {
@@ -219,6 +246,7 @@ overflows, yaitu, ketika ``balances[receiver] + amount`` dalam aritmatika presis
 nilai maksimum ``uint`` (``2**256 - 1``). Hal ini juga berlaku untuk statement
 ``balances[receiver] += amount;`` dalam fungsi ``send``.
 
+<<<<<<< HEAD
 :ref:`Errors <errors>` memungkinkan Anda memberikan informasi lebih lanjut kepada pemanggil tentang
 mengapa suatu kondisi atau operasi gagal. Kesalahan digunakan bersama dengan
 :ref:`mengembalikan pernyataan <revert-statement>`. Pernyataan revert tanpa syarat membatalkan
@@ -226,6 +254,15 @@ dan mengembalikan semua perubahan yang serupa dengan fungsi ``require``, tetapi 
 Anda untuk memberikan nama kesalahan dan data tambahan yang akan diberikan ke pemanggil
 (dan pada akhirnya ke aplikasi front-end atau block explorer) sehingga
 kegagalan dapat lebih mudah di-debug atau direaksikan.
+=======
+:ref:`Errors <errors>` allow you to provide more information to the caller about
+why a condition or operation failed. Errors are used together with the
+:ref:`revert statement <revert-statement>`. The ``revert`` statement unconditionally
+aborts and reverts all changes similar to the ``require`` function, but it also
+allows you to provide the name of an error and additional data which will be supplied to the caller
+(and eventually to the front-end application or block explorer) so that
+a failure can more easily be debugged or reacted upon.
+>>>>>>> english/develop
 
 Fungsi ``send`` dapat digunakan oleh siapa saja (yang telah
 memiliki beberapa koin ini) untuk mengirim koin kepada orang lain. Jika pengirim tidak memiliki
@@ -273,10 +310,17 @@ sifat transaksional database memastikan bahwa jika jumlahnya
 dikurangi dari satu akun tersebut, selalu ditambahkan ke akun lain. Jika karena suatu hal
 menambahkan jumlah ke akun target tidak memungkinkan, akun sumber juga tidak akan diubah.
 
+<<<<<<< HEAD
 Selanjutnya, transaksi selalu ditandatangani secara kriptografis oleh pengirim (creator).
 Sehingga membuatnya mudah untuk menjaga akses ke modifikasi tertentu dari database.
 Dalam contoh mata uang elektronik, pemeriksaan sederhana memastikan bahwa
 hanya orang yang memegang kunci akun yang dapat mentransfer uang darinya.
+=======
+Furthermore, a transaction is always cryptographically signed by the sender (creator).
+This makes it straightforward to guard access to specific modifications of the
+database. In the example of the electronic currency, a simple check ensures that
+only the person holding the keys to the account can transfer some compensation, e.g. Ether, from it.
+>>>>>>> english/develop
 
 .. index:: ! block
 
@@ -294,6 +338,7 @@ dan kemudian akan dieksekusi dan didistribusikan ke semua node yang berpartisipa
 Jika dua transaksi bertentangan satu sama lain, salah satu yang berakhir menjadi yang kedua akan
 ditolak dan tidak menjadi bagian dari block.
 
+<<<<<<< HEAD
 Block-block ini membentuk urutan linier dalam waktu dan dari situlah kata "blockchain" berasal.
 Block ditambahkan ke rantai/(chain) dalam interval yang agak teratur - untuk Ethereum, kira-kira setiap 17 detik.
 
@@ -301,13 +346,29 @@ Sebagai bagian dari "order selection mechanism" (yang disebut "menambang/*mining
 pengembalian blocks dari waktu to waktu, tetapi hanya terjadi di "ujung" rantai/(chain). Semakin banyak
 blok ditambahkan di atas blok tertentu, semakin kecil kemungkinan block ini akan dikembalikan. Jadi mungkin saja transaksi Anda dikembalikan
 dan bahkan dihapus dari blockchain, tetapi semakin lama Anda menunggu, semakin kecil kemungkinannya.
+=======
+These blocks form a linear sequence in time, and that is where the word "blockchain" derives from.
+Blocks are added to the chain at regular intervals, although these intervals may be subject to change in the future.
+For the most up-to-date information, it is recommended to monitor the network, for example, on `Etherscan <https://etherscan.io/chart/blocktime>`_.
+
+As part of the "order selection mechanism", which is called `attestation <https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/attestations/>`_, it may happen that
+blocks are reverted from time to time, but only at the "tip" of the chain. The more
+blocks are added on top of a particular block, the less likely this block will be reverted. So it might be that your transactions
+are reverted and even removed from the blockchain, but the longer you wait, the less
+likely it will be.
+>>>>>>> english/develop
 
 .. note::
     Transaksi tidak dijamin untuk dimasukkan dalam block berikutnya atau block selanjutnya yang spesifik,
     karena tidak tergantung pada pengirim transaksi, tetapi tergantung pada penambang untuk menentukan di block mana transaksi tersebut disertakan.
 
+<<<<<<< HEAD
     Jika Anda ingin menjadwalkan panggilan di masa mendatang dari kontrak Anda, Anda dapat menggunakan
     `jam alarm <https://www.ethereum-alarm-clock.com/>`_ atau layanan oracle serupa.
+=======
+    If you want to schedule future calls of your contract, you can use
+    a smart contract automation tool or an oracle service.
+>>>>>>> english/develop
 
 .. _the-ethereum-virtual-machine:
 
@@ -387,6 +448,7 @@ kode yang mengembalikan kode itu saat dieksekusi.
 Gas
 ===
 
+<<<<<<< HEAD
 Pada saat pembuatan, setiap transaksi dikenakan sejumlah **gas**,
 yang tujuannya adalah untuk membatasi jumlah pekerjaan yang diperlukan untuk
 melaksanakan transaksi dan untuk membayar biaya eksekusi pada waktu yang sama. Saat EVM melakukan
@@ -399,14 +461,41 @@ Jika beberapa gas tersisa setelah eksekusi, akan dikembalikan ke pengirim dengan
 Jika gas habis pada titik tertentu (yaitu akan menjadi negatif),
 akan memicu *out-of-gas exception*, yang akan mengembalikan semua perubahan
 yang dibuat pada state dalam rentang waktu saat ini.
+=======
+Upon creation, each transaction is charged with a certain amount of **gas**
+that has to be paid for by the originator of the transaction (``tx.origin``).
+While the EVM executes the
+transaction, the gas is gradually depleted according to specific rules.
+If the gas is used up at any point (i.e. it would be negative),
+an out-of-gas exception is triggered, which ends execution and reverts all modifications
+made to the state in the current call frame.
+>>>>>>> english/develop
+
+This mechanism incentivizes economical use of EVM execution time
+and also compensates EVM executors (i.e. miners / stakers) for their work.
+Since each block has a maximum amount of gas, it also limits the amount
+of work needed to validate a block.
+
+The **gas price** is a value set by the originator of the transaction, who
+has to pay ``gas_price * gas`` up front to the EVM executor.
+If some gas is left after execution, it is refunded to the transaction originator.
+In case of an exception that reverts changes, already used up gas is not refunded.
+
+Since EVM executors can choose to include a transaction or not,
+transaction senders cannot abuse the system by setting a low gas price.
 
 .. index:: ! storage, ! memory, ! stack
 
 Storage, Memory dan Stack
 =============================
 
+<<<<<<< HEAD
 Mesin Virtual Ethereum memiliki tiga area di mana ia dapat menyimpan data-
 storage, memory dan stack, yang akan dijelaskan dalam paragraf berikut.
+=======
+The Ethereum Virtual Machine has three areas where it can store data:
+storage, memory and the stack.
+>>>>>>> english/develop
 
 Setiap akun memiliki area data yang disebut **storage**, yang persisten antara fungsi memanggil
 dan transaksi.
@@ -487,8 +576,9 @@ kompleks, loop harus lebih didahulukan daripada panggilan rekursif. Selain itu,
 hanya 63/64 gas yang dapat diteruskan dalam pesan panggilan, yang menyebabkan
 batas kedalaman sedikit kurang dari 1000 dalam prakteknya.
 
-.. index:: delegatecall, callcode, library
+.. index:: delegatecall, library
 
+<<<<<<< HEAD
 Delegatecall / Callcode dan Libraries
 =====================================
 
@@ -496,6 +586,15 @@ Terdapat varian khusus dari pesan panggilan, bernama **delegatecall**
 yang identik dengan pesan panggilan terlepas dari kenyataan bahwa
 kode di alamat target dieksekusi dalam konteks panggilan
 kontrak dan ``msg.sender`` dan ``msg.value`` tidak mengubah nilainya.
+=======
+Delegatecall and Libraries
+==========================
+
+There exists a special variant of a message call, named **delegatecall**
+which is identical to a message call apart from the fact that
+the code at the target address is executed in the context (i.e. at the address) of the calling
+contract and ``msg.sender`` and ``msg.value`` do not change their values.
+>>>>>>> english/develop
 
 Ini berarti bahwa kontrak dapat memuat kode secara dinamis dari alamat yang
 berbeda saat *runtime*. Storage, alamat saat ini, dan saldo masih mengacu pada panggilan kontrak,
@@ -531,7 +630,7 @@ ijalankan dan hasilnya disimpan sebagai kode dan pemanggil/pembuat
 menerima alamat kontrak baru di stack.
 
 
-.. index:: selfdestruct, self-destruct, deactivate
+.. index:: ! selfdestruct, deactivate
 
 Nonaktifkan dan penghancuran diri (Deactivate and Self-destruct)
 ================================================================
@@ -542,6 +641,11 @@ di alamat itu dikirim ke target yang ditentukan dan kemudian storage dan kode
 akan dihapus dari state. Menghapus kontrak secara teori terdengar seperti ide
 yang bagus, tetapi berpotensi berbahaya, seolah-olah seseorang mengirim Ether untuk menghapus
 kontrak, Ether tersebut akan hilang selamanya.
+
+.. warning::
+    From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
+    deprecation warning, since the ``SELFDESTRUCT`` opcode will eventually undergo breaking changes in behavior
+    as stated in `EIP-6049 <https://eips.ethereum.org/EIPS/eip-6049>`_.
 
 .. warning::
     Even if a contract is removed by ``selfdestruct``, it is still part of the
@@ -564,6 +668,7 @@ makes it impossible to use the contract, as it returns Ether immediately.
 Kontrak prakompilasi (Precompiled contracts)
 ============================================
 
+<<<<<<< HEAD
 Ada satu set kecil alamat kontrak yang khusus:
 Rentang alamat antara ``1`` dan (termasuk) ``8`` berisi
 "kontrak prakompilasi" yang dapat disebut sebagai kontrak lain
@@ -576,3 +681,17 @@ kontrak prakompilasi yang berbeda. Mungkin juga kontrak prakompilasi baru
 akan ditambahkan ke rantai utama Ethereum di masa depan,
 tetapi Anda dapat secara wajar mengharapkannya untuk selalu berada dalam
 kisaran antara ``1`` dan ``0xffff`` (inklusif).
+=======
+There is a small set of contract addresses that are special:
+The address range between ``1`` and (including) ``8`` contains
+"precompiled contracts" that can be called as any other contract
+but their behavior (and their gas consumption) is not defined
+by EVM code stored at that address (they do not contain code)
+but instead is implemented in the EVM execution environment itself.
+
+Different EVM-compatible chains might use a different set of
+precompiled contracts. It might also be possible that new
+precompiled contracts are added to the Ethereum main chain in the future,
+but you can reasonably expect them to always be in the range between
+``1`` and ``0xffff`` (inclusive).
+>>>>>>> english/develop
